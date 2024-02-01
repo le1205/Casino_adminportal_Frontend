@@ -36,57 +36,59 @@ export const GeneralBookingPage = Loadable(
 );
 export const GeneralFilePage = Loadable(lazy(() => import('../pages/dashboard/GeneralFilePage')));
 
-// DASHBOARD: ECOMMERCE
-export const EcommerceShopPage = Loadable(
-  lazy(() => import('../pages/dashboard/EcommerceShopPage'))
-);
-export const EcommerceProductDetailsPage = Loadable(
-  lazy(() => import('../pages/dashboard/EcommerceProductDetailsPage'))
-);
-export const EcommerceProductListPage = Loadable(
-  lazy(() => import('../pages/dashboard/EcommerceProductListPage'))
-);
-export const EcommerceProductCreatePage = Loadable(
-  lazy(() => import('../pages/dashboard/EcommerceProductCreatePage'))
-);
-export const EcommerceProductEditPage = Loadable(
-  lazy(() => import('../pages/dashboard/EcommerceProductEditPage'))
-);
-export const EcommerceCheckoutPage = Loadable(
-  lazy(() => import('../pages/dashboard/EcommerceCheckoutPage'))
-);
-
-// DASHBOARD: INVOICE
-export const InvoiceListPage = Loadable(lazy(() => import('../pages/dashboard/InvoiceListPage')));
-export const InvoiceDetailsPage = Loadable(
-  lazy(() => import('../pages/dashboard/InvoiceDetailsPage'))
-);
-export const InvoiceCreatePage = Loadable(
-  lazy(() => import('../pages/dashboard/InvoiceCreatePage'))
-);
-export const InvoiceEditPage = Loadable(lazy(() => import('../pages/dashboard/InvoiceEditPage')));
+// DASHBOARD: PARTNER
+export const PartnerListPage = Loadable(lazy(() => import('../pages/dashboard/partner/PartnerListPage')));
+export const PartnerDetailPage = Loadable(lazy(() => import('../pages/dashboard/partner/PartnerDetailPage')));
+export const PartnerCreatePage = Loadable(lazy(() => import('../pages/dashboard/partner/PartnerCreatePage')));
+export const PartnerEditPage = Loadable(lazy(() => import('../pages/dashboard/partner/PartnerEditPage')));
 
 // DASHBOARD: USER
-export const UserProfilePage = Loadable(lazy(() => import('../pages/dashboard/UserProfilePage')));
-export const UserCardsPage = Loadable(lazy(() => import('../pages/dashboard/UserCardsPage')));
-export const UserListPage = Loadable(lazy(() => import('../pages/dashboard/UserListPage')));
-export const UserAccountPage = Loadable(lazy(() => import('../pages/dashboard/UserAccountPage')));
-export const UserCreatePage = Loadable(lazy(() => import('../pages/dashboard/UserCreatePage')));
-export const UserEditPage = Loadable(lazy(() => import('../pages/dashboard/UserEditPage')));
+export const UserListPage = Loadable(lazy(() => import('../pages/dashboard/user/UserListPage')));
+export const UserListAccordingPartnerPage = Loadable(lazy(() => import('../pages/dashboard/user/UserListAccordingPartnerPage')));
+export const UserAcceptPage = Loadable(lazy(() => import('../pages/dashboard/user/UserAcceptPage')));
+export const UserCashPage = Loadable(lazy(() => import('../pages/dashboard/user/UserCashPage')));
+export const UserPointPage = Loadable(lazy(() => import('../pages/dashboard/user/UserPointPage')));
+export const UserTrackPage = Loadable(lazy(() => import('../pages/dashboard/user/UserTrackPage')));
+export const UserConnectPage = Loadable(lazy(() => import('../pages/dashboard/user/UserConnectPage')));
+export const UserRollingPage = Loadable(lazy(() => import('../pages/dashboard/user/UserRollingPage')));
+export const UserMultiIpPage = Loadable(lazy(() => import('../pages/dashboard/user/UserMultiIpPage')));
+export const UserCreatePage = Loadable(lazy(() => import('../pages/dashboard/user/UserCreatePage')));
 
-// DASHBOARD: BLOG
-export const BlogPostsPage = Loadable(lazy(() => import('../pages/dashboard/BlogPostsPage')));
-export const BlogPostPage = Loadable(lazy(() => import('../pages/dashboard/BlogPostPage')));
-export const BlogNewPostPage = Loadable(lazy(() => import('../pages/dashboard/BlogNewPostPage')));
+// DASHBOARD: BET
+export const BetCommonPage = Loadable(lazy(() => import('../pages/dashboard/bet/BetCommonPage')));
+export const BetCasinoPage = Loadable(lazy(() => import('../pages/dashboard/bet/BetCasinoPage')));
+export const BetSlotPage = Loadable(lazy(() => import('../pages/dashboard/bet/BetSlotPage')));
 
-// DASHBOARD: FILE MANAGER
-export const FileManagerPage = Loadable(lazy(() => import('../pages/dashboard/FileManagerPage')));
+// DASHBOARD: EGG
+export const EggRequestPage = Loadable(lazy(() => import('../pages/dashboard/egg/EggRequestPage')));
+export const EggExchangePage = Loadable(lazy(() => import('../pages/dashboard/egg/EggExchangePage')));
+export const EggSettlementPage = Loadable(lazy(() => import('../pages/dashboard/egg/EggSettlementPage')));
+export const EggProcessPage = Loadable(lazy(() => import('../pages/dashboard/egg/EggProcessPage')));
 
-// DASHBOARD: APP
-export const ChatPage = Loadable(lazy(() => import('../pages/dashboard/ChatPage')));
-export const MailPage = Loadable(lazy(() => import('../pages/dashboard/MailPage')));
-export const CalendarPage = Loadable(lazy(() => import('../pages/dashboard/CalendarPage')));
-export const KanbanPage = Loadable(lazy(() => import('../pages/dashboard/KanbanPage')));
+// DASHBOARD: INVOICE
+export const InvoiceInApplyPage = Loadable(lazy(() => import('../pages/dashboard/invoice/InvoiceInApplyPage')));
+export const InvoiceInReportPage = Loadable(lazy(() => import('../pages/dashboard/invoice/InvoiceInReportPage')));
+export const InvoiceOutApplyPage = Loadable(lazy(() => import('../pages/dashboard/invoice/InvoiceOutApplyPage')));
+export const InvoiceOutReportPage = Loadable(lazy(() => import('../pages/dashboard/invoice/InvoiceOutReportPage')));
+export const InvoiceAdminListPage = Loadable(lazy(() => import('../pages/dashboard/invoice/InvoiceAdminListPage')));
+export const InvoiceHistoryPage = Loadable(lazy(() => import('../pages/dashboard/invoice/InvoiceHistoryPage')));
+
+// DASHBOARD: REPORT
+export const ReportPartnerListPage = Loadable(lazy(() => import('../pages/dashboard/report/ReportPartnerListPage')));
+export const ReportUserListPage = Loadable(lazy(() => import('../pages/dashboard/report/ReportUserListPage')));
+export const ReportGameListPage = Loadable(lazy(() => import('../pages/dashboard/report/ReportGameListPage')));
+export const ReportDailyPage = Loadable(lazy(() => import('../pages/dashboard/report/ReportDailyPage')));
+
+// DASHBOARD: CUSTOMER CENTER
+export const CustomerMessagePage = Loadable(lazy(() => import('../pages/dashboard/customer/CustomerMessagePage')));
+export const CustomerBlogPage = Loadable(lazy(() => import('../pages/dashboard/customer/CustomerBlogPage')));
+export const CustomerFaqPage = Loadable(lazy(() => import('../pages/dashboard/customer/CustomerFaqPage')));
+export const CustomerNoticePage = Loadable(lazy(() => import('../pages/dashboard/customer/CustomerNoticePage')));
+
+// DASHBOARD: ADMIN
+export const AdminListPage = Loadable(lazy(() => import('../pages/dashboard/admin/AdminListPage')));
+export const AdminIpPage = Loadable(lazy(() => import('../pages/dashboard/admin/AdminIpPage')));
+
 
 // TEST RENDER PAGE BY ROLE
 export const PermissionDeniedPage = Loadable(

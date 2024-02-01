@@ -38,16 +38,10 @@ export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   kanban: path(ROOTS_DASHBOARD, '/kanban'),
   calendar: path(ROOTS_DASHBOARD, '/calendar'),
-  fileManager: path(ROOTS_DASHBOARD, '/files-manager'),
   permissionDenied: path(ROOTS_DASHBOARD, '/permission-denied'),
   blank: path(ROOTS_DASHBOARD, '/blank'),
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
-    ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
-    analytics: path(ROOTS_DASHBOARD, '/analytics'),
-    banking: path(ROOTS_DASHBOARD, '/banking'),
-    booking: path(ROOTS_DASHBOARD, '/booking'),
-    file: path(ROOTS_DASHBOARD, '/file'),
   },
   mail: {
     root: path(ROOTS_DASHBOARD, '/mail'),
@@ -58,35 +52,67 @@ export const PATH_DASHBOARD = {
     new: path(ROOTS_DASHBOARD, '/chat/new'),
     view: (name) => path(ROOTS_DASHBOARD, `/chat/${name}`),
   },
+  partner: {
+    root: path(ROOTS_DASHBOARD, '/partner'),
+    new: path(ROOTS_DASHBOARD, '/partner/new'),
+    list: path(ROOTS_DASHBOARD, '/partner/list'),
+    detail: path(ROOTS_DASHBOARD, '/partner/detail'),
+    edit: (name) => path(ROOTS_DASHBOARD, `/partner/${name}/edit`),
+    demoEdit: path(ROOTS_DASHBOARD, `/partnerer/reece-chung/edit`),
+  },
   user: {
     root: path(ROOTS_DASHBOARD, '/user'),
     new: path(ROOTS_DASHBOARD, '/user/new'),
     list: path(ROOTS_DASHBOARD, '/user/list'),
-    cards: path(ROOTS_DASHBOARD, '/user/cards'),
-    profile: path(ROOTS_DASHBOARD, '/user/profile'),
-    account: path(ROOTS_DASHBOARD, '/user/account'),
-    edit: (name) => path(ROOTS_DASHBOARD, `/user/${name}/edit`),
-    demoEdit: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
+    listAccordingPartner: path(ROOTS_DASHBOARD, '/user/partner-list'),
+    accept: path(ROOTS_DASHBOARD, '/user/accept'),
+    cash: path(ROOTS_DASHBOARD, '/user/cash'),
+    point: path(ROOTS_DASHBOARD, '/user/point'),
+    track: path(ROOTS_DASHBOARD, '/user/track'),
+    connect: path(ROOTS_DASHBOARD, '/user/connect'),
+    rolling: path(ROOTS_DASHBOARD, '/user/rolling'),
+    multiIp: path(ROOTS_DASHBOARD, '/user/multi-ip'),
   },
-  eCommerce: {
-    root: path(ROOTS_DASHBOARD, '/e-commerce'),
-    shop: path(ROOTS_DASHBOARD, '/e-commerce/shop'),
-    list: path(ROOTS_DASHBOARD, '/e-commerce/list'),
-    checkout: path(ROOTS_DASHBOARD, '/e-commerce/checkout'),
-    new: path(ROOTS_DASHBOARD, '/e-commerce/product/new'),
-    view: (name) => path(ROOTS_DASHBOARD, `/e-commerce/product/${name}`),
-    edit: (name) => path(ROOTS_DASHBOARD, `/e-commerce/product/${name}/edit`),
-    demoEdit: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-blazer-low-77-vintage/edit'),
-    demoView: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-air-force-1-ndestrukt'),
+  bet: {
+    root: path(ROOTS_DASHBOARD, '/bet'),
+    common: path(ROOTS_DASHBOARD, '/bet/common'),
+    casino: path(ROOTS_DASHBOARD, '/bet/casino'),
+    slot: path(ROOTS_DASHBOARD, '/bet/slot'),
+  },
+  egg: {
+    root: path(ROOTS_DASHBOARD, '/egg'),
+    request: path(ROOTS_DASHBOARD, '/egg/request'),
+    exchange: path(ROOTS_DASHBOARD, '/egg/exchange'),
+    settlement: path(ROOTS_DASHBOARD, '/egg/settlement'),
+    process: path(ROOTS_DASHBOARD, '/egg/process'),
   },
   invoice: {
     root: path(ROOTS_DASHBOARD, '/invoice'),
-    list: path(ROOTS_DASHBOARD, '/invoice/list'),
-    new: path(ROOTS_DASHBOARD, '/invoice/new'),
-    view: (id) => path(ROOTS_DASHBOARD, `/invoice/${id}`),
-    edit: (id) => path(ROOTS_DASHBOARD, `/invoice/${id}/edit`),
-    demoEdit: path(ROOTS_DASHBOARD, '/invoice/e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1/edit'),
-    demoView: path(ROOTS_DASHBOARD, '/invoice/e99f09a7-dd88-49d5-b1c8-1daf80c2d7b5'),
+    inApply: path(ROOTS_DASHBOARD, '/invoice/in-apply'),
+    inReport: path(ROOTS_DASHBOARD, '/invoice/in-report'),
+    outApply: path(ROOTS_DASHBOARD, '/invoice/out-apply'),
+    outReport: path(ROOTS_DASHBOARD, '/invoice/out-report'),
+    adminList: path(ROOTS_DASHBOARD, '/invoice/admin-list'),
+    history: path(ROOTS_DASHBOARD, '/invoice/history'),
+  },
+  report: {
+    root: path(ROOTS_DASHBOARD, '/report'),
+    partner: path(ROOTS_DASHBOARD, '/report/partner'),
+    user: path(ROOTS_DASHBOARD, '/report/user'),
+    game: path(ROOTS_DASHBOARD, '/report/game'),
+    daily: path(ROOTS_DASHBOARD, '/report/daily'),
+  },
+  customer: {
+    root: path(ROOTS_DASHBOARD, '/customer'),
+    message: path(ROOTS_DASHBOARD, '/customer/message'),
+    blog: path(ROOTS_DASHBOARD, '/customer/blog'),
+    faq: path(ROOTS_DASHBOARD, '/customer/faq'),
+    notice: path(ROOTS_DASHBOARD, '/customer/notice'),
+  },
+  admin: {
+    root: path(ROOTS_DASHBOARD, '/admin'),
+    list: path(ROOTS_DASHBOARD, '/admin/list'),
+    ip: path(ROOTS_DASHBOARD, '/admin/ip'),
   },
   blog: {
     root: path(ROOTS_DASHBOARD, '/blog'),
@@ -97,16 +123,4 @@ export const PATH_DASHBOARD = {
   },
 };
 
-export const PATH_DOCS = {
-  root: 'https://docs.minimals.cc',
-  changelog: 'https://docs.minimals.cc/changelog',
-};
 
-export const PATH_ZONE_ON_STORE = 'https://mui.com/store/items/zone-landing-page/';
-
-export const PATH_MINIMAL_ON_STORE = 'https://mui.com/store/items/minimal-dashboard/';
-
-export const PATH_FREE_VERSION = 'https://mui.com/store/items/minimal-dashboard-free/';
-
-export const PATH_FIGMA_PREVIEW =
-  'https://www.figma.com/file/rWMDOkMZYw2VpTdNuBBCvN/%5BPreview%5D-Minimal-Web.26.11.22?node-id=0%3A1&t=ya2mDFiuhTXXLLF1-1';

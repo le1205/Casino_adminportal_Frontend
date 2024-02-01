@@ -209,48 +209,6 @@ export default function GeneralFilePage() {
               }}
             />
 
-            <div>
-              <FilePanel
-                title="Folders"
-                link={PATH_DASHBOARD.fileManager}
-                onOpen={handleOpenNewFolder}
-                sx={{ mt: 5 }}
-              />
-
-              <Scrollbar>
-                <Stack direction="row" spacing={3} sx={{ pb: 3 }}>
-                  {_folders.map((folder) => (
-                    <FileFolderCard
-                      key={folder.id}
-                      folder={folder}
-                      onDelete={() => console.log('DELETE', folder.id)}
-                      sx={{
-                        ...(_folders.length > 3 && {
-                          minWidth: 222,
-                        }),
-                      }}
-                    />
-                  ))}
-                </Stack>
-              </Scrollbar>
-
-              <FilePanel
-                title="Recent Files"
-                link={PATH_DASHBOARD.fileManager}
-                onOpen={handleOpenUploadFile}
-                sx={{ mt: 2 }}
-              />
-
-              <Stack spacing={2}>
-                {_files.slice(0, 5).map((file) => (
-                  <FileGeneralRecentCard
-                    key={file.id}
-                    file={file}
-                    onDelete={() => console.log('DELETE', file.id)}
-                  />
-                ))}
-              </Stack>
-            </div>
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>

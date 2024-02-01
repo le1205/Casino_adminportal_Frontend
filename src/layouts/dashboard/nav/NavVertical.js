@@ -44,6 +44,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
           height: 1,
           display: 'flex',
           flexDirection: 'column',
+          pb:2,
         },
       }}
     >

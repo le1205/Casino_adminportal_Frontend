@@ -10,8 +10,6 @@ import useResponsive from '../../hooks/useResponsive';
 import { bgBlur } from '../../utils/cssStyles';
 // config
 import { HEADER } from '../../config-global';
-// routes
-import { PATH_DOCS, PATH_MINIMAL_ON_STORE } from '../../routes/paths';
 // components
 import Logo from '../../components/logo';
 import Label from '../../components/label';
@@ -56,7 +54,6 @@ export default function Header() {
           <Logo />
 
           <Link
-            href={PATH_DOCS.changelog}
             target="_blank"
             rel="noopener"
             underline="none"
@@ -69,7 +66,7 @@ export default function Header() {
 
           {isDesktop && <NavDesktop isOffset={isOffset} data={navConfig} />}
 
-          <Button variant="contained" target="_blank" rel="noopener" href={PATH_MINIMAL_ON_STORE}>
+          <Button variant="contained" target="_blank" rel="noopener" >
             Purchase Now
           </Button>
 
