@@ -46,7 +46,9 @@ export default function AuthLoginForm() {
 
   const onSubmit = async (data) => {
     try {
-      await login(data.email, data.password);
+      // await login(data.email, data.password);
+      
+      window.open("/dashboard");
     } catch (error) {
       console.error(error);
       reset();
@@ -81,7 +83,7 @@ export default function AuthLoginForm() {
       </Stack>
 
       <Stack alignItems="flex-end" sx={{ my: 2 }}>
-        <Link
+        {/* <Link
           component={RouterLink}
           to={PATH_AUTH.resetPassword}
           variant="body2"
@@ -89,7 +91,7 @@ export default function AuthLoginForm() {
           underline="always"
         >
           Forgot password?
-        </Link>
+        </Link> */}
       </Stack>
 
       <LoadingButton

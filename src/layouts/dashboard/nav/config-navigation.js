@@ -126,7 +126,7 @@ const navConfig = [
 
       // REPORT
       {
-        title: 'report',
+        title: 'Settlement',
         path: PATH_DASHBOARD.report.root,
         icon: ICONS.menuItem,
         children: [
@@ -152,88 +152,84 @@ const navConfig = [
       // SETTING
       {
         title: 'setting',
-        path: '#/dashboard/setting',
+        path: PATH_DASHBOARD.setting.root,
         icon: ICONS.setting,
         children: [
           {
             title: 'account',
-            path: '#/dashboard/setting/account',
+            path: PATH_DASHBOARD.setting.account.root,
             children: [
               {
                 title: 'account status',
-                path: '#/dashboard/setting/account/list',
+                path:  PATH_DASHBOARD.setting.account.list,
               },
               {
                 title: 'log',
-                path: '#/dashboard/setting/account/log',
+                path:  PATH_DASHBOARD.setting.account.log,
               },
             ],
           },
           {
             title: 'company',
-            path: '#/dashboard/setting/company',
+            path: PATH_DASHBOARD.setting.company.root,
             children: [
               {
                 title: 'bank',
-                path: '#/dashboard/setting/company/bank',
+                path: PATH_DASHBOARD.setting.company.bank,
               },
               {
                 title: 'setting of domain',
-                path: '#/dashboard/setting/company/domain',
+                path: PATH_DASHBOARD.setting.company.domain,
               },
             ],
           },
           {
             title: 'level',
-            path: '#/dashboard/setting/level',
+            path: PATH_DASHBOARD.setting.level.root,
             children: [
               {
                 title: 'level list',
-                path: '#/dashboard/setting/level/bank',
+                path: PATH_DASHBOARD.setting.level.list,
               },
               {
-                title: 'doamin',
-                path: '#/dashboard/setting/level/domain',
+                title: 'domain',
+                path: PATH_DASHBOARD.setting.level.domain,
               },
             ],
           },
           {
             title: 'site',
-            path: '#/dashboard/setting/site',
+            path: PATH_DASHBOARD.setting.site.root,
             children: [
               {
                 title: 'main page',
-                path: '#/dashboard/setting/site/main',
+                path: PATH_DASHBOARD.setting.site.main,
               },
               {
                 title: 'maintain history',
-                path: '#/dashboard/setting/site/maintain',
+                path: PATH_DASHBOARD.setting.site.history,
               },
               {
                 title: 'maintain',
-                path: '#/dashboard/setting/site/maintain',
-              },
-              {
-                title: 'maintenance',
-                path: '#/dashboard/setting/site/maintenance',
+                path: PATH_DASHBOARD.setting.site.maintain,
               },
               {
                 title: 'option',
-                path: '#/dashboard/setting/site/option',
+                path: PATH_DASHBOARD.setting.site.option,
               },
             ],
           },
           {
             title: 'game',
-            path: '#/dashboard/setting/game',
+            path: PATH_DASHBOARD.setting.game.root,
             children: [
               {
                 title: 'casino',
-                path: '#/dashboard/setting/game/casino',
+                path: PATH_DASHBOARD.setting.game.casino,
               },
               {
                 title: 'slot',
-                path: '#/dashboard/setting/game/slot',
+                path: PATH_DASHBOARD.setting.game.slot,
               },
             ],
           },

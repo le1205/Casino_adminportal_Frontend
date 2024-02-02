@@ -36,21 +36,10 @@ export const PATH_PAGE = {
 
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
-  kanban: path(ROOTS_DASHBOARD, '/kanban'),
-  calendar: path(ROOTS_DASHBOARD, '/calendar'),
   permissionDenied: path(ROOTS_DASHBOARD, '/permission-denied'),
   blank: path(ROOTS_DASHBOARD, '/blank'),
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
-  },
-  mail: {
-    root: path(ROOTS_DASHBOARD, '/mail'),
-    all: path(ROOTS_DASHBOARD, '/mail/all'),
-  },
-  chat: {
-    root: path(ROOTS_DASHBOARD, '/chat'),
-    new: path(ROOTS_DASHBOARD, '/chat/new'),
-    view: (name) => path(ROOTS_DASHBOARD, `/chat/${name}`),
   },
   partner: {
     root: path(ROOTS_DASHBOARD, '/partner'),
@@ -108,6 +97,36 @@ export const PATH_DASHBOARD = {
     blog: path(ROOTS_DASHBOARD, '/customer/blog'),
     faq: path(ROOTS_DASHBOARD, '/customer/faq'),
     notice: path(ROOTS_DASHBOARD, '/customer/notice'),
+  },
+  setting: {
+    root: path(ROOTS_DASHBOARD, '/setting'),
+    account: {
+      root: path(ROOTS_DASHBOARD, '/setting/account'),
+      list: path(ROOTS_DASHBOARD, '/setting/account/list'),
+      log: path(ROOTS_DASHBOARD, '/setting/account/log'),
+    },
+    company: {
+      root:  path(ROOTS_DASHBOARD, '/setting/company'),
+      bank: path(ROOTS_DASHBOARD, '/setting/company/bank'),
+      domain: path(ROOTS_DASHBOARD, '/setting/company/domain'),
+    },
+    level: {
+      root:  path(ROOTS_DASHBOARD, '/setting/level'),
+      list: path(ROOTS_DASHBOARD, '/setting/level/list'),
+      domain: path(ROOTS_DASHBOARD, '/setting/level/domain'),
+    },
+    site: {
+      root:  path(ROOTS_DASHBOARD, '/setting/site'),
+      main: path(ROOTS_DASHBOARD, '/setting/site/main'),
+      history: path(ROOTS_DASHBOARD, '/setting/site/history'),
+      maintain: path(ROOTS_DASHBOARD, '/setting/site/maintain'),
+      option: path(ROOTS_DASHBOARD, '/setting/site/option'),
+    },
+    game: {
+      root:  path(ROOTS_DASHBOARD, '/setting/game'),
+      casino: path(ROOTS_DASHBOARD, '/setting/game/casino'),
+      slot: path(ROOTS_DASHBOARD, '/setting/game/slot'),
+    },
   },
   admin: {
     root: path(ROOTS_DASHBOARD, '/admin'),
