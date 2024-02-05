@@ -71,13 +71,13 @@ export default function PartnerDetailPage() {
         <title> User: Account Settings | Minimal UI</title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+      <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Account"
+          heading="Partner Details"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
-            { name: 'Account Settings' },
+            { name: 'Partner', href: PATH_DASHBOARD.partner.root },
+            { name: 'Partner Details' },
           ]}
         />
 

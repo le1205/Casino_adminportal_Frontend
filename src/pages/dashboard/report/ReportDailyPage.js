@@ -248,14 +248,18 @@ export default function ReportDailyPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Calendar"
+          heading="Daily Report"
           links={[
             {
               name: 'Dashboard',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Calendar',
+              name: 'Settlement',
+              href: PATH_DASHBOARD.report.root,
+            },
+            {
+              name: 'Daily Report',
             },
           ]}
           moreLink={['https://fullcalendar.io/docs/react']}

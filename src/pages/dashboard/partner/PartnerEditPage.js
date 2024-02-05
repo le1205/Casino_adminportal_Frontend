@@ -28,17 +28,17 @@ export default function PartnerEditPage() {
         <title> User: Edit user | Minimal UI</title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+      <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Edit user"
+          heading="Edit partner"
           links={[
             {
               name: 'Dashboard',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'User',
-              href: PATH_DASHBOARD.user.list,
+              name: 'Partner',
+              href: PATH_DASHBOARD.partner.root,
             },
             { name: currentUser?.name },
           ]}

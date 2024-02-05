@@ -185,27 +185,17 @@ export default function CustomerNoticePage() {
   return (
     <>
       <Helmet>
-        <title> User: List | Minimal UI</title>
+        <title> Admin Portal </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="User List"
+          heading="Notice"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
-            { name: 'List' },
+            { name: 'Customer Center', href: PATH_DASHBOARD.customer.root },
+            { name: 'Notice' },
           ]}
-          action={
-            <Button
-              component={RouterLink}
-              to={PATH_DASHBOARD.user.new}
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-            >
-              New User
-            </Button>
-          }
         />
 
         <Card>

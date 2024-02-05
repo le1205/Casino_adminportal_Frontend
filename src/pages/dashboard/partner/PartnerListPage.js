@@ -19,7 +19,7 @@ import {
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // _mock_
-import { _userList } from '../../../_mock/arrays';
+import { _partnerList } from '../../../_mock/arrays';
 // components
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
@@ -37,31 +37,33 @@ import {
   TablePaginationCustom,
 } from '../../../components/table';
 // sections
-import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/user/list';
+import { PartnerTableRow, PartnerTableToolbar } from '../../../sections/@dashboard/partner/list';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['all', 'active', 'banned'];
+const STATUS_OPTIONS = ['all', 'super head office', 'big head office', 'head office', 'distributor', 'store'];
 
 const ROLE_OPTIONS = [
   'all',
-  'ux designer',
-  'full stack designer',
-  'backend developer',
-  'project manager',
-  'leader',
-  'ui designer',
-  'ui/ux designer',
-  'front end developer',
-  'full stack developer',
+  'id',
+  'name',
 ];
 
 const TABLE_HEAD = [
+  { id: 'id', label: 'Id', align: 'left' },
   { id: 'name', label: 'Name', align: 'left' },
-  { id: 'company', label: 'Company', align: 'left' },
-  { id: 'role', label: 'Role', align: 'left' },
-  { id: 'isVerified', label: 'Verified', align: 'center' },
-  { id: 'status', label: 'Status', align: 'left' },
+  { id: 'level', label: 'Levle', align: 'left' },
+  { id: 'slotRolling', label: 'Slot(Rolling)', align: 'left' },
+  { id: 'slotLoosing', label: 'Slot(Loosing)', align: 'left' },
+  { id: 'moneySend', label: 'Moeny (Send)', align: 'left' },
+  { id: 'moneyReceive', label: 'Money (Receive)', align: 'center' },
+  { id: 'partner', label: 'Partner Number', align: 'left' },
+  { id: 'user', label: 'User Number', align: 'left' },
+  { id: 'money', label: 'Money Amount', align: 'left' },
+  { id: 'point', label: 'Points', align: 'left' },
+  { id: 'createPartner', label: 'Create Partner', align: 'left' },
+  { id: 'createUser', label: 'Create User', align: 'left' },
+  { id: 'option', label: 'Option', align: 'left' },
   { id: '' },
 ];
 
@@ -91,7 +93,7 @@ export default function PartnerListPage() {
 
   const navigate = useNavigate();
 
-  const [tableData, setTableData] = useState(_userList);
+  const [tableData, setTableData] = useState(_partnerList);
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -129,6 +131,7 @@ export default function PartnerListPage() {
   };
 
   const handleFilterStatus = (event, newValue) => {
+    console.log(newValue);
     setPage(0);
     setFilterStatus(newValue);
   };
@@ -185,27 +188,17 @@ export default function PartnerListPage() {
   return (
     <>
       <Helmet>
-        <title> User: List | Minimal UI</title>
+        <title> Admin Portal </title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+      <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="User List"
+          heading="Partner List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
+            { name: 'Partner', href: PATH_DASHBOARD.partner.root },
             { name: 'List' },
           ]}
-          action={
-            <Button
-              component={RouterLink}
-              to={PATH_DASHBOARD.user.new}
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-            >
-              New User
-            </Button>
-          }
         />
 
         <Card>
@@ -224,7 +217,7 @@ export default function PartnerListPage() {
 
           <Divider />
 
-          <UserTableToolbar
+          <PartnerTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
             filterRole={filterRole}
@@ -275,7 +268,7 @@ export default function PartnerListPage() {
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
-                      <UserTableRow
+                      <PartnerTableRow
                         key={row.id}
                         row={row}
                         selected={selected.includes(row.id)}
@@ -355,7 +348,7 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
   }
 
   if (filterStatus !== 'all') {
-    inputData = inputData.filter((user) => user.status === filterStatus);
+    inputData = inputData.filter((user) => user.level === filterStatus);
   }
 
   if (filterRole !== 'all') {

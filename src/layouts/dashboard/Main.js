@@ -34,8 +34,8 @@ export default function Main({ children, sx, ...other }) {
           pt: `${HEADER.H_MOBILE + SPACING}px`,
           pb: `${HEADER.H_MOBILE + SPACING}px`,
           ...(isDesktop && {
-            px: 2,
-            pt: `${HEADER.H_DASHBOARD_DESKTOP + 80}px`,
+            px: 0,
+            pt: `${HEADER.H_DASHBOARD_DESKTOP + 0}px`,
             pb: `${HEADER.H_DASHBOARD_DESKTOP + SPACING}px`,
           }),
         }}
@@ -52,7 +52,7 @@ export default function Main({ children, sx, ...other }) {
         flexGrow: 1,
         py: `${HEADER.H_MOBILE + SPACING}px`,
         ...(isDesktop && {
-          px: 2,
+          px: 0,
           py: `${HEADER.H_DASHBOARD_DESKTOP + SPACING}px`,
           width: `calc(100% - ${NAV.W_DASHBOARD}px)`,
           ...(isNavMini && {

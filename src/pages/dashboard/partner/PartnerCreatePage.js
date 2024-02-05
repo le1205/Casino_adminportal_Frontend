@@ -20,19 +20,19 @@ export default function PartnerCreatePage() {
         <title> User: Create a new user | Minimal UI</title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+      <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Create a new user"
+          heading="Create a new partner"
           links={[
             {
               name: 'Dashboard',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'User',
-              href: PATH_DASHBOARD.user.list,
+              name: 'Partner',
+              href: PATH_DASHBOARD.partner.root,
             },
-            { name: 'New user' },
+            { name: 'Create' },
           ]}
         />
         <UserNewEditForm />

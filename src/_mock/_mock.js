@@ -6,6 +6,8 @@ import {
   price,
   title,
   email,
+  level,
+  count,
   rating,
   percent,
   country,
@@ -29,6 +31,7 @@ const _mock = {
   time: (index) => sub(new Date(), { days: index, hours: index }),
   boolean: (index) => boolean[index],
   role: (index) => role[index],
+  level: (index) => level[index],
   company: (index) => company[index],
   address: {
     fullAddress: (index) => fullAddress[index],
@@ -48,6 +51,7 @@ const _mock = {
     percent: (index) => percent[index],
     rating: (index) => rating[index],
     age: (index) => age[index],
+    count: (index) => count[index],
     price: (index) => price[index],
   },
   image: {

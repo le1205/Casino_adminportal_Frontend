@@ -185,7 +185,7 @@ export default function UserListPage() {
   return (
     <>
       <Helmet>
-        <title> User: List | Minimal UI</title>
+        <title> Admin Portal </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>

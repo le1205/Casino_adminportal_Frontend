@@ -96,8 +96,6 @@ export const PermissionDeniedPage = Loadable(
   lazy(() => import('../pages/dashboard/PermissionDeniedPage'))
 );
 
-// BLANK PAGE
-export const BlankPage = Loadable(lazy(() => import('../pages/dashboard/BlankPage')));
 
 // MAIN
 export const Page500 = Loadable(lazy(() => import('../pages/Page500')));

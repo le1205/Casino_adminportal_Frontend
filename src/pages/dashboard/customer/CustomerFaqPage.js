@@ -3,6 +3,9 @@ import { Helmet } from 'react-helmet-async';
 import { Box, Container, Typography } from '@mui/material';
 // sections
 import { FaqsHero, FaqsCategory, FaqsList, FaqsForm } from '../../../sections/faqs';
+import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+// routes
+import { PATH_DASHBOARD } from '../../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -13,9 +16,15 @@ export default function CustomerFaqPage() {
         <title> Faqs | Minimal UI</title>
       </Helmet>
 
-      <FaqsHero />
-
       <Container sx={{ pt: 15, pb: 10, position: 'relative' }}>
+        <CustomBreadcrumbs
+          heading="FAQ"
+          links={[
+            { name: 'Dashboard', href: PATH_DASHBOARD.root },
+            { name: 'Customer Center', href: PATH_DASHBOARD.customer.root },
+            { name: 'Faq' },
+          ]}
+        />
         <FaqsCategory />
 
         <Typography variant="h3" sx={{ mb: 5 }}>
