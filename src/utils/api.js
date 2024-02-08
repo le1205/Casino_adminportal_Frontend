@@ -1,10 +1,10 @@
 import axios from "axios";
 
 // config
-import { HOST_API_SERVER } from '../config-global';
+import { HOST_API_SERVER, SECRET } from '../config-global';
 
 
-export const apiWithPostData = async (url, params) => {
+export const apiWithPostData = async (url, params, headers) => {
     const config = {
         method: 'post',
         url: HOST_API_SERVER + url,
@@ -13,8 +13,9 @@ export const apiWithPostData = async (url, params) => {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': 'true',
             'authorization':'0040544dd65352c2bf9c74f4d9b44099',
-            'token':'C74fWJQNre8g8xoxyo0a3zIMdXHKPESZ',
+            'token':SECRET.secretToken,
             'admin':'true',
+            ...headers,
         },
         data: params,
     };

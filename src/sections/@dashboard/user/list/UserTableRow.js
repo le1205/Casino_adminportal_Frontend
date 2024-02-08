@@ -33,7 +33,7 @@ UserTableRow.propTypes = {
 };
 
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectMoney }) {
-  const { name, id, no, company, role, cash, isVerified, inOut, totalLoose, status } = row;
+  const { name, id, no, company, role, cash, isVerified, inOut, totalLoose, status, lastDate, point } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -78,18 +78,12 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           {role}
         </TableCell>
 
-        <TableCell align="left">
-          <Label
-            variant="soft"
-            color={(status === 'banned' && 'error') || 'success'}
-            sx={{ textTransform: 'capitalize' }}
-          >
-            {status}
-          </Label>
-        </TableCell>
-
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
           {cash}
+        </TableCell>
+
+        <TableCell align="left">
+          {point}
         </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
@@ -110,6 +104,10 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
                 }}/>
             <LocalParkingIcon color="error"/>
           </Stack>
+        </TableCell>
+
+        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+          {lastDate}
         </TableCell>
 
         {/* <TableCell align="right">

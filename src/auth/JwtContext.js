@@ -112,7 +112,10 @@ export function AuthProvider({ children }) {
   const login = useCallback(async (email, pwd) => {
     try {
       const url = adminLoginUrl;
-      apiWithPostData(url, { email, password: pwd}).then((response) => {
+      const headers = {
+          'authorization':'0040544dd65352c2bf9c74f4d9b44099',
+        };
+      apiWithPostData(url, { email, password: pwd,}, headers).then((response) => {
         const { status, session, user } = response;
         console.log("result >>>>>", response);
         if(session.accessToken) {

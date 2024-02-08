@@ -46,9 +46,9 @@ import {
 // sections
 import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/user/list';
 // api
-import { apiWithGetData, apiWithPatchData, apiWithPostData } from '../../../utils/api';
+import { apiWithPostData } from '../../../utils/api';
 // url
-import { accountBalanceUrl } from '../../../utils/urlList';
+import { adminListUrl } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
@@ -73,8 +73,8 @@ const TABLE_HEAD = [
   { id: 'name', label: 'Name', align: 'left' },
   { id: 'company', label: 'Company', align: 'left' },
   { id: 'level', label: 'Level', align: 'left' },
-  { id: 'role', label: 'Role', align: 'left' },
   { id: 'cash', label: 'Cash', align: 'left' },
+  { id: 'point', label: 'point', align: 'left' },
   { id: 'in_out', label: 'In/Out', align: 'left' },
   { id: 'total_loose', label: 'Total Loose', align: 'left' },
   { id: 'action', label: 'Action', align: 'left' },
@@ -110,7 +110,7 @@ export default function UserListPage() {
 
   const navigate = useNavigate();
 
-  const [tableData, setTableData] = useState(_userList);
+  const [tableData, setTableData] = useState([]);
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -214,30 +214,44 @@ export default function UserListPage() {
   
   useEffect(() => {
     
-    const code = oPcode+secretKey
-    console.log(code);
-    const md5Signature = md5(code).toLowerCase();
-    console.log(md5Signature);
+    // const code = oPcode+secretKey
+    // console.log(code);
+    // const md5Signature = md5(code).toLowerCase();
+    // console.log(md5Signature);
     
-    const url = accountBalanceUrl;
-    // apiWithPatchData(url, { opcode:oPcode, signature: md5Signature }).then((response) => {
-    //     const result = response.data;
-    //     console.log(result);
-    // }).catch((error) => {
-    //   console.log("here>>>> ", error);
-    // });
-    // apiWithGetData(url, { opcode:oPcode, username:"www1101", token:"2c8e4901d70c39abdfad6625687776bb", signature: "7bf4c0055bf8592868846df5cb131d5d" }).then((response) => {
-    //     const result = response.data;
-    //     console.log(result);
-    // }).catch((error) => {
-    //   console.log(error);
-    // });
-    apiWithPostData(url, { username:"www001", password:"11111"}).then((response) => {
-        const result = response.data;
-        console.log(result);
-    }).catch((error) => {
+    try {
+      const url = adminListUrl;
+      const headers = {
+          'authorization':'eb2331cfc58db26ffabb8c817a35e243',
+        };
+      apiWithPostData(url, { page:1, pageSize: 30, date:[]}, headers).then((response) => {
+        const { results } = response;
+        console.log("result >>>>>", results);
+        const users = [];
+        results.forEach((item, index) => {
+          const user = {
+            no: index,
+            id: item.user_id || '---',
+            name: item.Nickname || '---',
+            company: item.company || '---',
+            level: item.level || '---',
+            cash: item.amount || '---',
+            point: item.pointSlot || '0',
+            inOut: item.inOut || '---',
+            totalLoose: item.loseSlotRate || '0',
+            lastDate: item.updatedAt || '---',
+            isVerified: item.verify || false,
+            status: item.isBlock || false,
+            role: item.role.name || '---',
+          }
+          users.push(user);
+        });
+        setTableData(users);
+
+      });
+    } catch (error) {
       console.log(error);
-    });
+    }
   }, []);
 
   return (
