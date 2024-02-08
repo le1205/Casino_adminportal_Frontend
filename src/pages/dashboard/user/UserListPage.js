@@ -1,7 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+// md5
+import {md5} from 'js-md5';
 // @mui
 import {
   Tab,
@@ -13,8 +15,13 @@ import {
   Divider,
   TableBody,
   Container,
-  IconButton,
+  Dialog,
   TableContainer,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  TextField,
+  DialogActions,
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
@@ -38,6 +45,10 @@ import {
 } from '../../../components/table';
 // sections
 import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/user/list';
+// api
+import { apiWithGetData, apiWithPatchData, apiWithPostData } from '../../../utils/api';
+// url
+import { accountBalanceUrl } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
@@ -57,13 +68,21 @@ const ROLE_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
+  { id: 'no', label: 'No', align: 'left' },
+  { id: 'id', label: 'Id', align: 'left' },
   { id: 'name', label: 'Name', align: 'left' },
   { id: 'company', label: 'Company', align: 'left' },
+  { id: 'level', label: 'Level', align: 'left' },
   { id: 'role', label: 'Role', align: 'left' },
-  { id: 'isVerified', label: 'Verified', align: 'center' },
-  { id: 'status', label: 'Status', align: 'left' },
-  { id: '' },
+  { id: 'cash', label: 'Cash', align: 'left' },
+  { id: 'in_out', label: 'In/Out', align: 'left' },
+  { id: 'total_loose', label: 'Total Loose', align: 'left' },
+  { id: 'action', label: 'Action', align: 'left' },
+  { id: 'last_date', label: 'Last Date', align:'left' },
 ];
+
+const oPcode = process.env.REACT_APP_SECRET_OPCODE;
+const secretKey = process.env.REACT_APP_SECRET_KEY;
 
 // ----------------------------------------------------------------------
 
@@ -94,6 +113,8 @@ export default function UserListPage() {
   const [tableData, setTableData] = useState(_userList);
 
   const [openConfirm, setOpenConfirm] = useState(false);
+
+  const [open, setOpen] = useState(false);
 
   const [filterName, setFilterName] = useState('');
 
@@ -182,13 +203,50 @@ export default function UserListPage() {
     setFilterStatus('all');
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  
+  useEffect(() => {
+    
+    const code = oPcode+secretKey
+    console.log(code);
+    const md5Signature = md5(code).toLowerCase();
+    console.log(md5Signature);
+    
+    const url = accountBalanceUrl;
+    // apiWithPatchData(url, { opcode:oPcode, signature: md5Signature }).then((response) => {
+    //     const result = response.data;
+    //     console.log(result);
+    // }).catch((error) => {
+    //   console.log("here>>>> ", error);
+    // });
+    // apiWithGetData(url, { opcode:oPcode, username:"www1101", token:"2c8e4901d70c39abdfad6625687776bb", signature: "7bf4c0055bf8592868846df5cb131d5d" }).then((response) => {
+    //     const result = response.data;
+    //     console.log(result);
+    // }).catch((error) => {
+    //   console.log(error);
+    // });
+    apiWithPostData(url, { username:"www001", password:"11111"}).then((response) => {
+        const result = response.data;
+        console.log(result);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }, []);
+
   return (
     <>
       <Helmet>
         <title> Admin Portal </title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+      <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
           heading="User List"
           links={[
@@ -202,6 +260,7 @@ export default function UserListPage() {
               to={PATH_DASHBOARD.user.new}
               variant="contained"
               startIcon={<Iconify icon="eva:plus-fill" />}
+              sx={{ mt: 4 }}
             >
               New User
             </Button>
@@ -235,7 +294,7 @@ export default function UserListPage() {
           />
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <TableSelectedAction
+            {/* <TableSelectedAction
               dense={dense}
               numSelected={selected.length}
               rowCount={tableData.length}
@@ -252,7 +311,7 @@ export default function UserListPage() {
                   </IconButton>
                 </Tooltip>
               }
-            />
+            /> */}
 
             <Scrollbar>
               <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
@@ -282,6 +341,7 @@ export default function UserListPage() {
                         onSelectRow={() => onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
                         onEditRow={() => handleEditRow(row.name)}
+                        onSelectMoney={() => handleClickOpen(row.id)}
                       />
                     ))}
 
@@ -308,6 +368,32 @@ export default function UserListPage() {
           />
         </Card>
       </Container>
+      
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Subscribe</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To subscribe to this website, please enter your email address here. We will send updates
+            occasionally.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            fullWidth
+            type="email"
+            margin="dense"
+            variant="outlined"
+            label="Email Address"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="inherit">
+            Cancel
+          </Button>
+          <Button onClick={handleClose} variant="contained">
+            Subscribe
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <ConfirmDialog
         open={openConfirm}

@@ -12,6 +12,9 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import LocalParkingIcon from '@mui/icons-material/LocalParking';
 // components
 import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
@@ -26,10 +29,11 @@ UserTableRow.propTypes = {
   onEditRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
   onSelectRow: PropTypes.func,
+  onSelectMoney: PropTypes.func,
 };
 
-export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { name, avatarUrl, company, role, isVerified, status } = row;
+export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectMoney }) {
+  const { name, id, no, company, role, cash, isVerified, inOut, totalLoose, status } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -54,14 +58,14 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
-        </TableCell>
+
+
+        <TableCell align="left">{no}</TableCell>
+
+        <TableCell align="left">{id}</TableCell>
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={name} src={avatarUrl} />
-
             <Typography variant="subtitle2" noWrap>
               {name}
             </Typography>
@@ -74,18 +78,6 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           {role}
         </TableCell>
 
-        <TableCell align="center">
-          <Iconify
-            icon={isVerified ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}
-            sx={{
-              width: 20,
-              height: 20,
-              color: 'success.main',
-              ...(!isVerified && { color: 'warning.main' }),
-            }}
-          />
-        </TableCell>
-
         <TableCell align="left">
           <Label
             variant="soft"
@@ -96,11 +88,35 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           </Label>
         </TableCell>
 
-        <TableCell align="right">
+        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+          {cash}
+        </TableCell>
+
+        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+          {inOut}
+        </TableCell>
+
+        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+          {totalLoose}
+        </TableCell>
+
+        <TableCell>
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <PersonIcon color="primary"/>
+            <AttachMoneyIcon color="warning"  
+                onClick={() => {
+                  handleOpenConfirm();
+                  handleClosePopover();
+                }}/>
+            <LocalParkingIcon color="error"/>
+          </Stack>
+        </TableCell>
+
+        {/* <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-        </TableCell>
+        </TableCell> */}
       </TableRow>
 
       <MenuPopover

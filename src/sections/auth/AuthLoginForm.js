@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import * as Yup from 'yup';
-import { Link as RouterLink } from 'react-router-dom';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { Link, Stack, Alert, IconButton, InputAdornment } from '@mui/material';
+import { Stack, Alert, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-// routes
-import { PATH_AUTH } from '../../routes/paths';
 // auth
 import { useAuthContext } from '../../auth/useAuthContext';
 // components
 import Iconify from '../../components/iconify';
 import FormProvider, { RHFTextField } from '../../components/hook-form';
+// api
+import { apiWithPostData } from '../../utils/api';
+// url
+import { adminLoginUrl } from '../../utils/urlList';
+import { setSession } from '../../auth/utils';
 
 // ----------------------------------------------------------------------
 
@@ -23,13 +25,13 @@ export default function AuthLoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
+    email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
   });
 
   const defaultValues = {
-    email: 'demo@minimals.cc',
-    password: 'demo1234',
+    email: 'adminhq',
+    password: 'dkagh@adminhq',
   };
 
   const methods = useForm({
@@ -46,11 +48,17 @@ export default function AuthLoginForm() {
 
   const onSubmit = async (data) => {
     try {
-      // await login(data.email, data.password);
-      
-      window.open("/dashboard");
+      await login(data.email, data.password);
+      // const url = adminLoginUrl;
+      // apiWithPostData(url, { email:data.email, password:data.password}).then((response) => {
+      //   const result = response;
+      //   const { status, session, user } = response;
+      //   console.log("here>>>>> result: ", result);
+      //   if(session.accessToken) {
+      //     setSession(session.accessToken);
+      //   }
+      // });
     } catch (error) {
-      console.error(error);
       reset();
       setError('afterSubmit', {
         ...error,
@@ -64,7 +72,7 @@ export default function AuthLoginForm() {
       <Stack spacing={3}>
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
 
-        <RHFTextField name="email" label="Email address" />
+        <RHFTextField name="email" label="Username" />
 
         <RHFTextField
           name="password"

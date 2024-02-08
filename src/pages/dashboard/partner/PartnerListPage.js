@@ -1,6 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
 import { useState } from 'react';
+// md5
+import {md5} from 'js-md5';
+
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import {
@@ -38,6 +41,8 @@ import {
 } from '../../../components/table';
 // sections
 import { PartnerTableRow, PartnerTableToolbar } from '../../../sections/@dashboard/partner/list';
+// config
+import { SECRET } from '../../../config-global';
 
 // ----------------------------------------------------------------------
 
@@ -66,6 +71,7 @@ const TABLE_HEAD = [
   { id: 'option', label: 'Option', align: 'left' },
   { id: '' },
 ];
+
 
 // ----------------------------------------------------------------------
 
@@ -131,7 +137,6 @@ export default function PartnerListPage() {
   };
 
   const handleFilterStatus = (event, newValue) => {
-    console.log(newValue);
     setPage(0);
     setFilterStatus(newValue);
   };

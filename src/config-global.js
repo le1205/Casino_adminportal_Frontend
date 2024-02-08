@@ -6,6 +6,8 @@ import { PATH_DASHBOARD } from './routes/paths';
 
 export const HOST_API_KEY = process.env.REACT_APP_HOST_API_KEY || '';
 
+export const HOST_API_SERVER = process.env.REACT_APP_HOST_API_SERVER || '';
+
 export const FIREBASE_API = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -30,6 +32,13 @@ export const MAP_API = process.env.REACT_APP_MAPBOX_API;
 
 // ROOT PATH AFTER LOGIN SUCCESSFUL
 export const PATH_AFTER_LOGIN = PATH_DASHBOARD.general.app; // as '/dashboard/app'
+
+
+export const SECRET = {
+  secretOpcode: process.env.REACT_APP_SECRET_OPCODE,
+  secretKey: process.env.REACT_APP_SECRET_KEY,
+  secretToken: process.env.REACT_APP_SECRET_TOKEN,
+};
 
 // LAYOUT
 // ----------------------------------------------------------------------
