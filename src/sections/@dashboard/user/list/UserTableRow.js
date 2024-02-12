@@ -33,7 +33,7 @@ UserTableRow.propTypes = {
 };
 
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectMoney }) {
-  const { name, id, no, company, role, cash, isVerified, inOut, totalLoose, status, lastDate, point } = row;
+  const {_id, name, id, no, company, role, cash,  inOut, totalLoose, lastDate, point } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -47,10 +47,6 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
     setOpenConfirm(false);
   };
 
-  const handleOpenPopover = (event) => {
-    setOpenPopover(event.currentTarget);
-  };
-
   const handleClosePopover = () => {
     setOpenPopover(null);
   };
@@ -58,7 +54,6 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
   return (
     <>
       <TableRow hover selected={selected}>
-
 
         <TableCell align="left">{no}</TableCell>
 
@@ -99,7 +94,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
             <PersonIcon color="primary"/>
             <AttachMoneyIcon color="warning"  
                 onClick={() => {
-                  handleOpenConfirm();
+                  onSelectMoney();
                   handleClosePopover();
                 }}/>
             <LocalParkingIcon color="error"/>

@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // md5
 import {md5} from 'js-md5';
@@ -48,7 +48,7 @@ import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/use
 // api
 import { apiWithPostData } from '../../../utils/api';
 // url
-import { adminListUrl } from '../../../utils/urlList';
+import { adminListUrl, balanceUpdateUrl } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
@@ -114,13 +114,22 @@ export default function UserListPage() {
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
-  const [open, setOpen] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+
+  const [openBalance, setOpenBalance] = useState(false);
+
+  const [isDeposit, setIsDeposit] = useState(true);
+
+  const [selectedRow, setSelectedRow] = useState({});
+
+  const [alertContent, setAlertContent] = useState('');
 
   const [filterName, setFilterName] = useState('');
 
   const [filterRole, setFilterRole] = useState('all');
 
   const [filterStatus, setFilterStatus] = useState('all');
+  const amountRef = useRef('');
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -141,8 +150,12 @@ export default function UserListPage() {
     (!dataFiltered.length && !!filterRole) ||
     (!dataFiltered.length && !!filterStatus);
 
-  const handleOpenConfirm = () => {
-    setOpenConfirm(true);
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
+
+  const handleOpenAlert = () => {
+    setOpenAlert(true);
   };
 
   const handleCloseConfirm = () => {
@@ -203,22 +216,69 @@ export default function UserListPage() {
     setFilterStatus('all');
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseBalance = () => {
+    setOpenBalance(false);
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickBalance = (row) => {
+    setSelectedRow(row);
+    setOpenBalance(true);
   };
 
-  
-  useEffect(() => {
-    
-    // const code = oPcode+secretKey
-    // console.log(code);
-    // const md5Signature = md5(code).toLowerCase();
-    // console.log(md5Signature);
-    
+  const handleDepositBalance = () => {
+    setIsDeposit(true);
+    const amount = amountRef.current.value;
+    if(amount === '' || amount === 0)
+    {
+      const content = "Please input amount to deposit.";
+      setAlertContent(content);
+      handleOpenAlert();
+    }
+    else {
+      setOpenConfirm(true);
+    }
+  };
+
+  const handleWithdrawBalance = () => {
+    setIsDeposit(false);
+    const amount = amountRef.current.value;
+    if(amount === '' || amount === 0)
+    {
+      const content = "Please input amount to withdraw.";
+      setAlertContent(content);
+      handleOpenAlert();
+    }
+    else if (amount > selectedRow.cash){
+      const content = "Please input amount less than cash amount.";
+      setAlertContent(content);
+      handleOpenAlert();
+    }
+    else {
+      setOpenConfirm(true);
+    }
+  };
+
+  const handleUpdateBalance = () => {
+    setOpenConfirm(false);
+    try {
+      const url = balanceUpdateUrl;
+      const amount = amountRef.current.value;
+      const type = isDeposit ? 'deposit' : 'withdraw';
+      const balanceId = selectedRow._id;
+      const headers = {
+          'authorization':'eb2331cfc58db26ffabb8c817a35e243',
+        };
+      apiWithPostData(url, { amount, type, balanceId}, headers).then((response) => {
+        const { results } = response;
+        handleCloseBalance();
+        usersList();
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const usersList = () => {
     try {
       const url = adminListUrl;
       const headers = {
@@ -226,16 +286,16 @@ export default function UserListPage() {
         };
       apiWithPostData(url, { page:1, pageSize: 30, date:[]}, headers).then((response) => {
         const { results } = response;
-        console.log("result >>>>>", results);
         const users = [];
         results.forEach((item, index) => {
           const user = {
+            _id: item._id || '',
             no: index,
             id: item.user_id || '---',
             name: item.Nickname || '---',
             company: item.company || '---',
             level: item.level || '---',
-            cash: item.amount || '---',
+            cash: item.balanceMain || 0,
             point: item.pointSlot || '0',
             inOut: item.inOut || '---',
             totalLoose: item.loseSlotRate || '0',
@@ -252,6 +312,17 @@ export default function UserListPage() {
     } catch (error) {
       console.log(error);
     }
+
+  };
+
+  
+  useEffect(() => {
+    
+    // const code = oPcode+secretKey
+    // console.log(code);
+    // const md5Signature = md5(code).toLowerCase();
+    // console.log(md5Signature);
+    usersList();
   }, []);
 
   return (
@@ -355,7 +426,7 @@ export default function UserListPage() {
                         onSelectRow={() => onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
                         onEditRow={() => handleEditRow(row.name)}
-                        onSelectMoney={() => handleClickOpen(row.id)}
+                        onSelectMoney={() => handleClickBalance(row)}
                       />
                     ))}
 
@@ -383,28 +454,28 @@ export default function UserListPage() {
         </Card>
       </Container>
       
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
+      <Dialog open={openBalance} onClose={handleCloseBalance}>
+        <DialogTitle>회원캐시 관리자 입출금</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here. We will send updates
-            occasionally.
+            현재 보유캐시: {selectedRow.cash}
           </DialogContentText>
           <TextField
             autoFocus
             fullWidth
-            type="email"
+            type="number"
             margin="dense"
             variant="outlined"
-            label="Email Address"
+            label="Amount"
+            inputRef={amountRef}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="inherit">
-            Cancel
+          <Button onClick={handleDepositBalance}variant="contained" color="success">
+            지급
           </Button>
-          <Button onClick={handleClose} variant="contained">
-            Subscribe
+          <Button onClick={handleWithdrawBalance} variant="contained" color="warning">
+            회수
           </Button>
         </DialogActions>
       </Dialog>
@@ -412,25 +483,40 @@ export default function UserListPage() {
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
-        title="Delete"
+        title="Confirm"
         content={
           <>
-            Are you sure want to delete <strong> {selected.length} </strong> items?
+            Are you sure want to {isDeposit? 'deposit' : 'withdraw'} <strong> {amountRef.current? amountRef.current.value : 0} </strong> ?
           </>
         }
         action={
           <Button
             variant="contained"
-            color="error"
+            color="success"
             onClick={() => {
-              handleDeleteRows(selected);
-              handleCloseConfirm();
+              handleUpdateBalance();
             }}
           >
-            Delete
+            Confirm
           </Button>
         }
       />
+
+      <Dialog open={openAlert} onClose={handleCloseAlert} sx={{ minWidth: 400 }}>
+        <DialogTitle>Alert</DialogTitle>
+
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {alertContent}
+          </DialogContentText>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={handleCloseAlert} autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

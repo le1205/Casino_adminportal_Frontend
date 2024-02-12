@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 // form
 import { useForm } from 'react-hook-form';
@@ -6,6 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Stack, Alert, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+// routes
+import { PATH_DASHBOARD } from '../../routes/paths';
 // auth
 import { useAuthContext } from '../../auth/useAuthContext';
 // components
@@ -20,6 +23,8 @@ import { setSession } from '../../auth/utils';
 // ----------------------------------------------------------------------
 
 export default function AuthLoginForm() {
+  
+  const navigate = useNavigate();
   const { login } = useAuthContext();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -48,16 +53,18 @@ export default function AuthLoginForm() {
 
   const onSubmit = async (data) => {
     try {
-      await login(data.email, data.password);
-      // const url = adminLoginUrl;
-      // apiWithPostData(url, { email:data.email, password:data.password}).then((response) => {
-      //   const result = response;
-      //   const { status, session, user } = response;
-      //   console.log("here>>>>> result: ", result);
-      //   if(session.accessToken) {
-      //     setSession(session.accessToken);
-      //   }
-      // });
+      const url = adminLoginUrl;
+      const headers = {
+          'authorization':'0040544dd65352c2bf9c74f4d9b44099',
+        };
+      apiWithPostData(url, { email:data.email, password: data.password,}, headers).then((response) => {
+        const { status, session, user } = response;
+        console.log("result >>>>>", response);
+        if(session.accessToken) {
+          setSession(session.accessToken);
+          navigate(PATH_DASHBOARD.user.list);
+        }
+      });
     } catch (error) {
       reset();
       setError('afterSubmit', {

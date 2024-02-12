@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { createContext, useEffect, useReducer, useCallback, useMemo } from 'react';
+
 // utils
 import axios from '../utils/axios';
 import localStorageAvailable from '../utils/localStorageAvailable';
@@ -64,6 +65,7 @@ export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const storageAvailable = localStorageAvailable();
+  
 
   const initialize = useCallback(async () => {
     try {
