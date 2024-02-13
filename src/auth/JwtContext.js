@@ -118,8 +118,7 @@ export function AuthProvider({ children }) {
           'authorization':'0040544dd65352c2bf9c74f4d9b44099',
         };
       apiWithPostData(url, { email, password: pwd,}, headers).then((response) => {
-        const { status, session, user } = response;
-        console.log("result >>>>>", response);
+        const { session, user } = response;
         if(session.accessToken) {
           setSession(session.accessToken);
           dispatch({

@@ -12,7 +12,7 @@ export const apiWithPostData = async (url, params, headers) => {
             'Content-Type': 'application/json', 
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': 'true',
-            'authorization':'0040544dd65352c2bf9c74f4d9b44099',
+            'authorization':localStorage.getItem('accessToken') || "",
             'token':SECRET.secretToken,
             'admin':'true',
             ...headers,
@@ -31,6 +31,7 @@ export const apiWithGetData = async (url, data) => {
             'Content-Type': 'application/json', 
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': 'true',
+            'authorization':localStorage.getItem('accessToken') || "",
         },
         data
     };
@@ -47,6 +48,7 @@ export const apiWithPatchData = async (url, data) => {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': 'true',
+            'authorization':localStorage.getItem('accessToken') || "",
         },
         data
     };
@@ -62,6 +64,7 @@ export const apiWithPutData = async (url, data) => {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': 'true',
+            'authorization':localStorage.getItem('accessToken') || "",
         },
         data
     };

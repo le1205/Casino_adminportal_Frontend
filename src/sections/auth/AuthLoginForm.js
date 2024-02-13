@@ -9,8 +9,6 @@ import { Stack, Alert, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
-// auth
-import { useAuthContext } from '../../auth/useAuthContext';
 // components
 import Iconify from '../../components/iconify';
 import FormProvider, { RHFTextField } from '../../components/hook-form';
@@ -25,7 +23,6 @@ import { setSession } from '../../auth/utils';
 export default function AuthLoginForm() {
   
   const navigate = useNavigate();
-  const { login } = useAuthContext();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -58,8 +55,7 @@ export default function AuthLoginForm() {
           'authorization':'0040544dd65352c2bf9c74f4d9b44099',
         };
       apiWithPostData(url, { email:data.email, password: data.password,}, headers).then((response) => {
-        const { status, session, user } = response;
-        console.log("result >>>>>", response);
+        const {session, user } = response;
         if(session.accessToken) {
           setSession(session.accessToken);
           navigate(PATH_DASHBOARD.user.list);

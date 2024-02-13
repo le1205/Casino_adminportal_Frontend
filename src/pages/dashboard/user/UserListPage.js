@@ -11,7 +11,6 @@ import {
   Card,
   Table,
   Button,
-  Tooltip,
   Divider,
   TableBody,
   Container,
@@ -25,8 +24,6 @@ import {
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
-// _mock_
-import { _userList } from '../../../_mock/arrays';
 // components
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
@@ -40,7 +37,6 @@ import {
   TableNoData,
   TableEmptyRows,
   TableHeadCustom,
-  TableSelectedAction,
   TablePaginationCustom,
 } from '../../../components/table';
 // sections
@@ -189,23 +185,6 @@ export default function UserListPage() {
     }
   };
 
-  const handleDeleteRows = (selectedRows) => {
-    const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
-    setSelected([]);
-    setTableData(deleteRows);
-
-    if (page > 0) {
-      if (selectedRows.length === dataInPage.length) {
-        setPage(page - 1);
-      } else if (selectedRows.length === dataFiltered.length) {
-        setPage(0);
-      } else if (selectedRows.length > dataInPage.length) {
-        const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
-        setPage(newPage);
-      }
-    }
-  };
-
   const handleEditRow = (id) => {
     navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
   };
@@ -265,9 +244,7 @@ export default function UserListPage() {
       const amount = amountRef.current.value;
       const type = isDeposit ? 'deposit' : 'withdraw';
       const balanceId = selectedRow._id;
-      const headers = {
-          'authorization':'eb2331cfc58db26ffabb8c817a35e243',
-        };
+      const headers = {};
       apiWithPostData(url, { amount, type, balanceId}, headers).then((response) => {
         const { results } = response;
         handleCloseBalance();
@@ -281,9 +258,7 @@ export default function UserListPage() {
   const usersList = () => {
     try {
       const url = adminListUrl;
-      const headers = {
-          'authorization':'eb2331cfc58db26ffabb8c817a35e243',
-        };
+      const headers = {};
       apiWithPostData(url, { page:1, pageSize: 30, date:[]}, headers).then((response) => {
         const { results } = response;
         const users = [];
