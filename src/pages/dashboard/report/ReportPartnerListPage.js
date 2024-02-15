@@ -1,17 +1,20 @@
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import {
   Tab,
-  Tabs,
+  Grid,
   Card,
   Table,
   Button,
   Tooltip,
-  Divider,
+  Typography,
   TableBody,
+  TableRow,
+  TableCell,
+  Stack,
   Container,
   IconButton,
   TableContainer,
@@ -37,7 +40,11 @@ import {
   TablePaginationCustom,
 } from '../../../components/table';
 // sections
-import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/user/list';
+import { ReportTableToolbar, ReportTableRow } from '../../../sections/@dashboard/report/list';
+// api
+import { apiWithPostData } from '../../../utils/api';
+// url
+import { allTotalListUrl, } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
@@ -58,18 +65,31 @@ const ROLE_OPTIONS = [
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', align: 'left' },
-  { id: 'company', label: 'Company', align: 'left' },
-  { id: 'role', label: 'Role', align: 'left' },
-  { id: 'isVerified', label: 'Verified', align: 'center' },
-  { id: 'status', label: 'Status', align: 'left' },
-  { id: '' },
+  { id: 'rate', label: 'Applied Rate', align: 'left' },
+  { id: 'status', label: 'Holding Status', align: 'left' },
+  { id: 'depwith', label: 'Deposit & Withdrawal', align: 'center' },
+  { id: 'sport', label: 'Sport', align: 'left' },
+  { id: 'slot', label: 'Slot', align: 'left' },
+  { id: 'mini', label: 'Mini Game', align: 'left' },
+];
+
+const TABLE_HEAD_TOTAL_ONE = [
+  { id: '1', label: '', align: 'center' },
+  { id: '2', label: '', align: 'center' },
+  { id: '3', label: '', align: 'center' },
+];
+const TABLE_HEAD_TOTAL_TWO = [
+  { id: 'sport', label: 'Sport', align: 'center' },
+  { id: 'slot', label: 'Slot', align: 'center' },
+  { id: 'mini', label: 'Mini Game', align: 'center' },
+  { id: 'total', label: 'Total', align: 'center' },
 ];
 
 // ----------------------------------------------------------------------
 
 export default function ReportPartnerListPage() {
   const {
-    dense,
+    dense = false,
     page,
     order,
     orderBy,
@@ -182,39 +202,471 @@ export default function ReportPartnerListPage() {
     setFilterStatus('all');
   };
 
+  const getAllTotalList = () => {
+    try {
+      const url = allTotalListUrl;
+      const headers = {};
+      apiWithPostData(url, {}, headers).then((response) => {
+        const { mapData } = response;
+        console.log("allTotalData >>>", mapData);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+  };
+  
+  useEffect(() => {
+    
+    // const code = oPcode+secretKey
+    // console.log(code);
+    // const md5Signature = md5(code).toLowerCase();
+    // console.log(md5Signature);
+    getAllTotalList();
+  }, []);
+
   return (
     <>
       <Helmet>
         <title> Admin Portal </title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+      <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Partner List"
+          heading="Partner Report"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             { name: 'Settlement', href: PATH_DASHBOARD.report.root },
-            { name: 'Partner List' },
+            { name: 'Partner Report' },
           ]}
         />
-
         <Card>
-          <Tabs
-            value={filterStatus}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2,
-              bgcolor: 'background.neutral',
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab key={tab} label={tab} value={tab} />
-            ))}
-          </Tabs>
-
-          <Divider />
-
-          <UserTableToolbar
+          <Typography variant="h6" sx={{ color: 'text.secondary', pt:1, pl:1, }}>
+            Total Search Result
+          </Typography>
+          <Grid container spacing={3} direction="row">
+            <Grid item xs={12} md={6} > 
+              <Table size= 'small' sx={{ minWidth: 600, mt:6 }}>
+                  <TableHeadCustom
+                    headLabel={TABLE_HEAD_TOTAL_ONE}
+                  />
+                  <TableBody sx={{ pt:3, }}>
+                    <TableRow key="total_search_one_1">
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Money:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            User Deposit:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            User Widthraw:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Deposit-Withdraw:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow key="total_search_one_2">
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Holding Point:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Partner Deposit:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Partner Widthraw:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Partner Deposit-Withdraw:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow key="total_search_one_3">
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Users:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Admin Deposit:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Admin Widthraw:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Admin Deposit-Withdraw:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+              </Table>
+            </Grid>
+            <Grid item xs={12} md={6} >
+              <Table size= 'small' sx={{ minWidth: 600, pt:1 }}>
+                  <TableHeadCustom
+                    headLabel={TABLE_HEAD_TOTAL_TWO}
+                  />
+                  <TableBody>
+                    <TableRow key="total_search_two_1">
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Betting:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Betting:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Betting:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Total Bet:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow key="total_search_two_2">
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Win:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Win:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Win:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Total Win:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow key="total_search_two_3">
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Rolling:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Rolling:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Rolling:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Total Rolling:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow key="total_search_two_4">
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Losing:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Losing:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Losing:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Total Losing:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow key="total_search_two_5">
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Balance:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Balance:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Balance:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <Stack direction="row"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Typography variant="body2">
+                            Total Balance:
+                          </Typography>
+                          <Typography variant="body2">
+                            0
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+              </Table>
+            </Grid>
+          </Grid>
+        </Card>
+        <Card>
+          <ReportTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
             filterRole={filterRole}
@@ -265,7 +717,7 @@ export default function ReportPartnerListPage() {
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
-                      <UserTableRow
+                      <ReportTableRow
                         key={row.id}
                         row={row}
                         selected={selected.includes(row.id)}

@@ -18,10 +18,15 @@ export default function HeaderAnalytic({ title, color, price, handleClick }) {
       sx={{ width: 0.5, minWidth: 85 }}
     >
 
-      <Card spacing={0.5} sx={{ px: 0.5 }} style={{cursor:'pointer'}} onClick={handleClick}>
-        <Typography variant="h8">{title}</Typography>
+      <Card 
+        spacing={0.5} 
+        sx={{ px: 1 }} 
+        style={{cursor:'pointer'} } 
+        onClick={handleClick}>
 
-        <Typography variant="subtitle2" sx={{ color }}>
+        <Typography variant="subtitle2"  align="center">{title}</Typography>
+
+        <Typography variant="subtitle2" align="center" sx={{ color }}>
           {price}
         </Typography>
       </Card>

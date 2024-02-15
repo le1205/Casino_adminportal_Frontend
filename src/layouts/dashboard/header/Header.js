@@ -92,7 +92,6 @@ export default function Header({ onOpenNav }) {
         setTotalWin(dashboard.total_win || 0);
         setRolling(dashboard.rolling || 0);
         setBettingProfit(dashboard.profit || 0);
-
       });
     } catch (error) {
       console.log(error);
@@ -125,7 +124,6 @@ export default function Header({ onOpenNav }) {
             <Scrollbar>
               <Stack
                 direction="row"
-                divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
                 sx={{ py: 1 }}
               >
                 <HeaderAnalytic

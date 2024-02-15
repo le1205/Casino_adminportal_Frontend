@@ -7,7 +7,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import { useSettingsContext } from '../../../components/settings';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 // sections
-import UserNewEditForm from '../../../sections/@dashboard/user/UserNewEditForm';
+import PartnerNewEditForm from '../../../sections/@dashboard/partner/PartnerNewEditForm';
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ export default function PartnerCreatePage() {
             { name: 'Create' },
           ]}
         />
-        <UserNewEditForm />
+        <PartnerNewEditForm />
       </Container>
     </>
   );

@@ -26,7 +26,7 @@ export default function RHFSwitch({ name, helperText, ...other }) {
             <FormHelperText error={!!error}>{error ? error?.message : helperText}</FormHelperText>
           )}
         </div>
-      )}
+    )}
     />
   );
 }
