@@ -16,7 +16,7 @@ import FormProvider, { RHFTextField } from '../../components/hook-form';
 import { apiWithPostData } from '../../utils/api';
 // url
 import { adminLoginUrl } from '../../utils/urlList';
-import { setSession } from '../../auth/utils';
+import { setSession, setUser } from '../../auth/utils';
 
 // ----------------------------------------------------------------------
 
@@ -58,6 +58,7 @@ export default function AuthLoginForm() {
         const {session, user } = response;
         if(session.accessToken) {
           setSession(session.accessToken);
+          setUser(user);
           navigate(PATH_DASHBOARD.user.list);
         }
       });

@@ -4,11 +4,9 @@ import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import {
-  Tab,
   Grid,
   Card,
   Table,
-  Button,
   Tooltip,
   Typography,
   TableBody,
@@ -21,14 +19,12 @@ import {
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
-// _mock_
-import { _userList } from '../../../_mock/arrays';
 // components
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
-import ConfirmDialog from '../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
+import LoadingScreen from '../../../components/loading-screen';
 import {
   useTable,
   getComparator,
@@ -47,8 +43,6 @@ import { apiWithPostData } from '../../../utils/api';
 import { allTotalListUrl, } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = ['all', 'active', 'banned'];
 
 const ROLE_OPTIONS = [
   'all',
@@ -70,7 +64,7 @@ const TABLE_HEAD = [
   { id: 'depwith', label: 'Deposit & Withdrawal', align: 'center' },
   { id: 'sport', label: 'Sport', align: 'left' },
   { id: 'slot', label: 'Slot', align: 'left' },
-  { id: 'mini', label: 'Mini Game', align: 'left' },
+  { id: 'total', label: 'Total', align: 'left' },
 ];
 
 const TABLE_HEAD_TOTAL_ONE = [
@@ -84,6 +78,7 @@ const TABLE_HEAD_TOTAL_TWO = [
   { id: 'mini', label: 'Mini Game', align: 'center' },
   { id: 'total', label: 'Total', align: 'center' },
 ];
+const userData = localStorage.getItem('user') || "";
 
 // ----------------------------------------------------------------------
 
@@ -110,19 +105,25 @@ export default function ReportPartnerListPage() {
   const { themeStretch } = useSettingsContext();
 
   const navigate = useNavigate();
-
-  const [tableData, setTableData] = useState(_userList);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [openConfirm, setOpenConfirm] = useState(false);
-
   const [filterName, setFilterName] = useState('');
-
   const [filterRole, setFilterRole] = useState('all');
-
   const [filterStatus, setFilterStatus] = useState('all');
+  const [totalHoldingPoint, setTotalHoldingPoint] = useState(0);
+  const [totalPartnerDeposit, setTotalPartnerDeposit] = useState(0);
+  const [totalAdminDeposit, setTotalAdminDeposit] = useState(0);
+  const [totalPartnerWithdraw, setTotalPartnerWithdraw] = useState(0);
+  const [totalAdminWithdraw, setTotalAdminWithdraw] = useState(0);
+  const [totalPartnerIncome, setTotalPartnerIncome] = useState(0);
+  const [totalAdminIncome, setTotalAdminIncome] = useState(0);
+  const [dataActive, setDataActive] = useState({});
+  const [node, setNode] = useState([]);
+  const [totalData, setTotalData] = useState({});
 
   const dataFiltered = applyFilter({
-    inputData: tableData,
+    inputData: node,
     comparator: getComparator(order, orderBy),
     filterName,
     filterRole,
@@ -144,15 +145,6 @@ export default function ReportPartnerListPage() {
     setOpenConfirm(true);
   };
 
-  const handleCloseConfirm = () => {
-    setOpenConfirm(false);
-  };
-
-  const handleFilterStatus = (event, newValue) => {
-    setPage(0);
-    setFilterStatus(newValue);
-  };
-
   const handleFilterName = (event) => {
     setPage(0);
     setFilterName(event.target.value);
@@ -163,31 +155,13 @@ export default function ReportPartnerListPage() {
     setFilterRole(event.target.value);
   };
 
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
+  const handleDeleteRow = (key) => {
+    const deleteRow = node.filter((row) => row.key !== key);
     setSelected([]);
-    setTableData(deleteRow);
 
     if (page > 0) {
       if (dataInPage.length < 2) {
         setPage(page - 1);
-      }
-    }
-  };
-
-  const handleDeleteRows = (selectedRows) => {
-    const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
-    setSelected([]);
-    setTableData(deleteRows);
-
-    if (page > 0) {
-      if (selectedRows.length === dataInPage.length) {
-        setPage(page - 1);
-      } else if (selectedRows.length === dataFiltered.length) {
-        setPage(0);
-      } else if (selectedRows.length > dataInPage.length) {
-        const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
-        setPage(newPage);
       }
     }
   };
@@ -204,26 +178,215 @@ export default function ReportPartnerListPage() {
 
   const getAllTotalList = () => {
     try {
+      setIsLoading(true);
       const url = allTotalListUrl;
       const headers = {};
       apiWithPostData(url, {}, headers).then((response) => {
-        const { mapData } = response;
-        console.log("allTotalData >>>", mapData);
+        
+        const valueData = {
+          ...response,
+          active: response.resultsValueMain.find((item) => item.username === userData.username)
+        };
+
+        const valueMain = response.mapData.map((item) => ({
+            ...item,
+            balanceMain:
+                (response?.resultsValueMain.find((val) => val?.userId?._id === item.userId)?.userId?.vituralMoney || 0) +
+                item.balanceMain
+        }));
+        
+        const listDataUser = valueMain.filter((item) => item.creatorId === userData._id);
+        const treedata = handleCountData(listDataUser, valueMain);
+        setTotalData(valueData);
+        setNode(treedata);
+        setIsLoading(false);
       });
     } catch (error) {
       console.log(error);
     }
-
   };
   
+  const handleCountTotal = (arr, key) => {
+      let tot = 0;
+      // eslint-disable-next-line array-callback-return
+      arr.map((item) => {
+          tot += Number(item[key]);
+      });
+      return tot;
+  };
+  const countData = (arr, role) => {
+      const data = arr.map((item) => {
+          if (item.role.title === 'user') {
+              return {
+                  ...item
+              };
+          }
+          return {
+              ...item,
+              bet_money_live_history: handleCountTotal(
+                  arr.filter((val) => val.creatorId === item.userId),
+                  'bet_money_live_history'
+              ),
+              lose_money_liveadmin: handleCountTotal(
+                  arr.filter((val) => val.creatorId === item.userId),
+                  'lose_money_liveadmin'
+              ),
+              bet_money_slot_history: handleCountTotal(
+                  arr.filter((val) => val.creatorId === item.userId),
+                  'bet_money_slot_history'
+              ),
+              lose_money_slotadmin: handleCountTotal(
+                  arr.filter((val) => val.creatorId === item.userId),
+                  'lose_money_slotadmin'
+              )
+          };
+      });
+      return data;
+  };
+  const handleCountHeaderDataNumber = (data) => Number(data.slice(data.search('/') + 1).replaceAll(',', ''));
+  const handleCountLosingRate = (arr) => {
+      let data = arr;
+      data = data.map((item) => ({
+              ...item,
+              total_money_count_live: item.bet_money_live_history - item.lose_money_liveadmin - item.bet_money_live,
+              total_money_count_losing_live:
+                  ((item.bet_money_live_history - item.lose_money_liveadmin - item.bet_money_live) * item.loseLiveRate) / 100,
+              total_money_count_slot: item.bet_money_slot_history - item.lose_money_slotadmin - item.bet_money_slot,
+              total_money_count_losing_slot:
+                  ((item.bet_money_slot_history - item.lose_money_slotadmin - item.bet_money_slot) * item.loseSlotRate) / 100
+          }));
+      return data;
+  };
+  const handleSumAll = (arr) => {
+      let data = arr;
+      data = data.map((item) => ({
+              ...item,
+              sum_1: item.bet_money_slot_history + item.bet_money_live_history,
+              sum_2: item.lose_money_slotadmin + item.lose_money_liveadmin,
+              sum_3: item.bet_money_slot + item.bet_money_live,
+              sum_4: item.total_money_count_losing_slot + item.total_money_count_losing_live,
+              sum_5: item.total_money_count_slot + item.total_money_count_live
+          }));
+      return data;
+  };
+  const handleCountUser = (arr) => {
+      const countUser = arr.filter((item) => item.role.title === 'user').length;
+      return countUser;
+  };
+  const handleCountTotalHeader = (arr) => {
+      let totalSlot1 = 0;
+      let totalSlot2 = 0;
+      let totalSlot3 = 0;
+      let totalSlot4 = 0;
+      let totalSlot5 = 0;
+      let totalLive1 = 0;
+      let totalLive2 = 0;
+      let totalLive3 = 0;
+      let totalLive4 = 0;
+      let totalLive5 = 0;
+      // eslint-disable-next-line array-callback-return
+      arr.map((item) => {
+          totalSlot1 += item.bet_money_slot_history;
+          totalSlot2 += item.lose_money_slotadmin;
+          totalSlot3 += item.bet_money_slot;
+          totalSlot4 += item.total_money_count_losing_slot;
+          totalSlot5 += item.total_money_count_slot;
+          totalLive1 += item.bet_money_live_history;
+          totalLive2 += item.lose_money_liveadmin;
+          totalLive3 += item.bet_money_live;
+          totalLive4 += item.total_money_count_losing_live;
+          totalLive5 += item.total_money_count_live;
+      });
+      return {
+          totalSlot1,
+          totalSlot2,
+          totalSlot3,
+          totalSlot4,
+          totalSlot5,
+          totalLive1,
+          totalLive2,
+          totalLive3,
+          totalLive4,
+          totalLive5
+      };
+  };
+  
+  const handleCountData = (listValue, dataMain) => {
+    const data = dataMain.map((item) => ({
+            ...item,
+            bet_money_slot: handleCountHeaderDataNumber(item.bet_money_slot),
+            bet_money_live: handleCountHeaderDataNumber(item.bet_money_live)
+        }));
+    const data1 = countData(data, 'user');
+    const data2 = countData(data1, 'agent');
+    const data3 = countData(data2, 'distribute');
+    const data4 = countData(data3, 'company');
+    const value1 = countData(data4, 'admin');
+    const value2 = handleCountLosingRate(value1);
+    const value = handleSumAll(value2);
+    const listDataUser1 = value.filter((item) => item.creatorId === userData._id);
+    setDataActive(handleCountTotalHeader(value.filter((item) => item.role.title !== 'user')));
+    const treedata = listDataUser1.map((item) => ({
+            key: item._id,
+            data: {
+                ...item,
+                total_user: handleCountUser(value.filter((sub) => sub.creatorId === item.userId))
+            },
+            children: value
+                .filter((sub) => sub.creatorId === item.userId)
+                ?.map((subitem) => ({
+                        key: subitem._id,
+                        data: {
+                            ...subitem,
+                            total_user: handleCountUser(value.filter((com) => com.creatorId === subitem.userId))
+                        },
+                        children: value
+                            .filter((com) => com.creatorId === subitem.userId)
+                            ?.map((comitem) => ({
+                                    key: comitem._id,
+                                    data: {
+                                        ...comitem,
+                                        total_user: handleCountUser(value.filter((dis) => dis.creatorId === comitem.userId))
+                                    },
+                                    children: value
+                                        .filter((dis) => dis.creatorId === comitem.userId)
+                                        ?.map((disitem) => ({
+                                                key: disitem._id,
+                                                data: {
+                                                    ...disitem,
+                                                    total_user: handleCountUser(
+                                                        value.filter((agent) => agent.creatorId === disitem.userId)
+                                                    )
+                                                },
+                                                children: value
+                                                    .filter((agent) => agent.creatorId === disitem.userId)
+                                                    ?.map((agentitem) => ({
+                                                            key: agentitem._id,
+                                                            data: {
+                                                                ...agentitem,
+                                                                total_user: handleCountUser(
+                                                                    value.filter((agent) => agent.creatorId === agentitem.userId)
+                                                                )
+                                                            },
+                                                            children: value
+                                                                .filter((user) => user.creatorId === agentitem.userId)
+                                                                ?.map((useitem) => ({
+                                                                        key: useitem._id,
+                                                                        data: useitem
+                                                                    }))
+                                                        }))
+                                            }))
+                                }))
+                    }))
+        }));
+    return treedata;
+};
+  
   useEffect(() => {
-    
-    // const code = oPcode+secretKey
-    // console.log(code);
-    // const md5Signature = md5(code).toLowerCase();
-    // console.log(md5Signature);
     getAllTotalList();
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openConfirm]);
+
 
   return (
     <>
@@ -260,7 +423,7 @@ export default function ReportPartnerListPage() {
                             Money:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                          {totalData?.totalMoney}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -272,7 +435,7 @@ export default function ReportPartnerListPage() {
                             User Deposit:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {totalData?.totald}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -284,7 +447,7 @@ export default function ReportPartnerListPage() {
                             User Widthraw:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {totalData?.totalw}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -296,7 +459,7 @@ export default function ReportPartnerListPage() {
                             Deposit-Withdraw:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {totalData?.totald}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -310,7 +473,7 @@ export default function ReportPartnerListPage() {
                             Holding Point:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {totalHoldingPoint}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -322,7 +485,7 @@ export default function ReportPartnerListPage() {
                             Partner Deposit:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {totalPartnerDeposit}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -334,7 +497,7 @@ export default function ReportPartnerListPage() {
                             Partner Widthraw:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {totalPartnerWithdraw}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -346,7 +509,7 @@ export default function ReportPartnerListPage() {
                             Partner Deposit-Withdraw:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {totalPartnerIncome}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -360,7 +523,7 @@ export default function ReportPartnerListPage() {
                             Users:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {totalData?.mapData?.length}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -372,7 +535,7 @@ export default function ReportPartnerListPage() {
                             Admin Deposit:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {totalAdminDeposit}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -384,7 +547,7 @@ export default function ReportPartnerListPage() {
                             Admin Widthraw:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {totalAdminWithdraw}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -396,7 +559,7 @@ export default function ReportPartnerListPage() {
                             Admin Deposit-Withdraw:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {totalAdminIncome}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -419,7 +582,7 @@ export default function ReportPartnerListPage() {
                             Betting:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {dataActive?.totalLive1}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -431,7 +594,8 @@ export default function ReportPartnerListPage() {
                             Betting:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            
+                          {dataActive?.totalSlot1}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -455,7 +619,10 @@ export default function ReportPartnerListPage() {
                             Total Bet:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {
+                            // eslint-disable-next-line no-unsafe-optional-chaining
+                            dataActive?.totalLive1 + dataActive.totalSlot1
+                            }
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -469,7 +636,7 @@ export default function ReportPartnerListPage() {
                             Win:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {dataActive?.totalLive2}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -481,7 +648,7 @@ export default function ReportPartnerListPage() {
                             Win:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {dataActive?.totalSlot2}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -505,7 +672,10 @@ export default function ReportPartnerListPage() {
                             Total Win:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                          {
+                            // eslint-disable-next-line no-unsafe-optional-chaining
+                            dataActive?.totalLive2 + dataActive.totalSlot2
+                          }
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -519,7 +689,7 @@ export default function ReportPartnerListPage() {
                             Rolling:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {dataActive?.totalLive3}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -531,7 +701,7 @@ export default function ReportPartnerListPage() {
                             Rolling:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {dataActive?.totalSlot3}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -555,7 +725,10 @@ export default function ReportPartnerListPage() {
                             Total Rolling:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {
+                            // eslint-disable-next-line no-unsafe-optional-chaining
+                            dataActive?.totalLive3 + dataActive.totalSlot3
+                            }
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -569,7 +742,7 @@ export default function ReportPartnerListPage() {
                             Losing:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {dataActive?.totalLive4}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -581,7 +754,7 @@ export default function ReportPartnerListPage() {
                             Losing:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {dataActive?.totalSlot4}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -605,7 +778,10 @@ export default function ReportPartnerListPage() {
                             Total Losing:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {
+                            // eslint-disable-next-line no-unsafe-optional-chaining
+                            dataActive?.totalLive4 + dataActive.totalSlot4
+                            }
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -619,7 +795,7 @@ export default function ReportPartnerListPage() {
                             Balance:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {dataActive?.totalLive5}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -631,7 +807,7 @@ export default function ReportPartnerListPage() {
                             Balance:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {dataActive?.totalSlot5}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -655,7 +831,10 @@ export default function ReportPartnerListPage() {
                             Total Balance:
                           </Typography>
                           <Typography variant="body2">
-                            0
+                            {
+                            // eslint-disable-next-line no-unsafe-optional-chaining
+                            dataActive?.totalLive5 + dataActive.totalSlot5
+                            }
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -680,11 +859,11 @@ export default function ReportPartnerListPage() {
             <TableSelectedAction
               dense={dense}
               numSelected={selected.length}
-              rowCount={tableData.length}
+              rowCount={node.length}
               onSelectAllRows={(checked) =>
                 onSelectAllRows(
                   checked,
-                  tableData.map((row) => row.id)
+                  node.map((row) => row.id)
                 )
               }
               action={
@@ -702,13 +881,13 @@ export default function ReportPartnerListPage() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
+                  rowCount={node.length}
                   numSelected={selected.length}
                   onSort={onSort}
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      tableData.map((row) => row.id)
+                      node.map((row) => row.id)
                     )
                   }
                 />
@@ -729,7 +908,7 @@ export default function ReportPartnerListPage() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
+                    emptyRows={emptyRows(page, rowsPerPage, node.length)}
                   />
 
                   <TableNoData isNotFound={isNotFound} />
@@ -750,29 +929,7 @@ export default function ReportPartnerListPage() {
           />
         </Card>
       </Container>
-
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows(selected);
-              handleCloseConfirm();
-            }}
-          >
-            Delete
-          </Button>
-        }
-      />
+      {(isLoading === true) && <LoadingScreen/>} 
     </>
   );
 }

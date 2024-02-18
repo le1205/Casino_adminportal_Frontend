@@ -26,7 +26,7 @@ import FormProvider, {
 export default function AccountGeneral() {
   const { enqueueSnackbar } = useSnackbar();
 
-  const { user } = useAuthContext();
+  const { user } = localStorage.getItem('user') || "";
 
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required('Name is required'),

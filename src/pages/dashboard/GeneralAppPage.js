@@ -33,7 +33,7 @@ import { SeoIllustration } from '../../assets/illustrations';
 // ----------------------------------------------------------------------
 
 export default function GeneralAppPage() {
-  const { user } = useAuthContext();
+  const { user } = localStorage.getItem('user') || "";
 
   const theme = useTheme();
 

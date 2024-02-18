@@ -50,7 +50,7 @@ ProfileCover.propTypes = {
 };
 
 export default function ProfileCover({ name, role, cover }) {
-  const { user } = useAuthContext();
+  const { user } = localStorage.getItem('user') || "";
 
   return (
     <StyledRoot>

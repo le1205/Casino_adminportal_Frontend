@@ -262,16 +262,6 @@ export default function ReportDailyPage() {
               name: 'Daily Report',
             },
           ]}
-          moreLink={['https://fullcalendar.io/docs/react']}
-          action={
-            <Button
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-              onClick={handleOpenModal}
-            >
-              New Event
-            </Button>
-          }
         />
 
         <Card>

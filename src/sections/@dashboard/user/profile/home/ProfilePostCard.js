@@ -33,7 +33,7 @@ ProfilePostCard.propTypes = {
 };
 
 export default function ProfilePostCard({ post }) {
-  const { user } = useAuthContext();
+  const { user } = localStorage.getItem('user') || "";
 
   const commentInputRef = useRef(null);
 

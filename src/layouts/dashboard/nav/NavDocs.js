@@ -8,7 +8,7 @@ import { useLocales } from '../../../locales';
 // ----------------------------------------------------------------------
 
 export default function NavDocs() {
-  const { user } = useAuthContext();
+  const { user } = localStorage.getItem('user') || "";
 
   const { translate } = useLocales();
 

@@ -30,6 +30,7 @@ import Scrollbar from '../../../components/scrollbar';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
+import LoadingScreen from '../../../components/loading-screen';
 import {
   useTable,
   getComparator,
@@ -106,6 +107,7 @@ export default function UserListPage() {
 
   const navigate = useNavigate();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
 
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -257,6 +259,7 @@ export default function UserListPage() {
 
   const usersList = () => {
     try {
+      setIsLoading(true);
       const url = adminListUrl;
       const headers = {};
       apiWithPostData(url, { page:1, pageSize: 30, date:[]}, headers).then((response) => {
@@ -282,6 +285,7 @@ export default function UserListPage() {
           users.push(user);
         });
         setTableData(users);
+        setIsLoading(false);
 
       });
     } catch (error) {
@@ -492,6 +496,8 @@ export default function UserListPage() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {(isLoading === true) && <LoadingScreen/>} 
     </>
   );
 }

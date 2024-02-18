@@ -3,20 +3,13 @@ import { useState } from 'react';
 // @mui
 import {
   Stack,
-  Avatar,
   Button,
-  Checkbox,
   TableRow,
   MenuItem,
   TableCell,
-  IconButton,
   Typography,
 } from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import LocalParkingIcon from '@mui/icons-material/LocalParking';
 // components
-import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
@@ -33,11 +26,15 @@ ReportTableRow.propTypes = {
 };
 
 export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectMoney }) {
-  const {_id, name, id, no, company, role, cash,  inOut, totalLoose, lastDate, point } = row;
+  const { key, data, children, } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [openPopover, setOpenPopover] = useState(null);
+
+  // eslint-disable-next-line no-unsafe-optional-chaining
+  const [holdingPoint, setHoldingPoint] = useState(data?.live_main + data?.slot_main);
+  
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
@@ -55,9 +52,39 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
     <>
       <TableRow hover selected={selected}>
 
-        <TableCell align="left">{name}</TableCell>
+        <TableCell align="left">
+          <Stack direction="row"
+            alignItems="center">
+            <Typography variant="body2">
+              {data?.username}
+            </Typography>
+          </Stack>
+          <Stack direction="row"
+            alignItems="center">
+            <Typography variant="body2">
+              {data?.role.title}
+            </Typography>
+            <Typography variant="body2">
+              ({data?.total_user})
+            </Typography>
+          </Stack>
+        </TableCell>
 
-        <TableCell align="left">{id}</TableCell>
+        <TableCell align="left">
+          <Stack direction="row"
+            alignItems="center"
+            justifyContent="space-between">
+            <Typography variant="body2">
+              Slot
+            </Typography>
+            <Typography variant="body2">
+              R: {data?.slotRate}
+            </Typography>
+            <Typography variant="body2">
+              L: {data?.loseSlotRate}
+            </Typography>
+          </Stack>
+        </TableCell>
 
         <TableCell>
           <Stack direction="row"
@@ -67,7 +94,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Money:
             </Typography>
             <Typography variant="body2">
-              0
+              {data?.balanceMain}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -77,7 +104,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Holding Point:
             </Typography>
             <Typography variant="body2">
-              0
+              {holdingPoint}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -110,7 +137,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               User Deposit:
             </Typography>
             <Typography variant="body2">
-              0
+              {data?.total_deposit}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -120,7 +147,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               User Widthraw:
             </Typography>
             <Typography variant="body2">
-              0
+              {data?.total_withdraw}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -154,7 +181,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Betting:
             </Typography>
             <Typography variant="body2">
-              0
+              {data?.bet_money_live_history}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -164,7 +191,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Win:
             </Typography>
             <Typography variant="body2">
-              0
+              {data?.lose_money_liveadmin}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -174,7 +201,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Rolling:
             </Typography>
             <Typography variant="body2">
-              0
+              {data?.bet_money_live}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -184,7 +211,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Losing:
             </Typography>
             <Typography variant="body2">
-              0
+              {data?.total_money_count_losing_live}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -194,7 +221,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Balance:
             </Typography>
             <Typography variant="body2" color='text.warn'>
-              0
+              {data?.total_money_count_live}
             </Typography>
           </Stack>
         </TableCell>
@@ -207,7 +234,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Betting:
             </Typography>
             <Typography variant="body2">
-              0
+              {data?.bet_money_slot_history}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -217,7 +244,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Win:
             </Typography>
             <Typography variant="body2">
-              0
+              {data?.lose_money_slotadmin}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -227,7 +254,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Rolling:
             </Typography>
             <Typography variant="body2">
-              0
+              {data?.bet_money_slot}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -237,7 +264,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Losing:
             </Typography>
             <Typography variant="body2">
-              0
+              {data?.total_money_count_losing_slot}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -247,7 +274,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Balance:
             </Typography>
             <Typography variant="body2" color='text.warn'>
-              0
+              {data?.total_money_count_slot}
             </Typography>
           </Stack>
         </TableCell>
@@ -261,7 +288,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Betting:
             </Typography>
             <Typography variant="body2">
-              0
+              {data?.sum_1}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -271,7 +298,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Win:
             </Typography>
             <Typography variant="body2">
-              0
+              {data?.sum_2}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -281,7 +308,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Rolling:
             </Typography>
             <Typography variant="body2">
-              0
+              {data?.sum_3}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -291,7 +318,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Losing:
             </Typography>
             <Typography variant="body2">
-              0
+              {data?.sum_4}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -301,7 +328,7 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
               Balance:
             </Typography>
             <Typography variant="body2" color='text.warn'>
-              0
+              {data?.sum_5}
             </Typography>
           </Stack>
         </TableCell>

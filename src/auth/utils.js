@@ -74,3 +74,12 @@ export const setSession = (accessToken) => {
     delete axios.defaults.headers.common.Authorization;
   }
 };
+
+
+export const setUser = (user) => {
+  if (user) {
+    localStorage.setItem('user', user);
+  } else {
+    localStorage.removeItem('user');
+  }
+};

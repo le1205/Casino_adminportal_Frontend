@@ -25,7 +25,6 @@ export default function AuthGuard({ children }) {
   }
 
   if (!isAuthenticated) {
-    console.log("here!!!!!");
     if (pathname !== requestedLocation) {
       setRequestedLocation(pathname);
     }
