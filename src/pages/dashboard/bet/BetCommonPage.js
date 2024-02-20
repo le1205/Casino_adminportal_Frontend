@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import {
@@ -18,14 +18,13 @@ import {
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
-// _mock_
-import { _userList } from '../../../_mock/arrays';
 // components
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
+import LoadingScreen from '../../../components/loading-screen';
 import {
   useTable,
   getComparator,
@@ -37,11 +36,15 @@ import {
   TablePaginationCustom,
 } from '../../../components/table';
 // sections
-import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/user/list';
+import { BetTotalTableToolbar, BetTotalTableRow } from '../../../sections/@dashboard/bet/list';
+// api
+import { apiWithPostData } from '../../../utils/api';
+// url
+import { gameLogUrl } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['all', 'active', 'banned'];
+const STATUS_OPTIONS = ['All', 'Slot'];
 
 const ROLE_OPTIONS = [
   'all',
@@ -57,12 +60,19 @@ const ROLE_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'company', label: 'Company', align: 'left' },
-  { id: 'role', label: 'Role', align: 'left' },
-  { id: 'isVerified', label: 'Verified', align: 'center' },
-  { id: 'status', label: 'Status', align: 'left' },
-  { id: '' },
+  { id: 'index', label: 'Index', align: 'center' },
+  { id: 'id', label: 'Id', align: 'center' },
+  { id: 'game', label: 'Game', align: 'center' },
+  { id: 'gameType', label: 'Game Type', align: 'center' },
+  { id: 'gameName', label: 'Game Name', align: 'center' },
+  { id: 'bettingId', label: 'Betting ID', align: 'center' },
+  { id: 'date', label: 'Betting Date', align: 'center' },
+  { id: 'before', label: 'Before', align: 'center' },
+  { id: 'money', label: 'Bet Money', align: 'center' },
+  { id: 'win', label: 'Win Money', align: 'center' },
+  { id: 'winLose', label: 'Win/Lose', align: 'center' },
+  { id: 'after', label: 'After', align: 'center' },
+  { id: 'status', label: 'Status', align: 'center' },
 ];
 
 // ----------------------------------------------------------------------
@@ -88,18 +98,15 @@ export default function BetCommonPage() {
   } = useTable();
 
   const { themeStretch } = useSettingsContext();
-
   const navigate = useNavigate();
-
-  const [tableData, setTableData] = useState(_userList);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [tableData, setTableData] = useState([]);
   const [openConfirm, setOpenConfirm] = useState(false);
-
   const [filterName, setFilterName] = useState('');
-
   const [filterRole, setFilterRole] = useState('all');
-
   const [filterStatus, setFilterStatus] = useState('all');
+  const [filterEndDate, setFilterEndDate] = useState(new Date);
+  const [filterStartDate, setFilterStartDate] = useState(new Date);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -182,15 +189,51 @@ export default function BetCommonPage() {
     setFilterStatus('all');
   };
 
+  const handleClickSearch = () => {
+    gameLog();
+  };
+
+  const gameLog = () => {
+    try {
+      setIsLoading(true);
+      const url = gameLogUrl;
+      const headers = {};
+      const data = {
+        "start": filterStartDate,
+        "end": filterEndDate,
+        "game_type": "live"
+      };
+      apiWithPostData(url, data, headers).then((response) => {
+        const dailyArr = response;
+        dailyArr?.forEach((item, index) => {
+          if(item.data) {
+            item.id = index;
+          }
+        });
+        setTableData(dailyArr);
+        setIsLoading(false);
+      });
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+
+  };
+
+  useEffect(() => {
+    gameLog();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openConfirm]);
+
   return (
     <>
       <Helmet>
         <title> Admin Portal </title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+      <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Total Bests"
+          heading="Total Bets"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             { name: 'Bet', href: PATH_DASHBOARD.bet.root },
@@ -214,14 +257,23 @@ export default function BetCommonPage() {
 
           <Divider />
 
-          <UserTableToolbar
+          <BetTotalTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
             filterRole={filterRole}
+            filterEndDate={filterEndDate}
+            filterStartDate={filterStartDate}
             optionsRole={ROLE_OPTIONS}
             onFilterName={handleFilterName}
             onFilterRole={handleFilterRole}
             onResetFilter={handleResetFilter}
+            onClickSearch={handleClickSearch}
+            onFilterStartDate={(newValue) => {
+              setFilterStartDate(newValue);
+            }}
+            onFilterEndDate={(newValue) => {
+              setFilterEndDate(newValue);
+            }}
           />
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
@@ -265,7 +317,7 @@ export default function BetCommonPage() {
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
-                      <UserTableRow
+                      <BetTotalTableRow
                         key={row.id}
                         row={row}
                         selected={selected.includes(row.id)}
@@ -321,6 +373,8 @@ export default function BetCommonPage() {
           </Button>
         }
       />
+      
+      {(isLoading === true) && <LoadingScreen/>} 
     </>
   );
 }

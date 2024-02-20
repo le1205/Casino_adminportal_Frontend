@@ -9,31 +9,39 @@ import {
   TableCell,
   Typography,
 } from '@mui/material';
+import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 // components
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 
+
 // ----------------------------------------------------------------------
 
 ReportTableRow.propTypes = {
   row: PropTypes.object,
+  display:PropTypes.bool,
+  count:PropTypes.number,
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   onSelectMoney: PropTypes.func,
+  onClickDownArrow: PropTypes.func,
+  onClickUpArrow: PropTypes.func,
 };
 
-export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectMoney }) {
-  const { key, data, children, } = row;
+export default function ReportTableRow({ row, display, selected, onEditRow, onSelectRow, onDeleteRow, onSelectMoney, onClickDownArrow, onClickUpArrow, count}) {
+  const data = row;
+  const {role} = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [openPopover, setOpenPopover] = useState(null);
 
   // eslint-disable-next-line no-unsafe-optional-chaining
-  const [holdingPoint, setHoldingPoint] = useState(data?.live_main + data?.slot_main);
+  const holdingPoint = data?.live_main + data?.slot_main;
   
 
   const handleOpenConfirm = () => {
@@ -48,11 +56,41 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
     setOpenPopover(null);
   };
 
+  console.log("data>>>", role);
+
   return (
     <>
-      <TableRow hover selected={selected}>
-
-        <TableCell align="left">
+      <TableRow key={data?._id} hover selected={selected} 
+          sx={{
+            ...(display === true && {
+              display: 'table-row',
+            }),
+            ...(display === false && {
+              display: 'none',
+            }),
+          }}
+      >
+        <TableCell align="left"
+          sx={{
+              ...(role?.order ===1 && {
+                pl: 0,
+              }),
+              ...(role?.order ===2 && {
+                pl: 1,
+              }),
+              ...(role?.order ===3 && {
+                pl: 2,
+              }),
+              ...(role?.order ===4 && {
+                pl: 3,
+              }),
+              ...(role?.order ===5 && {
+                pl: 4,
+              }),
+              ...(role?.order ===6 && {
+                pl: 5,
+              }),
+          }}>
           <Stack direction="row"
             alignItems="center">
             <Typography variant="body2">
@@ -67,6 +105,19 @@ export default function ReportTableRow({ row, selected, onEditRow, onSelectRow, 
             <Typography variant="body2">
               ({data?.total_user})
             </Typography>
+          </Stack>
+          <Stack direction="row"
+            alignItems="right"
+            justifyContent="flex-end"
+            sx={{
+              mt: 1,
+              height: 58,
+              ...(data?.total_user > 0 && {
+                height: 38,
+              }),
+            }}>
+              {data?.expand === false && data?.total_user >0 && <KeyboardDoubleArrowDownIcon onClick={onClickDownArrow} color='success' />}
+              {data?.expand === true && data?.total_user >0 && <KeyboardDoubleArrowUpIcon onClick={onClickUpArrow} color='warning' />}
           </Stack>
         </TableCell>
 

@@ -121,9 +121,11 @@ export default function ReportPartnerListPage() {
   const [dataActive, setDataActive] = useState({});
   const [node, setNode] = useState([]);
   const [totalData, setTotalData] = useState({});
+  const [tableData, setTableData] = useState([]);
+  const [count, setCount] = useState(0);
 
   const dataFiltered = applyFilter({
-    inputData: node,
+    inputData: tableData,
     comparator: getComparator(order, orderBy),
     filterName,
     filterRole,
@@ -170,6 +172,39 @@ export default function ReportPartnerListPage() {
     navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
   };
 
+  const handleClickDown = (key) => {
+    const tempData = tableData;
+    let number = count;
+    tempData.forEach(element => {
+      if(element._id === key) {
+        element.expand = true;
+      }
+      if(element.parent_key === key) {
+        number += 1;
+        element.display = true;
+      }
+    });
+    setTableData(tempData);
+    setCount(number);
+
+  };
+
+  const handleClickUp = (key) => {
+    const tempData = tableData;
+    let number = count;
+    tempData.forEach(element => {
+      if(element._id === key) {
+        element.expand = false;
+      }
+      if(element.parent_key === key) {
+        number -= 1;
+        element.display = false;
+      }
+    });
+    setTableData(tempData);
+    setCount(number);
+  };
+
   const handleResetFilter = () => {
     setFilterName('');
     setFilterRole('all');
@@ -200,6 +235,8 @@ export default function ReportPartnerListPage() {
         setTotalData(valueData);
         setNode(treedata);
         setIsLoading(false);
+        const totalArrays = handleTreeData(treedata);
+        setTableData(totalArrays);
       });
     } catch (error) {
       console.log(error);
@@ -381,6 +418,28 @@ export default function ReportPartnerListPage() {
         }));
     return treedata;
 };
+
+  const handleTreeData = (arr) => {
+    const arrData = [];
+    const loop = (data, key, display) => {
+      data.forEach((item, index) => {
+        if(item.data) {
+          const itemData = item.data;
+          itemData.parent_key = key;
+          itemData.display = display;
+          itemData.expand = false;
+          arrData.push(itemData);
+        }
+        if (item.children && item.children.length > 0 ) 
+        {
+            loop(item.children, item.key, false);
+        }
+          
+      });
+    };
+    loop(arr, "", true);
+    return arrData;
+  };
   
   useEffect(() => {
     getAllTotalList();
@@ -893,16 +952,20 @@ export default function ReportPartnerListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered
+                  {tableData
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
                       <ReportTableRow
-                        key={row.id}
+                        key={row._id}
+                        display={row.display}
                         row={row}
-                        selected={selected.includes(row.id)}
-                        onSelectRow={() => onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
+                        count= {count}
+                        selected={selected.includes(row._id)}
+                        onSelectRow={() => onSelectRow(row._id)}
+                        onDeleteRow={() => handleDeleteRow(row._id)}
                         onEditRow={() => handleEditRow(row.name)}
+                        onClickDownArrow={() => handleClickDown(row._id)}
+                        onClickUpArrow={() => handleClickUp(row._id)}
                       />
                     ))}
 
