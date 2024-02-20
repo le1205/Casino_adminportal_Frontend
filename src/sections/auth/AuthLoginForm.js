@@ -36,6 +36,11 @@ export default function AuthLoginForm() {
     password: 'dkagh@adminhq',
   };
 
+  // const defaultValues = {
+  //   email: '',
+  //   password: '',
+  // };
+
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
     defaultValues,
@@ -51,9 +56,7 @@ export default function AuthLoginForm() {
   const onSubmit = async (data) => {
     try {
       const url = adminLoginUrl;
-      const headers = {
-          'authorization':'0040544dd65352c2bf9c74f4d9b44099',
-        };
+      const headers = {};
       apiWithPostData(url, { email:data.email, password: data.password,}, headers).then((response) => {
         const {session, user } = response;
         if(session.accessToken) {

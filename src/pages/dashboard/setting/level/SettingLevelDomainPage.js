@@ -17,7 +17,7 @@ export default function SettingLevelDomainPage() {
   return (
     <>
       <Helmet>
-        <title> Blank Page | Minimal UI</title>
+        <title> Blank Page </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>

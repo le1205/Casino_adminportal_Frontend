@@ -243,7 +243,7 @@ export default function ReportDailyPage() {
   return (
     <>
       <Helmet>
-        <title> Calendar | Minimal UI</title>
+        <title> Calendar </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>

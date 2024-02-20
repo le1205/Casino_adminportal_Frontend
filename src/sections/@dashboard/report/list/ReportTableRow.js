@@ -56,8 +56,6 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
     setOpenPopover(null);
   };
 
-  console.log("data>>>", role);
-
   return (
     <>
       <TableRow key={data?._id} hover selected={selected} 

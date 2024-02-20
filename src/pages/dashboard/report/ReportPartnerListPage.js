@@ -46,15 +46,6 @@ import { allTotalListUrl, } from '../../../utils/urlList';
 
 const ROLE_OPTIONS = [
   'all',
-  'ux designer',
-  'full stack designer',
-  'backend developer',
-  'project manager',
-  'leader',
-  'ui designer',
-  'ui/ux designer',
-  'front end developer',
-  'full stack developer',
 ];
 
 const TABLE_HEAD = [
@@ -62,7 +53,7 @@ const TABLE_HEAD = [
   { id: 'rate', label: 'Applied Rate', align: 'left' },
   { id: 'status', label: 'Holding Status', align: 'left' },
   { id: 'depwith', label: 'Deposit & Withdrawal', align: 'center' },
-  { id: 'sport', label: 'Sport', align: 'left' },
+  { id: 'casino', label: 'Casino', align: 'left' },
   { id: 'slot', label: 'Slot', align: 'left' },
   { id: 'total', label: 'Total', align: 'left' },
 ];
@@ -73,9 +64,8 @@ const TABLE_HEAD_TOTAL_ONE = [
   { id: '3', label: '', align: 'center' },
 ];
 const TABLE_HEAD_TOTAL_TWO = [
-  { id: 'sport', label: 'Sport', align: 'center' },
+  { id: 'casino', label: 'Casino', align: 'center' },
   { id: 'slot', label: 'Slot', align: 'center' },
-  { id: 'mini', label: 'Mini Game', align: 'center' },
   { id: 'total', label: 'Total', align: 'center' },
 ];
 const userData = localStorage.getItem('user') || "";
@@ -664,18 +654,6 @@ export default function ReportPartnerListPage() {
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Betting:
-                          </Typography>
-                          <Typography variant="body2">
-                            0
-                          </Typography>
-                        </Stack>
-                      </TableCell>
-                      <TableCell align='left'>
-                        <Stack direction="row"
-                          alignItems="center"
-                          justifyContent="space-between">
-                          <Typography variant="body2">
                             Total Bet:
                           </Typography>
                           <Typography variant="body2">
@@ -709,18 +687,6 @@ export default function ReportPartnerListPage() {
                           </Typography>
                           <Typography variant="body2">
                             {dataActive?.totalSlot2}
-                          </Typography>
-                        </Stack>
-                      </TableCell>
-                      <TableCell align='left'>
-                        <Stack direction="row"
-                          alignItems="center"
-                          justifyContent="space-between">
-                          <Typography variant="body2">
-                            Win:
-                          </Typography>
-                          <Typography variant="body2">
-                            0
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -770,18 +736,6 @@ export default function ReportPartnerListPage() {
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Rolling:
-                          </Typography>
-                          <Typography variant="body2">
-                            0
-                          </Typography>
-                        </Stack>
-                      </TableCell>
-                      <TableCell align='left'>
-                        <Stack direction="row"
-                          alignItems="center"
-                          justifyContent="space-between">
-                          <Typography variant="body2">
                             Total Rolling:
                           </Typography>
                           <Typography variant="body2">
@@ -815,18 +769,6 @@ export default function ReportPartnerListPage() {
                           </Typography>
                           <Typography variant="body2">
                             {dataActive?.totalSlot4}
-                          </Typography>
-                        </Stack>
-                      </TableCell>
-                      <TableCell align='left'>
-                        <Stack direction="row"
-                          alignItems="center"
-                          justifyContent="space-between">
-                          <Typography variant="body2">
-                            Losing:
-                          </Typography>
-                          <Typography variant="body2">
-                            0
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -876,18 +818,6 @@ export default function ReportPartnerListPage() {
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Balance:
-                          </Typography>
-                          <Typography variant="body2">
-                            0
-                          </Typography>
-                        </Stack>
-                      </TableCell>
-                      <TableCell align='left'>
-                        <Stack direction="row"
-                          alignItems="center"
-                          justifyContent="space-between">
-                          <Typography variant="body2">
                             Total Balance:
                           </Typography>
                           <Typography variant="body2">
@@ -904,17 +834,7 @@ export default function ReportPartnerListPage() {
             </Grid>
           </Grid>
         </Card>
-        <Card>
-          <ReportTableToolbar
-            isFiltered={isFiltered}
-            filterName={filterName}
-            filterRole={filterRole}
-            optionsRole={ROLE_OPTIONS}
-            onFilterName={handleFilterName}
-            onFilterRole={handleFilterRole}
-            onResetFilter={handleResetFilter}
-          />
-
+        <Card  sx={{ mt:6, pl:0, }}>
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
               dense={dense}
@@ -954,7 +874,7 @@ export default function ReportPartnerListPage() {
 
                 <TableBody>
                   {tableData
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
                       <ReportTableRow
                         key={row._id}
@@ -981,7 +901,7 @@ export default function ReportPartnerListPage() {
             </Scrollbar>
           </TableContainer>
 
-          <TablePaginationCustom
+          {/* <TablePaginationCustom
             count={dataFiltered.length}
             page={page}
             rowsPerPage={rowsPerPage}
@@ -990,7 +910,7 @@ export default function ReportPartnerListPage() {
             //
             dense={dense}
             onChangeDense={onChangeDense}
-          />
+          /> */}
         </Card>
       </Container>
       {(isLoading === true) && <LoadingScreen/>} 

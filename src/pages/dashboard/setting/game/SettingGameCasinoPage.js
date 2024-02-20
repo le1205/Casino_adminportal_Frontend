@@ -17,7 +17,7 @@ export default function SettingGameCasinoPage() {
   return (
     <>
       <Helmet>
-        <title> Blank Page | Minimal UI</title>
+        <title> Blank Page </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>

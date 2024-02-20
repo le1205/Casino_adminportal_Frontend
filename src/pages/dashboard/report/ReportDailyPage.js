@@ -267,7 +267,7 @@ export default function ReportDailyPage() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
                       <ReportDailyTableRow
-                        key={row.id}
+                        key={row.username + row.date}
                         row={row}
                         selected={selected.includes(row.id)}
                       />
