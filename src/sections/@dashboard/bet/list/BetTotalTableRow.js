@@ -2,19 +2,11 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 // @mui
 import {
-  Stack,
-  Avatar,
   Button,
-  Checkbox,
   TableRow,
   MenuItem,
   TableCell,
-  IconButton,
-  Typography,
 } from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import LocalParkingIcon from '@mui/icons-material/LocalParking';
 // components
 import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
@@ -33,7 +25,7 @@ BetTotalTableRow.propTypes = {
 };
 
 export default function BetTotalTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectMoney }) {
-  const {username, provider_name, game_title, tx_type, bet, win, balance,  create_at, category, id } = row;
+  const {username, round_id, provider_name, game_title, tx_type, bet, win, balance,  create_at, category, id } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -62,7 +54,7 @@ export default function BetTotalTableRow({ row, selected, onEditRow, onSelectRow
         <TableCell align="center">{username}</TableCell>
 
         <TableCell>
-          {game_title}
+          {provider_name}
         </TableCell>
 
         <TableCell align="center">{category}</TableCell>
@@ -72,16 +64,16 @@ export default function BetTotalTableRow({ row, selected, onEditRow, onSelectRow
         </TableCell>
 
         <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {id}
+          {round_id}
         </TableCell>
 
         <TableCell align="center">
           {create_at}
         </TableCell>
-
+{/* 
         <TableCell align="center">
           0
-        </TableCell>
+        </TableCell> */}
 
         <TableCell align="center">
           {bet}

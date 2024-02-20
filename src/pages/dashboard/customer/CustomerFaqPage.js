@@ -1,22 +1,28 @@
 import { Helmet } from 'react-helmet-async';
 // @mui
-import { Box, Container, Typography } from '@mui/material';
-// sections
-import { FaqsHero, FaqsCategory, FaqsList, FaqsForm } from '../../../sections/faqs';
-import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import {
+  Box,
+  Container,
+} from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
+
+import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import { useSettingsContext } from '../../../components/settings';
 
 // ----------------------------------------------------------------------
 
 export default function CustomerFaqPage() {
+
+  const { themeStretch } = useSettingsContext();
+
   return (
     <>
       <Helmet>
-        <title> Faqs | Minimal UI</title>
+        <title> Admin Portal </title>
       </Helmet>
 
-      <Container sx={{ pt: 15, pb: 10, position: 'relative' }}>
+      <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
           heading="FAQ"
           links={[
@@ -25,25 +31,17 @@ export default function CustomerFaqPage() {
             { name: 'Faq' },
           ]}
         />
-        <FaqsCategory />
-
-        <Typography variant="h3" sx={{ mb: 5 }}>
-          Frequently asked questions
-        </Typography>
-
         <Box
-          gap={10}
-          display="grid"
-          gridTemplateColumns={{
-            xs: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
+          sx={{
+            mt: 5,
+            width: 1,
+            height: 320,
+            borderRadius: 2,
+            border: (theme) => `dashed 1px ${theme.palette.divider}`,
           }}
-        >
-          <FaqsList />
-
-          <FaqsForm />
-        </Box>
+        />
       </Container>
     </>
   );
 }
+

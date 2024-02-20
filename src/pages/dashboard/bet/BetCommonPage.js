@@ -44,30 +44,20 @@ import { gameLogUrl } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['All', 'Slot'];
-
-const ROLE_OPTIONS = [
-  'all',
-  'ux designer',
-  'full stack designer',
-  'backend developer',
-  'project manager',
-  'leader',
-  'ui designer',
-  'ui/ux designer',
-  'front end developer',
-  'full stack developer',
+const STATUS_OPTIONS = [
+  { id: 'live', label: 'Casino', },
+  { id: 'slot', label: 'Slot', },
 ];
 
 const TABLE_HEAD = [
-  { id: 'index', label: 'Index', align: 'center' },
+  { id: 'index', label: 'Betting No', align: 'center' },
   { id: 'id', label: 'Id', align: 'center' },
-  { id: 'game', label: 'Game', align: 'center' },
+  { id: 'provider', label: 'Provider', align: 'center' },
   { id: 'gameType', label: 'Game Type', align: 'center' },
   { id: 'gameName', label: 'Game Name', align: 'center' },
   { id: 'bettingId', label: 'Betting ID', align: 'center' },
   { id: 'date', label: 'Betting Date', align: 'center' },
-  { id: 'before', label: 'Before', align: 'center' },
+  // { id: 'before', label: 'Before', align: 'center' },
   { id: 'money', label: 'Bet Money', align: 'center' },
   { id: 'win', label: 'Win Money', align: 'center' },
   { id: 'winLose', label: 'Win/Lose', align: 'center' },
@@ -103,8 +93,7 @@ export default function BetCommonPage() {
   const [tableData, setTableData] = useState([]);
   const [openConfirm, setOpenConfirm] = useState(false);
   const [filterName, setFilterName] = useState('');
-  const [filterRole, setFilterRole] = useState('all');
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [gameType, setGameType] = useState('live');
   const [filterEndDate, setFilterEndDate] = useState(new Date);
   const [filterStartDate, setFilterStartDate] = useState(new Date);
 
@@ -112,20 +101,16 @@ export default function BetCommonPage() {
     inputData: tableData,
     comparator: getComparator(order, orderBy),
     filterName,
-    filterRole,
-    filterStatus,
   });
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const denseHeight = dense ? 52 : 72;
 
-  const isFiltered = filterName !== '' || filterRole !== 'all' || filterStatus !== 'all';
+  const isFiltered = filterName !== '';
 
   const isNotFound =
-    (!dataFiltered.length && !!filterName) ||
-    (!dataFiltered.length && !!filterRole) ||
-    (!dataFiltered.length && !!filterStatus);
+    (!dataFiltered.length && !!filterName) ||( !tableData.length);
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
@@ -137,17 +122,13 @@ export default function BetCommonPage() {
 
   const handleFilterStatus = (event, newValue) => {
     setPage(0);
-    setFilterStatus(newValue);
+    setGameType(newValue);
+    gameLog(newValue);
   };
 
   const handleFilterName = (event) => {
     setPage(0);
     setFilterName(event.target.value);
-  };
-
-  const handleFilterRole = (event) => {
-    setPage(0);
-    setFilterRole(event.target.value);
   };
 
   const handleDeleteRow = (id) => {
@@ -185,31 +166,25 @@ export default function BetCommonPage() {
 
   const handleResetFilter = () => {
     setFilterName('');
-    setFilterRole('all');
-    setFilterStatus('all');
   };
 
   const handleClickSearch = () => {
-    gameLog();
+    gameLog(gameType);
   };
 
-  const gameLog = () => {
+  const gameLog = (game) => {
     try {
       setIsLoading(true);
+      setPage(0);
       const url = gameLogUrl;
       const headers = {};
       const data = {
         "start": filterStartDate,
         "end": filterEndDate,
-        "game_type": "live"
+        "game_type": game,
       };
       apiWithPostData(url, data, headers).then((response) => {
         const dailyArr = response;
-        dailyArr?.forEach((item, index) => {
-          if(item.data) {
-            item.id = index;
-          }
-        });
         setTableData(dailyArr);
         setIsLoading(false);
       });
@@ -221,7 +196,7 @@ export default function BetCommonPage() {
   };
 
   useEffect(() => {
-    gameLog();
+    gameLog(gameType);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openConfirm]);
 
@@ -243,7 +218,7 @@ export default function BetCommonPage() {
 
         <Card>
           <Tabs
-            value={filterStatus}
+            value={gameType}
             onChange={handleFilterStatus}
             sx={{
               px: 2,
@@ -251,7 +226,7 @@ export default function BetCommonPage() {
             }}
           >
             {STATUS_OPTIONS.map((tab) => (
-              <Tab key={tab} label={tab} value={tab} />
+              <Tab key={tab.id} label={tab.label} value={tab.id} />
             ))}
           </Tabs>
 
@@ -260,12 +235,9 @@ export default function BetCommonPage() {
           <BetTotalTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
-            filterRole={filterRole}
             filterEndDate={filterEndDate}
             filterStartDate={filterStartDate}
-            optionsRole={ROLE_OPTIONS}
             onFilterName={handleFilterName}
-            onFilterRole={handleFilterRole}
             onResetFilter={handleResetFilter}
             onClickSearch={handleClickSearch}
             onFilterStartDate={(newValue) => {
@@ -381,7 +353,7 @@ export default function BetCommonPage() {
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, comparator, filterName, filterStatus, filterRole }) {
+function applyFilter({ inputData, comparator, filterName, filterStatus }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -394,16 +366,12 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
 
   if (filterName) {
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+      (user) => user.username.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
     );
   }
 
   if (filterStatus !== 'all') {
     inputData = inputData.filter((user) => user.status === filterStatus);
-  }
-
-  if (filterRole !== 'all') {
-    inputData = inputData.filter((user) => user.role === filterRole);
   }
 
   return inputData;

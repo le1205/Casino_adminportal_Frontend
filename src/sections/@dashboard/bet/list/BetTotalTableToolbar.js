@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/material';
+import { Stack, InputAdornment, TextField, Button } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 // components
 import Iconify from '../../../../components/iconify';
@@ -12,7 +12,6 @@ const INPUT_WIDTH = 200;
 BetTotalTableToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterName: PropTypes.string,
-  filterRole: PropTypes.string,
   onFilterName: PropTypes.func,
   onFilterRole: PropTypes.func,
   onResetFilter: PropTypes.func,
@@ -28,10 +27,8 @@ BetTotalTableToolbar.propTypes = {
 export default function BetTotalTableToolbar({
   isFiltered,
   filterName,
-  filterRole,
   optionsRole,
   onFilterName,
-  onFilterRole,
   onResetFilter,
   onFilterEndDate,
   onFilterStartDate,

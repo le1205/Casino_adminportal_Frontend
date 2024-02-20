@@ -214,6 +214,7 @@ export default function ReportPartnerListPage() {
   const getAllTotalList = () => {
     try {
       setIsLoading(true);
+      setPage(0);
       const url = allTotalListUrl;
       const headers = {};
       apiWithPostData(url, {}, headers).then((response) => {

@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 // @mui
 import { alpha } from '@mui/material/styles';
-import { Container, Typography, Box } from '@mui/material';
+import { Container, Box } from '@mui/material';
 // components
 import { useSettingsContext } from '../../../../components/settings';
 // routes

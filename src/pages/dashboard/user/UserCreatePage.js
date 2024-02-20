@@ -20,7 +20,7 @@ export default function UserCreatePage() {
         <title> User: Create a new user | Minimal UI</title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+      <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
           heading="Create a new user"
           links={[
