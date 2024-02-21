@@ -41,6 +41,7 @@ const cn = {
   analytics: `分析`,
   ecommerce: `电子商务`,
   management: `管理`,
+  dashboard: `仪表板`,
   menu_level: `菜单级别`,
   menu_level_2a: `菜单级别 2a`,
   menu_level_2b: `菜单级别 2b`,

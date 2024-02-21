@@ -71,7 +71,7 @@ export default function NavAccount() {
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="subtitle2" noWrap sx={{ color: 'text.secondary' }}>
-              Credit:
+              credit
             </Typography>
             <Typography variant="subtitle2" noWrap sx={{ color: theme.palette.warning.main }}>
               {balance}

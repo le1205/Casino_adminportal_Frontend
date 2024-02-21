@@ -3,20 +3,16 @@ import { useState } from 'react';
 // @mui
 import {
   Stack,
-  Avatar,
   Button,
-  Checkbox,
   TableRow,
   MenuItem,
   TableCell,
-  IconButton,
   Typography,
 } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
 // components
-import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
@@ -54,9 +50,6 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
   return (
     <>
       <TableRow hover selected={selected}>
-
-        <TableCell align="left">{no}</TableCell>
-
         <TableCell align="left">{id}</TableCell>
 
         <TableCell>

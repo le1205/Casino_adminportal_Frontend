@@ -59,17 +59,16 @@ const ROLE_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  { id: 'no', label: 'No', align: 'left' },
-  { id: 'id', label: 'Id', align: 'left' },
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'company', label: 'Company', align: 'left' },
-  { id: 'level', label: 'Level', align: 'left' },
-  { id: 'cash', label: 'Cash', align: 'left' },
+  { id: 'id', label: 'id', align: 'left' },
+  { id: 'name', label: 'name', align: 'left' },
+  { id: 'company', label: 'company', align: 'left' },
+  { id: 'level', label: 'level', align: 'left' },
+  { id: 'cash', label: 'cash', align: 'left' },
   { id: 'point', label: 'point', align: 'left' },
-  { id: 'in_out', label: 'In/Out', align: 'left' },
-  { id: 'total_loose', label: 'Total Loose', align: 'left' },
-  { id: 'action', label: 'Action', align: 'left' },
-  { id: 'last_date', label: 'Last Date', align:'left' },
+  { id: 'inOut', label: 'inOut', align: 'left' },
+  { id: 'totalLoose', label: 'totalLoose', align: 'left' },
+  { id: 'action', label: 'action', align: 'left' },
+  { id: 'lastDate', label: 'lastDate', align:'left' },
 ];
 
 const oPcode = process.env.REACT_APP_SECRET_OPCODE;
@@ -262,7 +261,6 @@ export default function UserListPage() {
         results.forEach((item, index) => {
           const user = {
             _id: item._id || '',
-            no: index,
             id: item.user_id || '---',
             name: item.Nickname || '---',
             company: item.company || '---',
@@ -306,11 +304,11 @@ export default function UserListPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="User List"
+          heading="memberList"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
-            { name: 'List' },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'user', href: PATH_DASHBOARD.user.root },
+            { name: 'list' },
           ]}
           action={
             <Button

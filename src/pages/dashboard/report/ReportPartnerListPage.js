@@ -111,6 +111,7 @@ export default function ReportPartnerListPage() {
   const [dataActive, setDataActive] = useState({});
   const [node, setNode] = useState([]);
   const [totalData, setTotalData] = useState({});
+  const [totalDepWith, setTotalDepWith] = useState(0);
   const [tableData, setTableData] = useState([]);
   const [count, setCount] = useState(0);
 
@@ -135,16 +136,6 @@ export default function ReportPartnerListPage() {
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
-  };
-
-  const handleFilterName = (event) => {
-    setPage(0);
-    setFilterName(event.target.value);
-  };
-
-  const handleFilterRole = (event) => {
-    setPage(0);
-    setFilterRole(event.target.value);
   };
 
   const handleDeleteRow = (key) => {
@@ -195,11 +186,6 @@ export default function ReportPartnerListPage() {
     setCount(number);
   };
 
-  const handleResetFilter = () => {
-    setFilterName('');
-    setFilterRole('all');
-    setFilterStatus('all');
-  };
 
   const getAllTotalList = () => {
     try {
@@ -208,154 +194,38 @@ export default function ReportPartnerListPage() {
       const url = allTotalListUrl;
       const headers = {};
       apiWithPostData(url, {}, headers).then((response) => {
-        
         const valueData = {
-          ...response,
-          active: response.resultsValueMain.find((item) => item.username === userData.username)
+          ...response
         };
-
         const valueMain = response.mapData.map((item) => ({
-            ...item,
-            balanceMain:
-                (response?.resultsValueMain.find((val) => val?.userId?._id === item.userId)?.userId?.vituralMoney || 0) +
-                item.balanceMain
+          ...item
         }));
-        
         const listDataUser = valueMain.filter((item) => item.creatorId === userData._id);
         const treedata = handleCountData(listDataUser, valueMain);
         setTotalData(valueData);
+        setDataActive(response.ListTotal);
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        setTotalDepWith(valueData?.totald - valueData?.totalw);
         setNode(treedata);
-        setIsLoading(false);
         const totalArrays = handleTreeData(treedata);
         setTableData(totalArrays);
+        setIsLoading(false);
       });
     } catch (error) {
       console.log(error);
     }
   };
-  
-  const handleCountTotal = (arr, key) => {
-      let tot = 0;
-      // eslint-disable-next-line array-callback-return
-      arr.map((item) => {
-          tot += Number(item[key]);
-      });
-      return tot;
-  };
-  const countData = (arr, role) => {
-      const data = arr.map((item) => {
-          if (item.role.title === 'user') {
-              return {
-                  ...item
-              };
-          }
-          return {
-              ...item,
-              bet_money_live_history: handleCountTotal(
-                  arr.filter((val) => val.creatorId === item.userId),
-                  'bet_money_live_history'
-              ),
-              lose_money_liveadmin: handleCountTotal(
-                  arr.filter((val) => val.creatorId === item.userId),
-                  'lose_money_liveadmin'
-              ),
-              bet_money_slot_history: handleCountTotal(
-                  arr.filter((val) => val.creatorId === item.userId),
-                  'bet_money_slot_history'
-              ),
-              lose_money_slotadmin: handleCountTotal(
-                  arr.filter((val) => val.creatorId === item.userId),
-                  'lose_money_slotadmin'
-              )
-          };
-      });
-      return data;
-  };
-  const handleCountHeaderDataNumber = (data) => Number(data.slice(data.search('/') + 1).replaceAll(',', ''));
-  const handleCountLosingRate = (arr) => {
-      let data = arr;
-      data = data.map((item) => ({
-              ...item,
-              total_money_count_live: item.bet_money_live_history - item.lose_money_liveadmin - item.bet_money_live,
-              total_money_count_losing_live:
-                  ((item.bet_money_live_history - item.lose_money_liveadmin - item.bet_money_live) * item.loseLiveRate) / 100,
-              total_money_count_slot: item.bet_money_slot_history - item.lose_money_slotadmin - item.bet_money_slot,
-              total_money_count_losing_slot:
-                  ((item.bet_money_slot_history - item.lose_money_slotadmin - item.bet_money_slot) * item.loseSlotRate) / 100
-          }));
-      return data;
-  };
-  const handleSumAll = (arr) => {
-      let data = arr;
-      data = data.map((item) => ({
-              ...item,
-              sum_1: item.bet_money_slot_history + item.bet_money_live_history,
-              sum_2: item.lose_money_slotadmin + item.lose_money_liveadmin,
-              sum_3: item.bet_money_slot + item.bet_money_live,
-              sum_4: item.total_money_count_losing_slot + item.total_money_count_losing_live,
-              sum_5: item.total_money_count_slot + item.total_money_count_live
-          }));
-      return data;
-  };
+
   const handleCountUser = (arr) => {
       const countUser = arr.filter((item) => item.role.title === 'user').length;
       return countUser;
   };
-  const handleCountTotalHeader = (arr) => {
-      let totalSlot1 = 0;
-      let totalSlot2 = 0;
-      let totalSlot3 = 0;
-      let totalSlot4 = 0;
-      let totalSlot5 = 0;
-      let totalLive1 = 0;
-      let totalLive2 = 0;
-      let totalLive3 = 0;
-      let totalLive4 = 0;
-      let totalLive5 = 0;
-      // eslint-disable-next-line array-callback-return
-      arr.map((item) => {
-          totalSlot1 += item.bet_money_slot_history;
-          totalSlot2 += item.lose_money_slotadmin;
-          totalSlot3 += item.bet_money_slot;
-          totalSlot4 += item.total_money_count_losing_slot;
-          totalSlot5 += item.total_money_count_slot;
-          totalLive1 += item.bet_money_live_history;
-          totalLive2 += item.lose_money_liveadmin;
-          totalLive3 += item.bet_money_live;
-          totalLive4 += item.total_money_count_losing_live;
-          totalLive5 += item.total_money_count_live;
-      });
-      return {
-          totalSlot1,
-          totalSlot2,
-          totalSlot3,
-          totalSlot4,
-          totalSlot5,
-          totalLive1,
-          totalLive2,
-          totalLive3,
-          totalLive4,
-          totalLive5
-      };
-  };
   
   const handleCountData = (listValue, dataMain) => {
-    const data = dataMain.map((item) => ({
-            ...item,
-            bet_money_slot: handleCountHeaderDataNumber(item.bet_money_slot),
-            bet_money_live: handleCountHeaderDataNumber(item.bet_money_live)
-        }));
-    const data1 = countData(data, 'user');
-    const data2 = countData(data1, 'agent');
-    const data3 = countData(data2, 'distribute');
-    const data4 = countData(data3, 'company');
-    const value1 = countData(data4, 'admin');
-    const value2 = handleCountLosingRate(value1);
-    const value = handleSumAll(value2);
+    const value  = dataMain
     const listDataUser1 = value.filter((item) => item.creatorId === userData._id);
-    setDataActive(handleCountTotalHeader(value.filter((item) => item.role.title !== 'user')));
     const treedata = listDataUser1.map((item) => ({
-            key: item._id,
+            key: item.userId,
             data: {
                 ...item,
                 total_user: handleCountUser(value.filter((sub) => sub.creatorId === item.userId))
@@ -363,7 +233,7 @@ export default function ReportPartnerListPage() {
             children: value
                 .filter((sub) => sub.creatorId === item.userId)
                 ?.map((subitem) => ({
-                        key: subitem._id,
+                        key: subitem.userId,
                         data: {
                             ...subitem,
                             total_user: handleCountUser(value.filter((com) => com.creatorId === subitem.userId))
@@ -371,7 +241,7 @@ export default function ReportPartnerListPage() {
                         children: value
                             .filter((com) => com.creatorId === subitem.userId)
                             ?.map((comitem) => ({
-                                    key: comitem._id,
+                                    key: comitem.userId,
                                     data: {
                                         ...comitem,
                                         total_user: handleCountUser(value.filter((dis) => dis.creatorId === comitem.userId))
@@ -379,7 +249,7 @@ export default function ReportPartnerListPage() {
                                     children: value
                                         .filter((dis) => dis.creatorId === comitem.userId)
                                         ?.map((disitem) => ({
-                                                key: disitem._id,
+                                                key: disitem.userId,
                                                 data: {
                                                     ...disitem,
                                                     total_user: handleCountUser(
@@ -389,7 +259,7 @@ export default function ReportPartnerListPage() {
                                                 children: value
                                                     .filter((agent) => agent.creatorId === disitem.userId)
                                                     ?.map((agentitem) => ({
-                                                            key: agentitem._id,
+                                                            key: agentitem.userId,
                                                             data: {
                                                                 ...agentitem,
                                                                 total_user: handleCountUser(
@@ -399,7 +269,7 @@ export default function ReportPartnerListPage() {
                                                             children: value
                                                                 .filter((user) => user.creatorId === agentitem.userId)
                                                                 ?.map((useitem) => ({
-                                                                        key: useitem._id,
+                                                                        key: useitem.userId,
                                                                         data: useitem
                                                                     }))
                                                         }))
@@ -416,6 +286,7 @@ export default function ReportPartnerListPage() {
       data.forEach((item, index) => {
         if(item.data) {
           const itemData = item.data;
+          itemData._id = item.key;
           itemData.parent_key = key;
           itemData.display = display;
           itemData.expand = false;
@@ -509,7 +380,7 @@ export default function ReportPartnerListPage() {
                             Deposit-Withdraw:
                           </Typography>
                           <Typography variant="body2">
-                            {totalData?.totald}
+                            {totalDepWith}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -632,7 +503,7 @@ export default function ReportPartnerListPage() {
                             Betting:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.totalLive1}
+                            {dataActive?.bet_live}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -645,7 +516,7 @@ export default function ReportPartnerListPage() {
                           </Typography>
                           <Typography variant="body2">
                             
-                          {dataActive?.totalSlot1}
+                          {dataActive?.bet_slot}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -659,7 +530,7 @@ export default function ReportPartnerListPage() {
                           <Typography variant="body2">
                             {
                             // eslint-disable-next-line no-unsafe-optional-chaining
-                            dataActive?.totalLive1 + dataActive.totalSlot1
+                            dataActive?.bet_live + dataActive.bet_slot
                             }
                           </Typography>
                         </Stack>
@@ -674,7 +545,7 @@ export default function ReportPartnerListPage() {
                             Win:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.totalLive2}
+                            {dataActive?.win_live}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -686,7 +557,7 @@ export default function ReportPartnerListPage() {
                             Win:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.totalSlot2}
+                            {dataActive?.win_slot}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -700,7 +571,7 @@ export default function ReportPartnerListPage() {
                           <Typography variant="body2">
                           {
                             // eslint-disable-next-line no-unsafe-optional-chaining
-                            dataActive?.totalLive2 + dataActive.totalSlot2
+                            dataActive?.win_live + dataActive.win_slot
                           }
                           </Typography>
                         </Stack>
@@ -715,7 +586,7 @@ export default function ReportPartnerListPage() {
                             Rolling:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.totalLive3}
+                            {dataActive?.bet_money_live}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -727,7 +598,7 @@ export default function ReportPartnerListPage() {
                             Rolling:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.totalSlot3}
+                            {dataActive?.bet_money_slot}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -741,7 +612,7 @@ export default function ReportPartnerListPage() {
                           <Typography variant="body2">
                             {
                             // eslint-disable-next-line no-unsafe-optional-chaining
-                            dataActive?.totalLive3 + dataActive.totalSlot3
+                            dataActive?.bet_money_live + dataActive.bet_money_slot
                             }
                           </Typography>
                         </Stack>
@@ -756,7 +627,7 @@ export default function ReportPartnerListPage() {
                             Losing:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.totalLive4}
+                            {dataActive?.lose_money_live}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -768,7 +639,7 @@ export default function ReportPartnerListPage() {
                             Losing:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.totalSlot4}
+                            {dataActive?.lose_money_slot}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -782,7 +653,7 @@ export default function ReportPartnerListPage() {
                           <Typography variant="body2">
                             {
                             // eslint-disable-next-line no-unsafe-optional-chaining
-                            dataActive?.totalLive4 + dataActive.totalSlot4
+                            dataActive?.lose_money_live + dataActive.lose_money_slot
                             }
                           </Typography>
                         </Stack>
@@ -797,7 +668,7 @@ export default function ReportPartnerListPage() {
                             Balance:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.totalLive5}
+                            {dataActive?.balance_live}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -809,7 +680,7 @@ export default function ReportPartnerListPage() {
                             Balance:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.totalSlot5}
+                            {dataActive?.balance_slot}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -823,7 +694,7 @@ export default function ReportPartnerListPage() {
                           <Typography variant="body2">
                             {
                             // eslint-disable-next-line no-unsafe-optional-chaining
-                            dataActive?.totalLive5 + dataActive.totalSlot5
+                            dataActive?.balance_live + dataActive.balance_slot
                             }
                           </Typography>
                         </Stack>
@@ -875,9 +746,9 @@ export default function ReportPartnerListPage() {
                 <TableBody>
                   {tableData
                     // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => (
+                    .map((row, index) => (
                       <ReportTableRow
-                        key={row._id}
+                        key={row._id + index}
                         display={row.display}
                         row={row}
                         count= {count}

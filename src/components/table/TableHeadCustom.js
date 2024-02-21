@@ -2,6 +2,9 @@ import PropTypes from 'prop-types';
 // @mui
 import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
 
+// locales
+import { useLocales } from '../../locales';
+
 // ----------------------------------------------------------------------
 
 const visuallyHidden = {
@@ -25,7 +28,6 @@ TableHeadCustom.propTypes = {
   headLabel: PropTypes.array,
   rowCount: PropTypes.number,
   numSelected: PropTypes.number,
-  onSelectAllRows: PropTypes.func,
   order: PropTypes.oneOf(['asc', 'desc']),
 };
 
@@ -36,9 +38,10 @@ export default function TableHeadCustom({
   headLabel,
   numSelected = 0,
   onSort,
-  onSelectAllRows,
   sx,
 }) {
+  
+  const { translate } = useLocales();
   return (
     <TableHead sx={sx}>
       <TableRow>
@@ -67,7 +70,9 @@ export default function TableHeadCustom({
                 onClick={() => onSort(headCell.id)}
                 sx={{ textTransform: 'capitalize' }}
               >
-                {headCell.label}
+                {/* {headCell.label} */}
+                
+                {`${translate(headCell.label)}`}
 
                 {orderBy === headCell.id ? (
                   <Box sx={{ ...visuallyHidden }}>

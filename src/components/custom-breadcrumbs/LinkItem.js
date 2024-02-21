@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { Box, Link } from '@mui/material';
+// locales
+import { useLocales } from '../../locales';
 
 // ----------------------------------------------------------------------
 
@@ -17,6 +19,8 @@ BreadcrumbsLink.propTypes = {
 
 export default function BreadcrumbsLink({ link, activeLast, disabled }) {
   const { name, href, icon } = link;
+  
+  const { translate } = useLocales();
 
   const styles = {
     typography: 'body2',
@@ -46,7 +50,7 @@ export default function BreadcrumbsLink({ link, activeLast, disabled }) {
         </Box>
       )}
 
-      {name}
+      {`${translate(name)}`}
     </>
   );
 

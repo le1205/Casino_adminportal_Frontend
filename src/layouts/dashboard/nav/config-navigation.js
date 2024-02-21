@@ -59,10 +59,9 @@ const navConfig = [
         path: PATH_DASHBOARD.partner.root,
         icon: ICONS.partner,
         children: [
-          { title: 'partner list', path: PATH_DASHBOARD.partner.list },
-          { title: 'partner create', path: PATH_DASHBOARD.partner.new },
-          { title: 'partner detail', path: PATH_DASHBOARD.partner.demoEdit },
-          { title: 'partner setting', path: PATH_DASHBOARD.partner.detail },
+          { title: 'partnerList', path: PATH_DASHBOARD.partner.list },
+          { title: 'partnerCreate', path: PATH_DASHBOARD.partner.new },
+          { title: 'partnerDetail', path: PATH_DASHBOARD.partner.detail },
         ],
       },
       // USER
@@ -71,82 +70,82 @@ const navConfig = [
         path: PATH_DASHBOARD.user.root,
         icon: ICONS.user,
         children: [
-          { title: 'create member', path: PATH_DASHBOARD.user.new },
-          { title: 'member list', path: PATH_DASHBOARD.user.list },
-          { title: 'member list (Ptn)', path: PATH_DASHBOARD.user.listAccordingPartner },
-          { title: 'member approbal', path: PATH_DASHBOARD.user.accept },
-          { title: 'money transaction list', path: PATH_DASHBOARD.user.cash },
-          { title: 'manage point', path: PATH_DASHBOARD.user.point },
-          { title: 'user tracking', path: PATH_DASHBOARD.user.track },
-          { title: 'logged in member', path: PATH_DASHBOARD.user.connect },
-          { title: 'mamnage rolling rate', path: PATH_DASHBOARD.user.rolling },
-          { title: 'multi ip list', path: PATH_DASHBOARD.user.multiIp },
+          { title: 'createMember', path: PATH_DASHBOARD.user.new },
+          { title: 'memberList', path: PATH_DASHBOARD.user.list },
+          { title: 'memberListPtn', path: PATH_DASHBOARD.user.listAccordingPartner },
+          { title: 'memberApproval', path: PATH_DASHBOARD.user.accept },
+          { title: 'moneyTransactionList', path: PATH_DASHBOARD.user.cash },
+          { title: 'managePoint', path: PATH_DASHBOARD.user.point },
+          { title: 'userTracking', path: PATH_DASHBOARD.user.track },
+          { title: 'loggedInMember', path: PATH_DASHBOARD.user.connect },
+          { title: 'mamnageRollingRate', path: PATH_DASHBOARD.user.rolling },
+          { title: 'multiIpList', path: PATH_DASHBOARD.user.multiIp },
         ],
       },
 
       // BET
       {
-        title: 'betting list',
+        title: 'bettingList',
         path: PATH_DASHBOARD.bet.root,
         icon: ICONS.cart,
         children: [
-          { title: 'total bet list', path: PATH_DASHBOARD.bet.common },
-          { title: 'casino game list', path: PATH_DASHBOARD.bet.casino },
-          { title: 'slot game list', path: PATH_DASHBOARD.bet.slot },
+          { title: 'totalBetList', path: PATH_DASHBOARD.bet.common },
+          { title: 'casinoGameList', path: PATH_DASHBOARD.bet.casino },
+          { title: 'slotGameList', path: PATH_DASHBOARD.bet.slot },
         ],
       },
 
       // EGG
       {
-        title: 'PT',
+        title: 'pt',
         path: PATH_DASHBOARD.egg.root,
         icon: ICONS.egg,
         children: [
-          { title: 'PT deposit list', path: PATH_DASHBOARD.egg.request },
-          { title: 'PT withdrawal list', path: PATH_DASHBOARD.egg.exchange },
-          { title: 'credit sum', path: PATH_DASHBOARD.egg.settlement },
-          { title: 'credit save list', path: PATH_DASHBOARD.egg.process },
+          { title: 'PTDepositList', path: PATH_DASHBOARD.egg.request },
+          { title: 'PTWithdrawalList', path: PATH_DASHBOARD.egg.exchange },
+          { title: 'creditSum', path: PATH_DASHBOARD.egg.settlement },
+          { title: 'creditSaveList', path: PATH_DASHBOARD.egg.process },
         ],
       },
 
       // INVOICE
       {
-        title: 'deposit & withdraw',
+        title: 'depositWithdraw',
         path: PATH_DASHBOARD.invoice.root,
         icon: ICONS.invoice,
         children: [
           { title: 'deposit', path: PATH_DASHBOARD.invoice.inApply },
-          { title: 'deposit list', path: PATH_DASHBOARD.invoice.inReport },
+          { title: 'depositList', path: PATH_DASHBOARD.invoice.inReport },
           { title: 'withdraw', path: PATH_DASHBOARD.invoice.outApply },
-          { title: 'withdraw list', path: PATH_DASHBOARD.invoice.outReport },
-          { title: 'operator transaction', path: PATH_DASHBOARD.invoice.adminList },
-          { title: 'cash history', path: PATH_DASHBOARD.invoice.history },
+          { title: 'withdrawList', path: PATH_DASHBOARD.invoice.outReport },
+          { title: 'operatorTransaction', path: PATH_DASHBOARD.invoice.adminList },
+          { title: 'cashHistory', path: PATH_DASHBOARD.invoice.history },
         ],
       },
 
       // REPORT
       {
-        title: 'Calculate',
+        title: 'calculate',
         path: PATH_DASHBOARD.report.root,
         icon: ICONS.menuItem,
         children: [
-          { title: 'partner calculate', path: PATH_DASHBOARD.report.partner },
-          { title: 'partner calculate2', path: PATH_DASHBOARD.report.user },
-          { title: 'result by game', path: PATH_DASHBOARD.report.game },
-          { title: 'result by day', path: PATH_DASHBOARD.report.daily },
+          { title: 'partnerCalculate', path: PATH_DASHBOARD.report.partner },
+          { title: 'partnerCalculate2', path: PATH_DASHBOARD.report.user },
+          { title: 'resultByGame', path: PATH_DASHBOARD.report.game },
+          { title: 'resultByDay', path: PATH_DASHBOARD.report.daily },
         ],
       },
 
       // CUSTOMER CENTER
       {
-        title: 'customer center',
+        title: 'customerCenter',
         path: PATH_DASHBOARD.customer.root,
         icon: ICONS.customer,
         children: [
-          { title: 'manage message', path: PATH_DASHBOARD.customer.message },
-          { title: 'manage board', path: PATH_DASHBOARD.customer.blog },
-          { title: 'manage fag', path: PATH_DASHBOARD.customer.faq },
-          { title: 'manage notice', path: PATH_DASHBOARD.customer.notice },
+          { title: 'manageMessage', path: PATH_DASHBOARD.customer.message },
+          { title: 'manageBoard', path: PATH_DASHBOARD.customer.blog },
+          { title: 'manageFag', path: PATH_DASHBOARD.customer.faq },
+          { title: 'manageNotice', path: PATH_DASHBOARD.customer.notice },
         ],
       },
       // SETTING
@@ -160,7 +159,7 @@ const navConfig = [
             path: PATH_DASHBOARD.setting.account.root,
             children: [
               {
-                title: 'account status',
+                title: 'accountStatus',
                 path:  PATH_DASHBOARD.setting.account.list,
               },
               {
@@ -178,31 +177,31 @@ const navConfig = [
                 path: PATH_DASHBOARD.setting.company.bank,
               },
               {
-                title: 'setting of domain',
+                title: 'settingOfDomain',
                 path: PATH_DASHBOARD.setting.company.domain,
               },
             ],
           },
           {
-            title: 'by level setting',
+            title: 'byLevelSetting',
             path: PATH_DASHBOARD.setting.level.root,
             children: [
               {
-                title: 'set by level',
+                title: 'setByLevel',
                 path: PATH_DASHBOARD.setting.level.list,
               },
               {
-                title: 'domain level',
+                title: 'domainLevel',
                 path: PATH_DASHBOARD.setting.level.domain,
               },
             ],
           },
           {
-            title: 'site setting',
+            title: 'siteSetting',
             path: PATH_DASHBOARD.setting.site.root,
             children: [
               {
-                title: 'main page',
+                title: 'mainPage',
                 path: PATH_DASHBOARD.setting.site.main,
               },
               {
@@ -210,25 +209,25 @@ const navConfig = [
                 path: PATH_DASHBOARD.setting.site.history,
               },
               {
-                title: 'inspection include',
+                title: 'inspectionInclude',
                 path: PATH_DASHBOARD.setting.site.maintain,
               },
               {
-                title: 'website option',
+                title: 'websiteOption',
                 path: PATH_DASHBOARD.setting.site.option,
               },
             ],
           },
           {
-            title: 'manage game',
+            title: 'manageGame',
             path: PATH_DASHBOARD.setting.game.root,
             children: [
               {
-                title: 'casino setting',
+                title: 'casinoSetting',
                 path: PATH_DASHBOARD.setting.game.casino,
               },
               {
-                title: 'slot setting',
+                title: 'slotSetting',
                 path: PATH_DASHBOARD.setting.game.slot,
               },
             ],
@@ -237,12 +236,12 @@ const navConfig = [
       },
       //  ADMIN
       {
-        title: 'Admin Setting',
+        title: 'adminSetting',
         path: PATH_DASHBOARD.admin.root,
         icon: ICONS.admin,
         children: [
-          { title: 'operator list', path: PATH_DASHBOARD.admin.list },
-          { title: 'operator ip control', path: PATH_DASHBOARD.admin.ip },
+          { title: 'operatorList', path: PATH_DASHBOARD.admin.list },
+          { title: 'operatorIpControl', path: PATH_DASHBOARD.admin.ip },
         ],
       },
     ],

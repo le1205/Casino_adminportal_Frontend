@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 // @mui
 import { Box, Link, Stack, Typography, Breadcrumbs } from '@mui/material';
+// locales
+import { useLocales } from '../../locales';
 //
 import LinkItem from './LinkItem';
 
@@ -25,6 +27,7 @@ export default function CustomBreadcrumbs({
   ...other
 }) {
   const lastLink = links[links.length - 1].name;
+  const { translate } = useLocales();
 
   return (
     <Box sx={{ mb: 1, ...sx }}>
@@ -33,7 +36,7 @@ export default function CustomBreadcrumbs({
           {/* HEADING */}
           {heading && (
             <Typography variant="h4" gutterBottom>
-              {heading}
+              {`${translate(heading)}`}
             </Typography>
           )}
 
