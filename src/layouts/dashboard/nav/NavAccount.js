@@ -1,13 +1,17 @@
 import { Link as RouterLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 // @mui
-import { styled, alpha } from '@mui/material/styles';
-import { Box, Link, Typography } from '@mui/material';
-// auth
-import { useAuthContext } from '../../../auth/useAuthContext';
+import { styled, alpha, useTheme } from '@mui/material/styles';
+import { Box, Link, Typography, Stack } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
-// components
-import { CustomAvatar } from '../../../components/custom-avatar';
+
+// utils
+import {parseJson } from '../../../auth/utils';
+// api
+import { apiWithGetData } from '../../../utils/api';
+// url
+import { userBalanceUrl, } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
@@ -22,21 +26,68 @@ const StyledRoot = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function NavAccount() {
-  const { user } = localStorage.getItem('user') || "";
+  const theme = useTheme();
+
+  const [balance, setBalance] = useState(0);
+  const [point, setPoint] = useState(0);
+  
+  const user = parseJson(localStorage.getItem('user') || "");
+  
+  const userBalance = () => {
+    try {
+      const url = userBalanceUrl + user._id;
+      const headers = {};
+      apiWithGetData(url, {}, headers).then((response) => {
+        setBalance(response?.balance || 0);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  useEffect(() => {
+    const optimer = setInterval(userBalance, 6000)
+    return ()=>clearInterval(optimer)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <Link component={RouterLink} to={PATH_DASHBOARD.user.account} underline="none" color="inherit">
       <StyledRoot>
-        <CustomAvatar src={user?.photoURL} alt={user?.displayName} name={user?.displayName} />
-
-        <Box sx={{ ml: 2, minWidth: 0 }}>
-          <Typography variant="subtitle2" noWrap>
-            {user?.displayName}
-          </Typography>
-
-          <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-            {user?.role}
-          </Typography>
+        <Box sx={{ ml: 1, minWidth: 0 }}>
+          
+          <Stack direction="row"
+            alignItems="center"
+            justifyContent="space-between">
+            <Typography variant="subtitle2" noWrap sx={{ color: 'text.secondary' }}>
+              {user?.role}
+            </Typography>
+            <Typography variant="subtitle1" noWrap sx={{ pl: 6}}>
+              {user?.username}
+            </Typography>
+          </Stack>
+          
+          <Stack direction="row"
+            alignItems="center"
+            justifyContent="space-between">
+            <Typography variant="subtitle2" noWrap sx={{ color: 'text.secondary' }}>
+              Credit:
+            </Typography>
+            <Typography variant="subtitle2" noWrap sx={{ color: theme.palette.warning.main }}>
+              {balance}
+            </Typography>
+          </Stack>
+          
+          <Stack direction="row"
+            alignItems="center"
+            justifyContent="space-between">
+            <Typography variant="subtitle2" noWrap sx={{ color: 'text.secondary' }}>
+              Point:
+            </Typography>
+            <Typography variant="subtitle2" noWrap sx={{  color: theme.palette.success.main}}>
+              {point}
+            </Typography>
+          </Stack>
         </Box>
       </StyledRoot>
     </Link>

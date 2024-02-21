@@ -40,6 +40,7 @@ export default function AuthLoginForm() {
   //   email: '',
   //   password: '',
   // };
+  localStorage.clear();
 
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
@@ -59,6 +60,7 @@ export default function AuthLoginForm() {
       const headers = {};
       apiWithPostData(url, { email:data.email, password: data.password,}, headers).then((response) => {
         const {session, user } = response;
+        console.log("response>>>>", response);
         if(session.accessToken) {
           setSession(session.accessToken);
           setUser(user);

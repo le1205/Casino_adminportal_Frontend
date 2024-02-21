@@ -78,8 +78,17 @@ export const setSession = (accessToken) => {
 
 export const setUser = (user) => {
   if (user) {
-    localStorage.setItem('user', user);
+    const strUser = JSON.stringify(user);
+    localStorage.setItem('user', strUser);
   } else {
     localStorage.removeItem('user');
   }
+};
+
+export const parseJson = (str) => {
+  let obj = {};
+  if (str && str !== "") {
+    obj = JSON.parse(str);
+  } 
+  return obj
 };
