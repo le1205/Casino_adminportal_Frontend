@@ -41,17 +41,17 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
   const [openPopover, setOpenPopover] = useState(null);
 
   // eslint-disable-next-line no-unsafe-optional-chaining
-  const holdingPoint = data?.live_main + data?.slot_main;
+  const holdingPoint = data?.live_main + data?.slot_main || 0;
   // eslint-disable-next-line no-unsafe-optional-chaining
-  const totalBet = data?.bet_live + data?.bet_slot;
+  const totalBet = data?.bet_live + data?.bet_slot || 0;
   // eslint-disable-next-line no-unsafe-optional-chaining
-  const totalWin = data?.win_live + data?.win_slot;
+  const totalWin = data?.win_live + data?.win_slot || 0;
   // eslint-disable-next-line no-unsafe-optional-chaining
-  const totalRolling = data?.bet_money_live + data?.bet_money_slot;
+  const totalRolling = data?.bet_money_live + data?.bet_money_slot || 0;
   // eslint-disable-next-line no-unsafe-optional-chaining
-  const totalLoosing = data?.lose_money_live + data?.lose_money_slot;
+  const totalLoosing = data?.lose_money_live + data?.lose_money_slot || 0;
   // eslint-disable-next-line no-unsafe-optional-chaining
-  const totalBalance = data?.balance_live + data?.balance_slot;
+  const totalBalance = data?.balance_live + data?.balance_slot || 0;
   
 
   const handleOpenConfirm = () => {
@@ -153,7 +153,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Money:
             </Typography>
             <Typography variant="body2">
-              {data?.balanceMain}
+              {data?.balanceMain?.toLocaleString()}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -163,7 +163,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Holding Point:
             </Typography>
             <Typography variant="body2">
-              {holdingPoint || 0}
+              {holdingPoint?.toLocaleString() || 0}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -196,7 +196,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               User Deposit:
             </Typography>
             <Typography variant="body2">
-              {data?.total_deposit || 0}
+              {data?.total_deposit?.toLocaleString() || 0}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -206,7 +206,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               User Widthraw:
             </Typography>
             <Typography variant="body2">
-              {data?.total_withdraw || 0}
+              {data?.total_withdraw?.toLocaleString() || 0}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -240,7 +240,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Betting:
             </Typography>
             <Typography variant="body2">
-              {data?.bet_live}
+              {data?.bet_live?.toLocaleString()}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -250,7 +250,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Win:
             </Typography>
             <Typography variant="body2">
-              {data?.win_live}
+              {data?.win_live?.toLocaleString()}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -260,7 +260,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Rolling:
             </Typography>
             <Typography variant="body2">
-              {data?.bet_money_live}
+              {data?.bet_money_live?.toLocaleString()}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -270,7 +270,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Losing:
             </Typography>
             <Typography variant="body2">
-              {data?.lose_money_live}
+              {data?.lose_money_live?.toLocaleString()}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -280,7 +280,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Balance:
             </Typography>
             <Typography variant="body2" color='text.warn'>
-              {data?.balance_live}
+              {data?.balance_live?.toLocaleString()}
             </Typography>
           </Stack>
         </TableCell>
@@ -293,7 +293,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Betting:
             </Typography>
             <Typography variant="body2">
-              {data?.bet_slot}
+              {data?.bet_slot?.toLocaleString()}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -303,7 +303,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Win:
             </Typography>
             <Typography variant="body2">
-              {data?.win_slot}
+              {data?.win_slot?.toLocaleString()}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -313,7 +313,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Rolling:
             </Typography>
             <Typography variant="body2">
-              {data?.bet_money_slot}
+              {data?.bet_money_slot?.toLocaleString()}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -323,7 +323,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Losing:
             </Typography>
             <Typography variant="body2">
-              {data?.lose_money_slot}
+              {data?.lose_money_slot?.toLocaleString()}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -333,7 +333,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Balance:
             </Typography>
             <Typography variant="body2" color='text.warn'>
-              {data?.balance_slot}
+              {data?.balance_slot?.toLocaleString()}
             </Typography>
           </Stack>
         </TableCell>
@@ -347,7 +347,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Betting:
             </Typography>
             <Typography variant="body2">
-              {totalBet}
+              {totalBet?.toLocaleString()}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -357,7 +357,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Win:
             </Typography>
             <Typography variant="body2">
-              {totalWin}
+              {totalWin?.toLocaleString()}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -367,7 +367,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Rolling:
             </Typography>
             <Typography variant="body2">
-              {totalRolling}
+              {totalRolling?.toLocaleString()}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -377,7 +377,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Losing:
             </Typography>
             <Typography variant="body2">
-              {totalLoosing}
+              {totalLoosing?.toLocaleString()}
             </Typography>
           </Stack>
           <Stack direction="row"
@@ -387,7 +387,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
               Balance:
             </Typography>
             <Typography variant="body2" color='text.warn'>
-              {totalBalance}
+              {totalBalance?.toLocaleString()}
             </Typography>
           </Stack>
         </TableCell>

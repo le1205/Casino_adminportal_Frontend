@@ -22,17 +22,17 @@ export default function PartnerCreatePage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Create a new partner"
+          heading="partnerCreate"
           links={[
             {
-              name: 'Dashboard',
+              name: 'dashboard',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Partner',
+              name: 'partner',
               href: PATH_DASHBOARD.partner.root,
             },
-            { name: 'Create' },
+            { name: 'create' },
           ]}
         />
         <PartnerNewEditForm />

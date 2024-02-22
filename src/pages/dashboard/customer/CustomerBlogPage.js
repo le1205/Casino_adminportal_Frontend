@@ -24,10 +24,10 @@ export default function CustomerBlogPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Blog"
+          heading="manageBoard"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Customer Center', href: PATH_DASHBOARD.customer.root },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'customerCenter', href: PATH_DASHBOARD.customer.root },
             { name: 'Blog' },
           ]}
         />

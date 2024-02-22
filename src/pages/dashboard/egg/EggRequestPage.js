@@ -24,10 +24,10 @@ export default function EggRequestPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Egg Requests"
+          heading="PTDepositList"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Egg', href: PATH_DASHBOARD.egg.root },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'pt', href: PATH_DASHBOARD.egg.root },
             { name: 'Requests' },
           ]}
         />

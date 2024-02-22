@@ -22,12 +22,12 @@ export default function SettingCompanyDomainPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Company Domain"
+          heading="settingOfDomain"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Seeting', href: PATH_DASHBOARD.setting.root },
-            { name: 'Company', href: PATH_DASHBOARD.setting.company.root },
-            { name: 'Domain' },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'setting', href: PATH_DASHBOARD.setting.root },
+            { name: 'company', href: PATH_DASHBOARD.setting.company.root },
+            { name: 'domain' },
           ]}
         />
 

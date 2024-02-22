@@ -24,14 +24,14 @@ export default function InvoiceInReportPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Invoice List"
+          heading="depositList"
           links={[
             {
-              name: 'Dashboard',
+              name: 'dashboard',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Invoices',
+              name: 'invoices',
               href: PATH_DASHBOARD.invoice.root,
             },
             {

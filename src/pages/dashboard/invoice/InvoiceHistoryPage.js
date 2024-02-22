@@ -28,14 +28,14 @@ export default function InvoiceHistoryPage() {
       <Container maxWidth={themeStretch ? false : 'xl'}>
 
         <CustomBreadcrumbs
-          heading="Invoice History"
+          heading="cashHistory"
           links={[
             {
-              name: 'Dashboard',
+              name: 'dashboard',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Invoices',
+              name: 'invoices',
               href: PATH_DASHBOARD.invoice.root,
             },
             {

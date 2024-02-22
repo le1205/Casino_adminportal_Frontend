@@ -22,11 +22,11 @@ export default function SettingAccountStatusPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Account Status"
+          heading="accountStatus"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Seeting', href: PATH_DASHBOARD.setting.root },
-            { name: 'Account', href: PATH_DASHBOARD.setting.account.root },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'setting', href: PATH_DASHBOARD.setting.root },
+            { name: 'account', href: PATH_DASHBOARD.setting.account.root },
             { name: 'Status' },
           ]}
         />

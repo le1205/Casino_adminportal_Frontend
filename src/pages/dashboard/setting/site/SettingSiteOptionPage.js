@@ -22,11 +22,11 @@ export default function SettingSiteOptionPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Site Option"
+          heading="websiteOption"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Seeting', href: PATH_DASHBOARD.setting.root },
-            { name: 'Site', href: PATH_DASHBOARD.setting.site.root },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'setting', href: PATH_DASHBOARD.setting.root },
+            { name: 'site', href: PATH_DASHBOARD.setting.site.root },
             { name: 'Option' },
           ]}
         />

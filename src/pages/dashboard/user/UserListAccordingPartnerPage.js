@@ -24,11 +24,11 @@ export default function UserListAccordingPartnerPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="List(According Partner)"
+          heading="memberListPtn"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
-            { name: 'List(According Partner)' },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'user', href: PATH_DASHBOARD.user.root },
+            { name: 'listPartner' },
           ]}
         />
         <Box

@@ -144,7 +144,7 @@ const navConfig = [
         children: [
           { title: 'manageMessage', path: PATH_DASHBOARD.customer.message },
           { title: 'manageBoard', path: PATH_DASHBOARD.customer.blog },
-          { title: 'manageFag', path: PATH_DASHBOARD.customer.faq },
+          { title: 'manageFaq', path: PATH_DASHBOARD.customer.faq },
           { title: 'manageNotice', path: PATH_DASHBOARD.customer.notice },
         ],
       },

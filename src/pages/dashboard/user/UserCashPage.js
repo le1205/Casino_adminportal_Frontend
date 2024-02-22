@@ -24,10 +24,10 @@ export default function UserCashPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Cash Movement"
+          heading="moneyTransactionList"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'user', href: PATH_DASHBOARD.user.root },
             { name: 'Cash Movement' },
           ]}
         />

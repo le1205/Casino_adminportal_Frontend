@@ -73,11 +73,11 @@ export default function PartnerDetailPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Partner Details"
+          heading="partnerDetail"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Partner', href: PATH_DASHBOARD.partner.root },
-            { name: 'Partner Details' },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'partner', href: PATH_DASHBOARD.partner.root },
+            { name: 'details' },
           ]}
         />
 

@@ -28,11 +28,11 @@ import {
   TablePaginationCustom,
 } from '../../../components/table';
 // sections
-import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/user/list';
+import { UserTableToolbar, UserConnectingTableRow } from '../../../sections/@dashboard/user/list';
 // api
-import { apiWithPostData } from '../../../utils/api';
+import { apiWithGetData } from '../../../utils/api';
 // url
-import { adminListUrl, } from '../../../utils/urlList';
+import { userSigninUrl, } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
@@ -45,18 +45,18 @@ const ROLE_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  { id: 'no', label: 'No', align: 'left' },
-  { id: 'id', label: 'Id', align: 'left' },
-  { id: 'company', label: 'Company', align: 'left' },
-  { id: 'cash', label: 'Cash', align: 'left' },
-  { id: 'time', label: 'Login Time', align: 'left' },
-  { id: 'ip', label: 'Last Ip', align: 'left' },
-  { id: 'dep_with', label: 'Deposit/Withdraw', align: 'left' },
-  { id: 'last_game', label: 'Last Game', align: 'left' },
-  { id: 'login', label: 'Login Possible', align:'left' },
-  { id: 'betting', label: 'Betting', align:'left' },
-  { id: 'confirm', label: 'Confirm', align:'left' },
-  { id: 'logout', label: 'Logout', align:'left' },
+  { id: 'no', label: 'no', align: 'left' },
+  { id: 'id', label: 'id', align: 'left' },
+  { id: 'company', label: 'company', align: 'left' },
+  { id: 'cash', label: 'cash', align: 'left' },
+  { id: 'loginTime', label: 'loginTime', align: 'left' },
+  { id: 'lastIp', label: 'lastIp', align: 'left' },
+  { id: 'depowith', label: 'depowith', align: 'left' },
+  { id: 'lastGame', label: 'lastGame', align: 'left' },
+  { id: 'loginPossible', label: 'loginPossible', align:'left' },
+  { id: 'betPossible', label: 'betPossible', align:'left' },
+  { id: 'confirm', label: 'confirm', align:'left' },
+  { id: 'logout', label: 'logout', align:'left' },
 ];
 
 export default function UserConnectPage() {
@@ -124,6 +124,51 @@ export default function UserConnectPage() {
     setFilterStatus('all');
   };
 
+  
+
+  const userSigninList = () => {
+    try {
+      setIsLoading(true);
+      const url = userSigninUrl;
+      const headers = {};
+      apiWithGetData(url, {}, headers).then((response) => {
+        console.log("respnose>>>>", response);
+        // const { results } = response;
+        // const users = [];
+        // results.forEach((item, index) => {
+        //   const user = {
+        //     _id: item._id || '',
+        //     id: item.user_id || '---',
+        //     name: item.Nickname || '---',
+        //     company: item.company || '---',
+        //     level: item.level || '---',
+        //     cash: item.balanceMain || 0,
+        //     point: item.pointSlot || '0',
+        //     inOut: item.inOut || '---',
+        //     totalLoose: item.loseSlotRate || '0',
+        //     lastDate: item.updatedAt || '---',
+        //     isVerified: item.verify || false,
+        //     status: item.isBlock || false,
+        //     role: item.role.name || '---',
+        //   }
+        //   users.push(user);
+        // });
+
+        // setTableData(users);
+        setIsLoading(false);
+
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+  };
+
+  
+  useEffect(() => {
+    userSigninList();
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -132,11 +177,11 @@ export default function UserConnectPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Conneting Users"
+          heading="loggedInMember"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
-            { name: 'Connecting Users' },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'user', href: PATH_DASHBOARD.user.root },
+            { name: 'connecting' },
           ]}
         />
 
@@ -176,7 +221,7 @@ export default function UserConnectPage() {
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
-                      <UserTableRow
+                      <UserConnectingTableRow
                         key={row.id}
                         row={row}
                         selected={selected.includes(row.id)}

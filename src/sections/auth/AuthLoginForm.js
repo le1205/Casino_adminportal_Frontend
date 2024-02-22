@@ -31,15 +31,15 @@ export default function AuthLoginForm() {
     password: Yup.string().required('Password is required'),
   });
 
-  const defaultValues = {
-    email: 'adminhq',
-    password: 'dkagh@adminhq',
-  };
-
   // const defaultValues = {
-  //   email: '',
-  //   password: '',
+  //   email: 'adminhq',
+  //   password: 'dkagh@adminhq',
   // };
+
+  const defaultValues = {
+    email: '',
+    password: '',
+  };
   localStorage.clear();
 
   const methods = useForm({
@@ -60,7 +60,7 @@ export default function AuthLoginForm() {
       const headers = {};
       apiWithPostData(url, { email:data.email, password: data.password,}, headers).then((response) => {
         const {session, user } = response;
-        console.log("response>>>>", response);
+        // console.log("response>>>>", response);
         if(session.accessToken) {
           setSession(session.accessToken);
           setUser(user);

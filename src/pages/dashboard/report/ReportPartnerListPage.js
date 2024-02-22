@@ -33,7 +33,6 @@ import {
   TableEmptyRows,
   TableHeadCustom,
   TableSelectedAction,
-  TablePaginationCustom,
 } from '../../../components/table';
 // sections
 import { ReportTableToolbar, ReportTableRow } from '../../../sections/@dashboard/report/list';
@@ -44,18 +43,14 @@ import { allTotalListUrl, } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
-const ROLE_OPTIONS = [
-  'all',
-];
-
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'rate', label: 'Applied Rate', align: 'left' },
-  { id: 'status', label: 'Holding Status', align: 'left' },
-  { id: 'depwith', label: 'Deposit & Withdrawal', align: 'center' },
-  { id: 'casino', label: 'Casino', align: 'left' },
-  { id: 'slot', label: 'Slot', align: 'left' },
-  { id: 'total', label: 'Total', align: 'left' },
+  { id: 'name', label: 'name', align: 'left' },
+  { id: 'appliedRate', label: 'appliedRate', align: 'left' },
+  { id: 'holdingStatus', label: 'holdingStatus', align: 'left' },
+  { id: 'depositWithdrawal', label: 'depositWithdrawal', align: 'center' },
+  { id: 'casino', label: 'casino', align: 'left' },
+  { id: 'slot', label: 'slot', align: 'left' },
+  { id: 'total', label: 'total', align: 'left' },
 ];
 
 const TABLE_HEAD_TOTAL_ONE = [
@@ -64,9 +59,9 @@ const TABLE_HEAD_TOTAL_ONE = [
   { id: '3', label: '', align: 'center' },
 ];
 const TABLE_HEAD_TOTAL_TWO = [
-  { id: 'casino', label: 'Casino', align: 'center' },
-  { id: 'slot', label: 'Slot', align: 'center' },
-  { id: 'total', label: 'Total', align: 'center' },
+  { id: 'casino', label: 'casino', align: 'center' },
+  { id: 'slot', label: 'slot', align: 'center' },
+  { id: 'total', label: 'total', align: 'center' },
 ];
 const userData = localStorage.getItem('user') || "";
 
@@ -87,9 +82,6 @@ export default function ReportPartnerListPage() {
     onSelectAllRows,
     //
     onSort,
-    onChangeDense,
-    onChangePage,
-    onChangeRowsPerPage,
   } = useTable();
 
   const { themeStretch } = useSettingsContext();
@@ -317,10 +309,10 @@ export default function ReportPartnerListPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Partner Report"
+          heading="partnerCalculate"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Settlement', href: PATH_DASHBOARD.report.root },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'settlement', href: PATH_DASHBOARD.report.root },
             { name: 'Partner Report' },
           ]}
         />
@@ -344,7 +336,7 @@ export default function ReportPartnerListPage() {
                             Money:
                           </Typography>
                           <Typography variant="body2">
-                          {totalData?.totalMoney}
+                          {totalData?.totalMoney?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -356,7 +348,7 @@ export default function ReportPartnerListPage() {
                             User Deposit:
                           </Typography>
                           <Typography variant="body2">
-                            {totalData?.totald}
+                            {totalData?.totald?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -368,7 +360,7 @@ export default function ReportPartnerListPage() {
                             User Widthraw:
                           </Typography>
                           <Typography variant="body2">
-                            {totalData?.totalw}
+                            {totalData?.totalw?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -380,7 +372,7 @@ export default function ReportPartnerListPage() {
                             Deposit-Withdraw:
                           </Typography>
                           <Typography variant="body2">
-                            {totalDepWith}
+                            {totalDepWith?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -394,7 +386,7 @@ export default function ReportPartnerListPage() {
                             Holding Point:
                           </Typography>
                           <Typography variant="body2">
-                            {totalHoldingPoint}
+                            {totalHoldingPoint?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -406,7 +398,7 @@ export default function ReportPartnerListPage() {
                             Partner Deposit:
                           </Typography>
                           <Typography variant="body2">
-                            {totalPartnerDeposit}
+                            {totalPartnerDeposit?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -418,7 +410,7 @@ export default function ReportPartnerListPage() {
                             Partner Widthraw:
                           </Typography>
                           <Typography variant="body2">
-                            {totalPartnerWithdraw}
+                            {totalPartnerWithdraw?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -430,7 +422,7 @@ export default function ReportPartnerListPage() {
                             Partner Deposit-Withdraw:
                           </Typography>
                           <Typography variant="body2">
-                            {totalPartnerIncome}
+                            {totalPartnerIncome?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -456,7 +448,7 @@ export default function ReportPartnerListPage() {
                             Admin Deposit:
                           </Typography>
                           <Typography variant="body2">
-                            {totalAdminDeposit}
+                            {totalAdminDeposit?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -468,7 +460,7 @@ export default function ReportPartnerListPage() {
                             Admin Widthraw:
                           </Typography>
                           <Typography variant="body2">
-                            {totalAdminWithdraw}
+                            {totalAdminWithdraw?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -480,7 +472,7 @@ export default function ReportPartnerListPage() {
                             Admin Deposit-Withdraw:
                           </Typography>
                           <Typography variant="body2">
-                            {totalAdminIncome}
+                            {totalAdminIncome?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -503,7 +495,7 @@ export default function ReportPartnerListPage() {
                             Betting:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.bet_live}
+                            {dataActive?.bet_live?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -516,7 +508,7 @@ export default function ReportPartnerListPage() {
                           </Typography>
                           <Typography variant="body2">
                             
-                          {dataActive?.bet_slot}
+                          {dataActive?.bet_slot?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -530,7 +522,7 @@ export default function ReportPartnerListPage() {
                           <Typography variant="body2">
                             {
                             // eslint-disable-next-line no-unsafe-optional-chaining
-                            dataActive?.bet_live + dataActive.bet_slot
+                            (dataActive?.bet_live + dataActive.bet_slot)?.toLocaleString()
                             }
                           </Typography>
                         </Stack>
@@ -545,7 +537,7 @@ export default function ReportPartnerListPage() {
                             Win:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.win_live}
+                            {dataActive?.win_live?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -557,7 +549,7 @@ export default function ReportPartnerListPage() {
                             Win:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.win_slot}
+                            {dataActive?.win_slot?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -571,7 +563,7 @@ export default function ReportPartnerListPage() {
                           <Typography variant="body2">
                           {
                             // eslint-disable-next-line no-unsafe-optional-chaining
-                            dataActive?.win_live + dataActive.win_slot
+                            (dataActive?.win_live + dataActive.win_slot)?.toLocaleString()
                           }
                           </Typography>
                         </Stack>
@@ -586,7 +578,7 @@ export default function ReportPartnerListPage() {
                             Rolling:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.bet_money_live}
+                            {dataActive?.bet_money_live?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -598,7 +590,7 @@ export default function ReportPartnerListPage() {
                             Rolling:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.bet_money_slot}
+                            {dataActive?.bet_money_slot?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -612,7 +604,7 @@ export default function ReportPartnerListPage() {
                           <Typography variant="body2">
                             {
                             // eslint-disable-next-line no-unsafe-optional-chaining
-                            dataActive?.bet_money_live + dataActive.bet_money_slot
+                            (dataActive?.bet_money_live + dataActive.bet_money_slot)?.toLocaleString()
                             }
                           </Typography>
                         </Stack>
@@ -627,7 +619,7 @@ export default function ReportPartnerListPage() {
                             Losing:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.lose_money_live}
+                            {dataActive?.lose_money_live?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -639,7 +631,7 @@ export default function ReportPartnerListPage() {
                             Losing:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.lose_money_slot}
+                            {dataActive?.lose_money_slot?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -653,7 +645,7 @@ export default function ReportPartnerListPage() {
                           <Typography variant="body2">
                             {
                             // eslint-disable-next-line no-unsafe-optional-chaining
-                            dataActive?.lose_money_live + dataActive.lose_money_slot
+                            (dataActive?.lose_money_live + dataActive.lose_money_slot)?.toLocaleString()
                             }
                           </Typography>
                         </Stack>
@@ -668,7 +660,7 @@ export default function ReportPartnerListPage() {
                             Balance:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.balance_live}
+                            {dataActive?.balance_live?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -680,7 +672,7 @@ export default function ReportPartnerListPage() {
                             Balance:
                           </Typography>
                           <Typography variant="body2">
-                            {dataActive?.balance_slot}
+                            {dataActive?.balance_slot?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -694,7 +686,7 @@ export default function ReportPartnerListPage() {
                           <Typography variant="body2">
                             {
                             // eslint-disable-next-line no-unsafe-optional-chaining
-                            dataActive?.balance_live + dataActive.balance_slot
+                            (dataActive?.balance_live + dataActive.balance_slot)?.toLocaleString()
                             }
                           </Typography>
                         </Stack>

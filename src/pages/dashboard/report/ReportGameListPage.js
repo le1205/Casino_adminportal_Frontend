@@ -24,10 +24,10 @@ export default function ReportGameListPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Game List"
+          heading="resultByGame"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Settlement', href: PATH_DASHBOARD.report.root },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'settlement', href: PATH_DASHBOARD.report.root },
             { name: 'Game List' },
           ]}
         />

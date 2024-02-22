@@ -24,10 +24,10 @@ export default function EggSettlementPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Egg Process"
+          heading="creditSaveList"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Egg', href: PATH_DASHBOARD.egg.root },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'pt', href: PATH_DASHBOARD.egg.root },
             { name: 'Process' },
           ]}
         />

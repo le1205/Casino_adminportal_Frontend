@@ -50,19 +50,19 @@ const STATUS_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  { id: 'index', label: 'Betting No', align: 'center' },
-  { id: 'id', label: 'Id', align: 'center' },
-  { id: 'provider', label: 'Provider', align: 'center' },
-  { id: 'gameType', label: 'Game Type', align: 'center' },
-  { id: 'gameName', label: 'Game Name', align: 'center' },
-  { id: 'bettingId', label: 'Betting ID', align: 'center' },
-  { id: 'date', label: 'Betting Date', align: 'center' },
+  { id: 'index', label: 'bettingNo', align: 'center' },
+  { id: 'id', label: 'id', align: 'center' },
+  { id: 'provider', label: 'provider', align: 'center' },
+  { id: 'gameType', label: 'gameType', align: 'center' },
+  { id: 'gameName', label: 'gameName', align: 'center' },
+  { id: 'bettingId', label: 'bettingId', align: 'center' },
+  { id: 'bettingDate', label: 'bettingDate', align: 'center' },
   // { id: 'before', label: 'Before', align: 'center' },
-  { id: 'money', label: 'Bet Money', align: 'center' },
-  { id: 'win', label: 'Win Money', align: 'center' },
-  { id: 'winLose', label: 'Win/Lose', align: 'center' },
-  { id: 'after', label: 'After', align: 'center' },
-  { id: 'status', label: 'Status', align: 'center' },
+  { id: 'betMoney', label: 'betMoney', align: 'center' },
+  { id: 'winMoney', label: 'winMoney', align: 'center' },
+  { id: 'winLose', label: 'winLose', align: 'center' },
+  { id: 'after', label: 'after', align: 'center' },
+  { id: 'status', label: 'status', align: 'center' },
 ];
 
 // ----------------------------------------------------------------------
@@ -208,10 +208,10 @@ export default function BetCommonPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Total Bets"
+          heading="totalBetList"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Bet', href: PATH_DASHBOARD.bet.root },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'betting', href: PATH_DASHBOARD.bet.root },
             { name: 'Total' },
           ]}
         />

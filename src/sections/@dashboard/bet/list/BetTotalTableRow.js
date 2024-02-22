@@ -76,19 +76,19 @@ export default function BetTotalTableRow({ row, selected, onEditRow, onSelectRow
         </TableCell> */}
 
         <TableCell align="center">
-          {bet}
+          {bet.toLocaleString()}
         </TableCell>
 
         <TableCell align="center">
-          {win}
+          {win.toLocaleString()}
         </TableCell>
 
         <TableCell align="center">
-          {winLose}
+          {winLose.toLocaleString()}
         </TableCell>
 
         <TableCell align="center">
-          {balance}
+          {balance.toLocaleString()}
         </TableCell>
 
         <TableCell align="center">

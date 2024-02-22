@@ -22,11 +22,11 @@ export default function SettingSiteMaintainPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Site Maintain"
+          heading="inspectionInclude"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Seeting', href: PATH_DASHBOARD.setting.root },
-            { name: 'Site', href: PATH_DASHBOARD.setting.site.root },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'setting', href: PATH_DASHBOARD.setting.root },
+            { name: 'site', href: PATH_DASHBOARD.setting.site.root },
             { name: 'Maintain' },
           ]}
         />

@@ -22,17 +22,17 @@ export default function UserCreatePage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Create a new user"
+          heading="createMember"
           links={[
             {
-              name: 'Dashboard',
+              name: 'dashboard',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'User',
+              name: 'user',
               href: PATH_DASHBOARD.user.list,
             },
-            { name: 'New user' },
+            { name: 'create' },
           ]}
         />
         <UserNewEditForm />

@@ -5,6 +5,8 @@ import { styled, alpha, useTheme } from '@mui/material/styles';
 import { Box, Link, Typography, Stack } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
+// locales
+import { useLocales } from '../../../locales';
 
 // utils
 import {parseJson } from '../../../auth/utils';
@@ -27,6 +29,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
 
 export default function NavAccount() {
   const theme = useTheme();
+  const { translate } = useLocales();
 
   const [balance, setBalance] = useState(0);
   const [point, setPoint] = useState(0);
@@ -38,7 +41,7 @@ export default function NavAccount() {
       const url = userBalanceUrl + user._id;
       const headers = {};
       apiWithGetData(url, {}, headers).then((response) => {
-        setBalance(response?.balance || 0);
+        setBalance(response?.balance.toLocaleString() || 0);
       });
     } catch (error) {
       console.log(error);
@@ -60,7 +63,8 @@ export default function NavAccount() {
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="subtitle2" noWrap sx={{ color: 'text.secondary' }}>
-              {user?.role}
+              {/* {user?.role} */}
+              {`${translate(user?.role)}`}
             </Typography>
             <Typography variant="subtitle1" noWrap sx={{ pl: 6}}>
               {user?.username}
@@ -71,7 +75,7 @@ export default function NavAccount() {
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="subtitle2" noWrap sx={{ color: 'text.secondary' }}>
-              credit
+            {`${translate('credit')}`}
             </Typography>
             <Typography variant="subtitle2" noWrap sx={{ color: theme.palette.warning.main }}>
               {balance}
@@ -82,7 +86,7 @@ export default function NavAccount() {
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="subtitle2" noWrap sx={{ color: 'text.secondary' }}>
-              Point:
+            {`${translate('point')}`}
             </Typography>
             <Typography variant="subtitle2" noWrap sx={{  color: theme.palette.success.main}}>
               {point}

@@ -6,8 +6,6 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {md5} from 'js-md5';
 // @mui
 import {
-  Tab,
-  Tabs,
   Card,
   Table,
   Button,
@@ -45,18 +43,9 @@ import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/use
 // api
 import { apiWithPostData } from '../../../utils/api';
 // url
-import { adminListUrl, balanceUpdateUrl } from '../../../utils/urlList';
+import { adminListUrl, balanceUpdateUrl, roleListUrl } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = ['all', 'active', 'banned'];
-
-const ROLE_OPTIONS = [
-  'all',
-  'admin',
-  'partner',
-  'user',
-];
 
 const TABLE_HEAD = [
   { id: 'id', label: 'id', align: 'left' },
@@ -102,6 +91,7 @@ export default function UserListPage() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
+  const [totalRole, setTotalRole] = useState([]);
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -255,7 +245,8 @@ export default function UserListPage() {
       setIsLoading(true);
       const url = adminListUrl;
       const headers = {};
-      apiWithPostData(url, { page:1, pageSize: 30, date:[]}, headers).then((response) => {
+      const data = {};
+      apiWithPostData(url, data, headers).then((response) => {
         const { results } = response;
         const users = [];
         results.forEach((item, index) => {
@@ -266,9 +257,9 @@ export default function UserListPage() {
             company: item.company || '---',
             level: item.level || '---',
             cash: item.balanceMain || 0,
-            point: item.pointSlot || '0',
+            point: item.pointSlot || 0,
             inOut: item.inOut || '---',
-            totalLoose: item.loseSlotRate || '0',
+            totalLoose: item.loseSlotRate || 0,
             lastDate: item.updatedAt || '---',
             isVerified: item.verify || false,
             status: item.isBlock || false,
@@ -286,6 +277,35 @@ export default function UserListPage() {
 
   };
 
+  const roleList = () => {
+    try {
+      setIsLoading(true);
+      const url = roleListUrl;
+      const headers = {};
+      const data = {};
+      apiWithPostData(url, data, headers).then((response) => {
+        const { results } = response;
+        const roles = [{
+          name: 'all',
+          order: 0,
+          title: 'all',
+        }];
+        results.forEach((item, index) => {
+          const role = {
+            name: item.name || '',
+            order: item.order || '',
+            title: item.title || '',
+          }
+          roles.push(role);
+        });
+        setTotalRole(roles);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+  };
+
   
   useEffect(() => {
     
@@ -293,6 +313,7 @@ export default function UserListPage() {
     // console.log(code);
     // const md5Signature = md5(code).toLowerCase();
     // console.log(md5Signature);
+    roleList();
     usersList();
   }, []);
 
@@ -322,53 +343,19 @@ export default function UserListPage() {
             </Button>
           }
         />
-
         <Card>
-          <Tabs
-            value={filterStatus}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2,
-              bgcolor: 'background.neutral',
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab key={tab} label={tab} value={tab} />
-            ))}
-          </Tabs>
-
           <Divider />
-
           <UserTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
             filterRole={filterRole}
-            optionsRole={ROLE_OPTIONS}
+            optionsRole={totalRole}
             onFilterName={handleFilterName}
             onFilterRole={handleFilterRole}
             onResetFilter={handleResetFilter}
           />
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            {/* <TableSelectedAction
-              dense={dense}
-              numSelected={selected.length}
-              rowCount={tableData.length}
-              onSelectAllRows={(checked) =>
-                onSelectAllRows(
-                  checked,
-                  tableData.map((row) => row.id)
-                )
-              }
-              action={
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={handleOpenConfirm}>
-                    <Iconify icon="eva:trash-2-outline" />
-                  </IconButton>
-                </Tooltip>
-              }
-            /> */}
-
             <Scrollbar>
               <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
                 <TableHeadCustom

@@ -22,12 +22,12 @@ export default function SettingLevelListPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Level List"
+          heading="byLevelSetting"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Seeting', href: PATH_DASHBOARD.setting.root },
-            { name: 'Levle', href: PATH_DASHBOARD.setting.level.root },
-            { name: 'List' },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'setting', href: PATH_DASHBOARD.setting.root },
+            { name: 'level', href: PATH_DASHBOARD.setting.level.root },
+            { name: 'list' },
           ]}
         />
 

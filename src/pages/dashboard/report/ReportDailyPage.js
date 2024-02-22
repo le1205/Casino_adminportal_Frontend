@@ -31,6 +31,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from '../../../components/table';
+// locales
+import { useLocales } from '../../../locales';
 // sections
 import { ReportDailyTableToolbar, ReportDailyTableRow } from '../../../sections/@dashboard/report/list';
 // api
@@ -48,15 +50,15 @@ const ROLE_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  { id: 'date', label: 'Date', align: 'center',  colSpan: 1 },
-  { id: 'username', label: 'User name', align: 'center',  colSpan: 1 },
-  { id: 'deposit', label: 'Deposit', align: 'center', colSpan: 1 },
-  { id: 'withdraw', label: 'Withdraw', align: 'center', colSpan: 1 },
-  { id: 'depowith', label: 'Deposit-Wthdraw', align: 'center', colSpan: 1 },
-  { id: 'betting', label: 'Betting Amount', align: 'center', colSpan: 3 },
-  { id: 'win', label: 'Win Amount', align: 'center', colSpan: 3 },
-  { id: 'rolling', label: 'Rolling Amount', align: 'center', colSpan: 3 },
-  { id: 'loosing', label: 'Loosing Amount', align: 'center', colSpan: 3 },
+  { id: 'date', label: 'date', align: 'center',  colSpan: 1 },
+  { id: 'userName', label: 'userName', align: 'center',  colSpan: 1 },
+  { id: 'deposit', label: 'deposit', align: 'center', colSpan: 1 },
+  { id: 'withdraw', label: 'withdraw', align: 'center', colSpan: 1 },
+  { id: 'depowith', label: 'depowith', align: 'center', colSpan: 1 },
+  { id: 'bettingAmount', label: 'bettingAmount', align: 'center', colSpan: 3 },
+  { id: 'winAmount', label: 'winAmount', align: 'center', colSpan: 3 },
+  { id: 'rollingAmount', label: 'rollingAmount', align: 'center', colSpan: 3 },
+  { id: 'loosingAmount', label: 'loosingAmount', align: 'center', colSpan: 3 },
 ];
 
 const TABLE_SUB_HEAD = [
@@ -65,18 +67,18 @@ const TABLE_SUB_HEAD = [
   { id: 'deposit', label: '', align: 'center', },
   { id: 'withdraw', label: '', align: 'center', },
   { id: 'depowith', label: '', align: 'center', },
-  { id: 'bettingCasino', label: 'Casino', align: 'center', },
-  { id: 'bettingSlot', label: 'Slot', align: 'center', },
-  { id: 'bettingTotal', label: 'Total', align: 'center', },
-  { id: 'winCasino', label: 'Casino', align: 'center', },
-  { id: 'winSlot', label: 'Slot', align: 'center', },
-  { id: 'winTotal', label: 'Total', align: 'center', },
-  { id: 'rollingCasino', label: 'Casino', align: 'center', },
-  { id: 'rollingSlot', label: 'Slot', align: 'center', },
-  { id: 'rollingTotal', label: 'Total', align: 'center', },
-  { id: 'loosingCasino', label: 'Casino', align: 'center', },
-  { id: 'loosingSlot', label: 'Slot', align: 'center', },
-  { id: 'loosingTotal', label: 'Total', align: 'center', },
+  { id: 'bettingCasino', label: 'casino', align: 'center', },
+  { id: 'bettingSlot', label: 'slot', align: 'center', },
+  { id: 'bettingTotal', label: 'total', align: 'center', },
+  { id: 'winCasino', label: 'casino', align: 'center', },
+  { id: 'winSlot', label: 'slot', align: 'center', },
+  { id: 'winTotal', label: 'total', align: 'center', },
+  { id: 'rollingCasino', label: 'casino', align: 'center', },
+  { id: 'rollingSlot', label: 'slot', align: 'center', },
+  { id: 'rollingTotal', label: 'total', align: 'center', },
+  { id: 'loosingCasino', label: 'casino', align: 'center', },
+  { id: 'loosingSlot', label: 'slot', align: 'center', },
+  { id: 'loosingTotal', label: 'total', align: 'center', },
 ];
 
 // ----------------------------------------------------------------------
@@ -110,7 +112,7 @@ export default function ReportDailyPage() {
     comparator: getComparator(order, orderBy),
     filterRole,
   });
-  const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const { translate } = useLocales();
   const denseHeight = dense ? 52 : 72;
   const isFiltered = filterRole !== 'all';
 
@@ -178,14 +180,14 @@ export default function ReportDailyPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
-          heading="Daily Report"
+          heading="resultByDay"
           links={[
             {
-              name: 'Dashboard',
+              name: 'dashboard',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Settlement',
+              name: 'settlement',
               href: PATH_DASHBOARD.report.root,
             },
             {
@@ -245,7 +247,7 @@ export default function ReportDailyPage() {
                         colSpan={column.colSpan}
                         style={{ top: 56, minWidth: column.minWidth }}
                       >
-                        {column.label}
+                        {`${translate(column.label)}`}
                       </TableCell>
                     ))}
                   </TableRow>
@@ -256,7 +258,7 @@ export default function ReportDailyPage() {
                         align={column.align}
                         style={{ top: 56, minWidth: column.minWidth }}
                       >
-                        {column.label}
+                      {`${translate(column.label)}`}
                       </TableCell>
                     ))}
                   </TableRow>

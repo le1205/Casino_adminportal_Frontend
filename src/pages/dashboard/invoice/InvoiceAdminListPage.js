@@ -24,10 +24,10 @@ export default function InvoiceAdminListPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Admin List"
+          heading="operatorTransaction"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Invoice', href: PATH_DASHBOARD.invoice.root },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'invoices', href: PATH_DASHBOARD.invoice.root },
             { name: 'Admin List' },
           ]}
         />

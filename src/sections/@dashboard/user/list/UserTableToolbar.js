@@ -13,7 +13,7 @@ UserTableToolbar.propTypes = {
   onFilterName: PropTypes.func,
   onFilterRole: PropTypes.func,
   onResetFilter: PropTypes.func,
-  optionsRole: PropTypes.arrayOf(PropTypes.string),
+  optionsRole: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default function UserTableToolbar({
@@ -57,8 +57,8 @@ export default function UserTableToolbar({
       >
         {optionsRole.map((option) => (
           <MenuItem
-            key={option}
-            value={option}
+            key={option?.name}
+            value={option?.name}
             sx={{
               mx: 1,
               borderRadius: 0.75,
@@ -66,7 +66,7 @@ export default function UserTableToolbar({
               textTransform: 'capitalize',
             }}
           >
-            {option}
+            {option?.name}
           </MenuItem>
         ))}
       </TextField>

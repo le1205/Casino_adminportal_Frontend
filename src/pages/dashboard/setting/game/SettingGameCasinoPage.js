@@ -22,12 +22,12 @@ export default function SettingGameCasinoPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Game Casino"
+          heading="casinoSetting"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Seeting', href: PATH_DASHBOARD.setting.root },
-            { name: 'Game', href: PATH_DASHBOARD.setting.game.root },
-            { name: 'Casino' },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'setting', href: PATH_DASHBOARD.setting.root },
+            { name: 'game', href: PATH_DASHBOARD.setting.game.root },
+            { name: 'casino' },
           ]}
         />
 

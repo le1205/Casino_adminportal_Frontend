@@ -24,10 +24,10 @@ export default function ReportUserListPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="User List"
+          heading="partnerCalculate2"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Settlement', href: PATH_DASHBOARD.report.root },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'settlement', href: PATH_DASHBOARD.report.root },
             { name: 'User List' },
           ]}
         />

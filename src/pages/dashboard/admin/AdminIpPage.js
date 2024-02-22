@@ -24,10 +24,10 @@ export default function AdminIpPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Admin Ips"
+          heading="operatorIpControl"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Admin', href: PATH_DASHBOARD.admin.root },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'admin', href: PATH_DASHBOARD.admin.root },
             { name: 'Ips' },
           ]}
         />

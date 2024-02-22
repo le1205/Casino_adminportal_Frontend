@@ -24,14 +24,14 @@ export default function InvoiceOutReportPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Invoice List"
+          heading="withdrawList"
           links={[
             {
-              name: 'Dashboard',
+              name: 'dashboard',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Invoices',
+              name: 'invoices',
               href: PATH_DASHBOARD.invoice.root,
             },
             {

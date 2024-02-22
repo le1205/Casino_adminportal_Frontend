@@ -6,16 +6,16 @@ import { enUS, koKR } from '@mui/material/locale';
 
 export const allLangs = [
   {
-    label: 'English',
-    value: 'en',
-    systemValue: enUS,
-    icon: '/assets/icons/flags/ic_flag_en.svg',
-  },
-  {
     label: 'Korean',
     value: 'kr',
     systemValue: koKR,
     icon: '/assets/icons/flags/ic_flag_kr.svg',
+  },
+  {
+    label: 'English',
+    value: 'en',
+    systemValue: enUS,
+    icon: '/assets/icons/flags/ic_flag_en.svg',
   },
 ];
 

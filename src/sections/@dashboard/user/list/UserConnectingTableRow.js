@@ -19,7 +19,7 @@ import ConfirmDialog from '../../../../components/confirm-dialog';
 
 // ----------------------------------------------------------------------
 
-UserTableRow.propTypes = {
+UserConnectingTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
@@ -28,8 +28,8 @@ UserTableRow.propTypes = {
   onSelectMoney: PropTypes.func,
 };
 
-export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectMoney }) {
-  const { name, id, company, role, cash,  inOut, totalLoose, lastDate, point } = row;
+export default function UserConnectingTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectMoney }) {
+  const {_id, name, id, no, company, role, cash,  inOut, totalLoose, lastDate, point } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -67,11 +67,11 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {cash.toLocaleString()}
+          {cash}
         </TableCell>
 
         <TableCell align="left">
-          {point.toLocaleString()}
+          {point}
         </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
@@ -79,7 +79,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {totalLoose.toLocaleString()}
+          {totalLoose}
         </TableCell>
 
         <TableCell>

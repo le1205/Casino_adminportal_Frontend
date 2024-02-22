@@ -24,10 +24,10 @@ export default function BetSlotPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Slot"
+          heading="slotGameList"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Bet', href: PATH_DASHBOARD.bet.root },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'betting', href: PATH_DASHBOARD.bet.root },
             { name: 'Slot' },
           ]}
         />

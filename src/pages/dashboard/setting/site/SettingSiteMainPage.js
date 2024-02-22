@@ -22,12 +22,12 @@ export default function SettingSiteMainPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Site Main"
+          heading="mainPage"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Seeting', href: PATH_DASHBOARD.setting.root },
-            { name: 'Site', href: PATH_DASHBOARD.setting.site.root },
-            { name: 'Main' },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'setting', href: PATH_DASHBOARD.setting.root },
+            { name: 'site', href: PATH_DASHBOARD.setting.site.root },
+            { name: 'main' },
           ]}
         />
 

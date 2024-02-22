@@ -55,19 +55,19 @@ const ROLE_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  { id: 'id', label: 'Id', align: 'left' },
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'level', label: 'Levle', align: 'left' },
-  { id: 'slotRolling', label: 'Slot(Rolling)', align: 'left' },
-  { id: 'slotLoosing', label: 'Slot(Loosing)', align: 'left' },
-  { id: 'moneySend', label: 'Moeny (Send)', align: 'left' },
-  { id: 'moneyReceive', label: 'Money (Receive)', align: 'center' },
-  { id: 'partner', label: 'Partner Number', align: 'left' },
-  { id: 'user', label: 'User Number', align: 'left' },
-  { id: 'money', label: 'Money Amount', align: 'left' },
-  { id: 'point', label: 'Points', align: 'left' },
-  { id: 'createPartner', label: 'Create Partner', align: 'left' },
-  { id: 'createUser', label: 'Create User', align: 'left' },
+  { id: 'id', label: 'id', align: 'left' },
+  { id: 'name', label: 'name', align: 'left' },
+  { id: 'level', label: 'level', align: 'left' },
+  { id: 'slotRolling', label: 'slotRolling', align: 'left' },
+  { id: 'slotLoosing', label: 'slotLoosing', align: 'left' },
+  { id: 'moneySend', label: 'moneySend', align: 'left' },
+  { id: 'moneyReceive', label: 'moneyReceive', align: 'center' },
+  { id: 'partnerNumber', label: 'partnerNumber', align: 'left' },
+  { id: 'userNumber', label: 'userNumber', align: 'left' },
+  { id: 'moneyAmount', label: 'moneyAmount', align: 'left' },
+  { id: 'points', label: 'points', align: 'left' },
+  { id: 'createPartner', label: 'createPartner', align: 'left' },
+  { id: 'createUser', label: 'createUser', align: 'left' },
   { id: 'option', label: 'Option', align: 'left' },
   { id: '' },
 ];
@@ -198,11 +198,11 @@ export default function PartnerListPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Partner List"
+          heading="partnerList"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Partner', href: PATH_DASHBOARD.partner.root },
-            { name: 'List' },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'partner', href: PATH_DASHBOARD.partner.root },
+            { name: 'list' },
           ]}
         />
 

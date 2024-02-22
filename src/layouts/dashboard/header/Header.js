@@ -76,22 +76,22 @@ export default function Header({ onOpenNav }) {
       const headers = {};
       apiWithPostData(url, {}, headers).then((response) => {
         const { dashboard } = response;
-        setTotalMember(dashboard.total_member || 0);
-        setBetMember(dashboard.total_bet || 0);
+        setTotalMember(dashboard?.total_member || 0);
+        setBetMember(dashboard?.total_bet || 0);
         setNewMember(0);
-        setLoginMember(dashboard.login_member || 0);
-        setUserMoney(dashboard.user_money || 0);
-        setUserPoint(dashboard.user_point || 0);
-        setDeposit(dashboard.totald || 0);
-        setWithdraw(dashboard.totalw || 0);
+        setLoginMember(dashboard?.login_member || 0);
+        setUserMoney(dashboard?.user_money || 0);
+        setUserPoint(dashboard?.user_point || 0);
+        setDeposit(dashboard?.totald || 0);
+        setWithdraw(dashboard?.totalw || 0);
         setProfitLoss(0);
         setCManager(0);
         setPManager(0);
-        setBettingCount(dashboard.betting || 0);
-        setTotalBet(dashboard.total_bet || 0);
-        setTotalWin(dashboard.total_win || 0);
-        setRolling(dashboard.rolling || 0);
-        setBettingProfit(dashboard.profit || 0);
+        setBettingCount(dashboard?.betting || 0);
+        setTotalBet(dashboard?.total_bet || 0);
+        setTotalWin(dashboard?.total_win || 0);
+        setRolling(dashboard?.rolling || 0);
+        setBettingProfit(dashboard?.profit || 0);
       });
     } catch (error) {
       console.log(error);
@@ -114,7 +114,7 @@ export default function Header({ onOpenNav }) {
       )}
 
       <Stack
-        flexGrow={5}
+        flexGrow={4}
         direction="row"
         alignItems="center"
         justifyContent="flex"
@@ -127,101 +127,101 @@ export default function Header({ onOpenNav }) {
                 sx={{ py: 1 }}
               >
                 <HeaderAnalytic
-                  title="Total Members"
+                  title="totalMembers"
                   price={totalMember}
                   color={theme.palette.info.main}
                   handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
                 <HeaderAnalytic
-                  title="Bet Members"
+                  title="betMembers"
                   price={betMember}
                   color={theme.palette.info.main}
                   handleClick={() => movePage(PATH_DASHBOARD.user.listAccordingPartner)}
                 />
                 <HeaderAnalytic
-                  title="New Members"
+                  title="newMembers"
                   price={newMember}
                   color={theme.palette.info.main}
                   handleClick={() => movePage(PATH_DASHBOARD.user.accept)}
                 />
                 <HeaderAnalytic
-                  title="Login Members"
+                  title="loginMembers"
                   price={loginMember}
                   color={theme.palette.info.main}
                   handleClick={() => movePage(PATH_DASHBOARD.user.connect)}
                 />
                 <HeaderAnalytic
-                  title="User Money"
+                  title="userMoney"
                   price={userMoney}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
                 <HeaderAnalytic
-                  title="User Point"
+                  title="userPoint"
                   price={userPoint}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
 
                 <HeaderAnalytic
-                  title="Deposit"
+                  title="totalDeposit"
                   price={deposit}
                   color={theme.palette.warning.main}
                   handleClick={() => movePage(PATH_DASHBOARD.invoice.inApply)}
                 />
                 <HeaderAnalytic
-                  title="Withdraw"
+                  title="totalWithdraw"
                   price={withdraw}
                   color={theme.palette.warning.main}
                   handleClick={() => movePage(PATH_DASHBOARD.invoice.outApply)}
                 />
                 <HeaderAnalytic
-                  title="Profit/Loss"
+                  title="profitLoss"
                   price={profitLoss}
                   color={theme.palette.warning.main}
                 />
-                <HeaderAnalytic
-                  title="Manager (C)"
+                {/* <HeaderAnalytic
+                  title="managerCompany"
                   price={cManager}
                   color={theme.palette.warning.main}
-                />
+                /> */}
                 <HeaderAnalytic
-                  title="Manager (P)"
+                  title="managerPartner"
                   price={pManager}
                   color={theme.palette.warning.main}
                 />
 
                 <HeaderAnalytic
-                  title="Betting Count"
+                  title="bettingCount"
                   price={bettingCount}
                   color={theme.palette.text.secondary}
                   handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
                 />
 
                 <HeaderAnalytic
-                  title="Total Bet"
+                  title="totalBet"
                   price={totalBet}
                   color={theme.palette.text.secondary}
                   handleClick={() => movePage(PATH_DASHBOARD.report.partner)}
                 />
 
                 <HeaderAnalytic
-                  title="Total Win"
+                  title="totalWin"
                   price={totalWin}
                   color={theme.palette.text.secondary}
                 />
 
                 <HeaderAnalytic
-                  title="Rolling"
+                  title="totalRolling"
                   price={rolling}
                   color={theme.palette.text.secondary}
                 />
 
-                <HeaderAnalytic
+                {/* <HeaderAnalytic
                   title="Betting Profit"
                   price={bettingProfit}
                   color={theme.palette.text.secondary}
-                />
+                /> */}
               </Stack>
             </Scrollbar>
         </Card>

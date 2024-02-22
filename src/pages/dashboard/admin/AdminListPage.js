@@ -24,11 +24,11 @@ export default function AdminListPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Admin List"
+          heading="operatorList"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Admin', href: PATH_DASHBOARD.admin.root },
-            { name: 'List' },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'admin', href: PATH_DASHBOARD.admin.root },
+            { name: 'list' },
           ]}
         />
         <Box

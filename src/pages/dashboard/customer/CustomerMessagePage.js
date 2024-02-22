@@ -24,10 +24,10 @@ export default function CustomerMessagePage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Messages"
+          heading="manageMessage"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Customer Center', href: PATH_DASHBOARD.customer.root },
+            { name: 'dashboard', href: PATH_DASHBOARD.root },
+            { name: 'customerCenter', href: PATH_DASHBOARD.customer.root },
             { name: 'Messages' },
           ]}
         />
