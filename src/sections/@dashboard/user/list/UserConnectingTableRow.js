@@ -5,7 +5,7 @@ import {
   Stack,
   Button,
   TableRow,
-  MenuItem,
+  Switch,
   TableCell,
   Typography,
 } from '@mui/material';
@@ -16,7 +16,11 @@ import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
+// locales
+import { useLocales } from '../../../../locales';
 
+// utils
+import { convertLocalDateTime } from '../../../../utils/convert';
 // ----------------------------------------------------------------------
 
 UserConnectingTableRow.propTypes = {
@@ -29,109 +33,71 @@ UserConnectingTableRow.propTypes = {
 };
 
 export default function UserConnectingTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectMoney }) {
-  const {_id, name, id, no, company, role, cash,  inOut, totalLoose, lastDate, point } = row;
+  const {_id, ip, username, company, role, cash,  lastDate, isVerified,  status, lastGame} = row;
+  
+  const { translate } = useLocales();
 
   const [openConfirm, setOpenConfirm] = useState(false);
-
-  const [openPopover, setOpenPopover] = useState(null);
-
-  const handleOpenConfirm = () => {
-    setOpenConfirm(true);
-  };
+  
+  const dateString = convertLocalDateTime(lastDate) ;
 
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
   };
 
-  const handleClosePopover = () => {
-    setOpenPopover(null);
-  };
 
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell align="left">{id}</TableCell>
+        <TableCell align="left">{username}</TableCell>
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Typography variant="subtitle2" noWrap>
-              {name}
+              {company}
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{company}</TableCell>
+        <TableCell align="left">{cash.toLocaleString()}</TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {role}
+          {dateString}
         </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {cash}
+          {ip}
         </TableCell>
 
         <TableCell align="left">
-          {point}
+          {0}
         </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {inOut}
+          {lastGame}
         </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {totalLoose}
-        </TableCell>
-
-        <TableCell>
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <PersonIcon color="primary"/>
-            <AttachMoneyIcon color="warning"  
-                onClick={() => {
-                  onSelectMoney();
-                  handleClosePopover();
-                }}/>
-            <LocalParkingIcon color="error"/>
-          </Stack>
+          <Switch  checked={isVerified} />
         </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {lastDate}
+            <Switch  checked={status} />
         </TableCell>
 
-        {/* <TableCell align="right">
-          <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </TableCell> */}
+        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+          <Button variant="contained" color="warning" size="small"> 
+            {`${translate('bettingList')}`}
+          </Button>
+        </TableCell>
+
+        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+          <Button variant="contained" color="error" size="small"> 
+            {`${translate('logout')}`}
+          </Button>
+        </TableCell>
+
       </TableRow>
-
-      <MenuPopover
-        open={openPopover}
-        onClose={handleClosePopover}
-        arrow="right-top"
-        sx={{ width: 140 }}
-      >
-        <MenuItem
-          onClick={() => {
-            handleOpenConfirm();
-            handleClosePopover();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="eva:trash-2-outline" />
-          Delete
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            onEditRow();
-            handleClosePopover();
-          }}
-        >
-          <Iconify icon="eva:edit-fill" />
-          Edit
-        </MenuItem>
-      </MenuPopover>
 
       <ConfirmDialog
         open={openConfirm}

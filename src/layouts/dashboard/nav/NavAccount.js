@@ -49,6 +49,7 @@ export default function NavAccount() {
   };
   
   useEffect(() => {
+    userBalance();
     const optimer = setInterval(userBalance, 6000)
     return ()=>clearInterval(optimer)
   // eslint-disable-next-line react-hooks/exhaustive-deps

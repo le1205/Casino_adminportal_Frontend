@@ -64,7 +64,7 @@ export default function Header({ onOpenNav }) {
   const [totalWin, setTotalWin] = useState(0);
   const [rolling, setRolling] = useState(0);
   const [bettingProfit, setBettingProfit] = useState(0);
-  
+   
   
   useEffect(() => {
     getHeaderDashboard()

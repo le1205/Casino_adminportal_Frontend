@@ -245,7 +245,6 @@ export default function UserListPage() {
       apiWithPostData(url, data, headers).then((response) => {
         const { results } = response;
         const users = [];
-        console.log(results);
         results.forEach((item, index) => {
           const user = {
             _id: item._id || '',
@@ -300,7 +299,6 @@ export default function UserListPage() {
     } catch (error) {
       console.log(error);
     }
-
   };
 
   

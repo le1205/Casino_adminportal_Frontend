@@ -166,6 +166,21 @@ const en = {
   confirm:`Confirm`,
   logout:`Logout`,
   preparing:`Preparing...`,
+  loginAvailable:`login available`,
+  betAvailable:`betting available`,
+  nickName:`nick name`,
+  password:`password`,
+  exchangePassword:`exchange password`,
+  birthday:`birthday`,
+  phoneNumber:`phone number`,
+  bankInfo:`bank info`,
+  bankAccount:`bank account`,
+  depositOwner:`deposit owner`,
+  community:`community`,
+  casinoRolling:`rolling (casino)`,
+  casinoLoosing:`loosing (casino)`,
+  role:`role`,
+  agent:`agent`,
 };
 
 export default en;
