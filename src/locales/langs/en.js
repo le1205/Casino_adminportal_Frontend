@@ -165,6 +165,7 @@ const en = {
   betPossible:`Betting Possible`,
   confirm:`Confirm`,
   logout:`Logout`,
+  preparing:`Preparing...`,
 };
 
 export default en;

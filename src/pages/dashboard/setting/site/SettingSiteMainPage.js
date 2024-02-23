@@ -4,10 +4,11 @@ import { alpha } from '@mui/material/styles';
 import { Container, Typography, Box } from '@mui/material';
 // components
 import { useSettingsContext } from '../../../../components/settings';
+import PreparingContent from '../../../../components/preparing';
+import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 
-import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 
 // ----------------------------------------------------------------------
 
@@ -30,17 +31,22 @@ export default function SettingSiteMainPage() {
             { name: 'main' },
           ]}
         />
-
         <Box
           sx={{
             mt: 5,
             width: 1,
             height: 320,
             borderRadius: 2,
-            bgcolor: (theme) => alpha(theme.palette.grey[500], 0.04),
             border: (theme) => `dashed 1px ${theme.palette.divider}`,
-          }}
-        />
+          }}>
+          
+          <PreparingContent
+            title="preparing"
+            sx={{
+              '& span.MuiBox-root': { height: 200 },
+            }}
+          />
+        </Box>
       </Container>
     </>
   );

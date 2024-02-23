@@ -28,11 +28,11 @@ import {
   TablePaginationCustom,
 } from '../../../components/table';
 // sections
-import { UserTableToolbar, UserConnectingTableRow } from '../../../sections/@dashboard/user/list';
+import { UserConnectingTableToolbar, UserConnectingTableRow } from '../../../sections/@dashboard/user/list';
 // api
-import { apiWithGetData } from '../../../utils/api';
+import { apiWithPostData } from '../../../utils/api';
 // url
-import { userSigninUrl, } from '../../../utils/urlList';
+import { userSessionUrl, roleListUrl,} from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
@@ -84,6 +84,7 @@ export default function UserConnectPage() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
+  const [totalRole, setTotalRole] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [filterRole, setFilterRole] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -124,14 +125,47 @@ export default function UserConnectPage() {
     setFilterStatus('all');
   };
 
-  
-
-  const userSigninList = () => {
+  const roleList = () => {
     try {
       setIsLoading(true);
-      const url = userSigninUrl;
+      const url = roleListUrl;
       const headers = {};
-      apiWithGetData(url, {}, headers).then((response) => {
+      const data = {};
+      apiWithPostData(url, data, headers).then((response) => {
+        const { results } = response;
+        const roles = [{
+          name: 'all',
+          order: 0,
+          title: 'all',
+        }];
+        results.forEach((item, index) => {
+          const role = {
+            name: item.name || '',
+            order: item.order || '',
+            title: item.title || '',
+          }
+          roles.push(role);
+        });
+        setTotalRole(roles);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+  };
+
+  
+
+  const sessionList = () => {
+    try {
+      setIsLoading(true);
+      const url = userSessionUrl;
+      const data = {
+        page: 1,
+        pageSize: 50,
+      }
+      const headers = {};
+      apiWithPostData(url, data, headers).then((response) => {
         console.log("respnose>>>>", response);
         // const { results } = response;
         // const users = [];
@@ -166,7 +200,8 @@ export default function UserConnectPage() {
 
   
   useEffect(() => {
-    userSigninList();
+    roleList();
+    sessionList();
   }, []);
 
   return (
@@ -188,11 +223,11 @@ export default function UserConnectPage() {
         <Card>
           <Divider />
 
-          <UserTableToolbar
+          <UserConnectingTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
             filterRole={filterRole}
-            optionsRole={ROLE_OPTIONS}
+            optionsRole={totalRole}
             onFilterName={handleFilterName}
             onFilterRole={handleFilterRole}
             onResetFilter={handleResetFilter}

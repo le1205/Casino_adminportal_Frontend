@@ -6,6 +6,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import { useSettingsContext } from '../../../components/settings';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import PreparingContent from '../../../components/preparing';
 // sections
 import PartnerNewEditForm from '../../../sections/@dashboard/partner/PartnerNewEditForm';
 
@@ -35,7 +36,15 @@ export default function PartnerCreatePage() {
             { name: 'create' },
           ]}
         />
-        <PartnerNewEditForm />
+        {/* <PartnerNewEditForm /> */}
+        
+          
+        <PreparingContent
+          title="preparing"
+          sx={{
+            '& span.MuiBox-root': { height: 200 },
+          }}
+        />
       </Container>
     </>
   );

@@ -12,6 +12,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import Iconify from '../../../components/iconify';
 import { useSettingsContext } from '../../../components/settings';
+import PreparingContent from '../../../components/preparing';
 
 // ----------------------------------------------------------------------
 
@@ -60,8 +61,15 @@ export default function InvoiceHistoryPage() {
             height: 320,
             borderRadius: 2,
             border: (theme) => `dashed 1px ${theme.palette.divider}`,
-          }}
-        />
+          }}>
+          
+          <PreparingContent
+            title="preparing"
+            sx={{
+              '& span.MuiBox-root': { height: 200 },
+            }}
+          />
+        </Box>
       </Container>
     </>
   );

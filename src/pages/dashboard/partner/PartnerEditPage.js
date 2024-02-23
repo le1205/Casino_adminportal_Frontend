@@ -10,6 +10,7 @@ import { _userList } from '../../../_mock/arrays';
 // components
 import { useSettingsContext } from '../../../components/settings';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import PreparingContent from '../../../components/preparing';
 // sections
 import UserNewEditForm from '../../../sections/@dashboard/user/UserNewEditForm';
 
@@ -44,7 +45,16 @@ export default function PartnerEditPage() {
           ]}
         />
 
-        <UserNewEditForm isEdit currentUser={currentUser} />
+        {/* <UserNewEditForm isEdit currentUser={currentUser} /> */}
+        
+          
+        <PreparingContent
+          title="preparing"
+          sx={{
+            '& span.MuiBox-root': { height: 200 },
+          }}
+        />
+
       </Container>
     </>
   );

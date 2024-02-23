@@ -6,6 +6,7 @@ import {
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
+import PreparingContent from '../../../components/preparing';
 
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
@@ -38,8 +39,15 @@ export default function UserListAccordingPartnerPage() {
             height: 320,
             borderRadius: 2,
             border: (theme) => `dashed 1px ${theme.palette.divider}`,
-          }}
-        />
+          }}>
+          
+          <PreparingContent
+            title="preparing"
+            sx={{
+              '& span.MuiBox-root': { height: 200 },
+            }}
+          />
+        </Box>
       </Container>
     </>
   );

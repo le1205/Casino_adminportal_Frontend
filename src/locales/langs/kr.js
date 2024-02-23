@@ -165,6 +165,7 @@ const kr = {
   betPossible:`베팅 기능`,
   confirm:`내역 확인`,
   logout:`강제 로그아웃`,
+  preparing:`준비중...`,
 };
 
 export default kr;

@@ -10,6 +10,7 @@ import { _userPayment, _userAddressBook, _userInvoices, _userAbout } from '../..
 import Iconify from '../../../components/iconify';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
+import PreparingContent from '../../../components/preparing';
 // sections
 import {
   AccountGeneral,
@@ -81,7 +82,7 @@ export default function PartnerDetailPage() {
           ]}
         />
 
-        <Tabs value={currentTab} onChange={(event, newValue) => setCurrentTab(newValue)}>
+        {/* <Tabs value={currentTab} onChange={(event, newValue) => setCurrentTab(newValue)}>
           {TABS.map((tab) => (
             <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
           ))}
@@ -94,7 +95,14 @@ export default function PartnerDetailPage() {
                 {tab.component}
               </Box>
             )
-        )}
+        )} */}
+        
+        <PreparingContent
+          title="preparing"
+          sx={{
+            '& span.MuiBox-root': { height: 200 },
+          }}
+        />
       </Container>
     </>
   );

@@ -53,9 +53,9 @@ const TABLE_HEAD = [
   { id: 'company', label: 'company', align: 'left' },
   { id: 'level', label: 'level', align: 'left' },
   { id: 'cash', label: 'cash', align: 'left' },
-  { id: 'point', label: 'point', align: 'left' },
-  { id: 'inOut', label: 'inOut', align: 'left' },
-  { id: 'totalLoose', label: 'totalLoose', align: 'left' },
+  // { id: 'point', label: 'point', align: 'left' },
+  // { id: 'inOut', label: 'inOut', align: 'left' },
+  // { id: 'totalLoose', label: 'totalLoose', align: 'left' },
   { id: 'action', label: 'action', align: 'left' },
   { id: 'lastDate', label: 'lastDate', align:'left' },
 ];
@@ -143,11 +143,6 @@ export default function UserListPage() {
     setOpenConfirm(false);
   };
 
-  const handleFilterStatus = (event, newValue) => {
-    setPage(0);
-    setFilterStatus(newValue);
-  };
-
   const handleFilterName = (event) => {
     setPage(0);
     setFilterName(event.target.value);
@@ -156,18 +151,6 @@ export default function UserListPage() {
   const handleFilterRole = (event) => {
     setPage(0);
     setFilterRole(event.target.value);
-  };
-
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
-
-    if (page > 0) {
-      if (dataInPage.length < 2) {
-        setPage(page - 1);
-      }
-    }
   };
 
   const handleEditRow = (id) => {
@@ -222,6 +205,14 @@ export default function UserListPage() {
     }
   };
 
+  const updateUser = (id, amount, type) => {
+    tableData.forEach(element => {
+      if(id=== element._id) {
+        element.cash = type === 'withdraw' ? element.cash - Number(amount) : element.cash + Number(amount);
+      }
+    });
+  };
+
   const handleUpdateBalance = () => {
     setOpenConfirm(false);
     try {
@@ -231,9 +222,11 @@ export default function UserListPage() {
       const balanceId = selectedRow._id;
       const headers = {};
       apiWithPostData(url, { amount, type, balanceId}, headers).then((response) => {
-        const { results } = response;
         handleCloseBalance();
-        usersList();
+        if(response === true) {
+          updateUser(balanceId, amount, type);
+        }
+        // usersList();
       });
     } catch (error) {
       console.log(error);
@@ -245,22 +238,26 @@ export default function UserListPage() {
       setIsLoading(true);
       const url = adminListUrl;
       const headers = {};
-      const data = {};
+      const data = {
+        page:1,
+        pageSize:100,
+      };
       apiWithPostData(url, data, headers).then((response) => {
         const { results } = response;
         const users = [];
+        console.log(results);
         results.forEach((item, index) => {
           const user = {
             _id: item._id || '',
             id: item.user_id || '---',
-            name: item.Nickname || '---',
+            name: item.username || '---',
             company: item.company || '---',
             level: item.level || '---',
             cash: item.balanceMain || 0,
             point: item.pointSlot || 0,
             inOut: item.inOut || '---',
             totalLoose: item.loseSlotRate || 0,
-            lastDate: item.updatedAt || '---',
+            lastDate: item.updatedAt,
             isVerified: item.verify || false,
             status: item.isBlock || false,
             role: item.role.name || '---',
@@ -382,7 +379,6 @@ export default function UserListPage() {
                         row={row}
                         selected={selected.includes(row.id)}
                         onSelectRow={() => onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
                         onEditRow={() => handleEditRow(row.name)}
                         onSelectMoney={() => handleClickBalance(row)}
                       />

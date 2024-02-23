@@ -99,7 +99,7 @@ export default function PartnerListPage() {
 
   const navigate = useNavigate();
 
-  const [tableData, setTableData] = useState(_partnerList);
+  const [tableData, setTableData] = useState([]);
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
