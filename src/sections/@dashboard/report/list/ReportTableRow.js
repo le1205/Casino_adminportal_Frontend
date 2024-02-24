@@ -27,12 +27,11 @@ ReportTableRow.propTypes = {
   onEditRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
   onSelectRow: PropTypes.func,
-  onSelectMoney: PropTypes.func,
   onClickDownArrow: PropTypes.func,
   onClickUpArrow: PropTypes.func,
 };
 
-export default function ReportTableRow({ row, display, selected, onEditRow, onSelectRow, onDeleteRow, onSelectMoney, onClickDownArrow, onClickUpArrow, count}) {
+export default function ReportTableRow({ row, display, selected, onEditRow, onSelectRow, onDeleteRow, onClickDownArrow, onClickUpArrow, count}) {
   const data = row;
   const {role} = row;
 
@@ -52,6 +51,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
   const totalLoosing = data?.lose_money_live + data?.lose_money_slot || 0;
   // eslint-disable-next-line no-unsafe-optional-chaining
   const totalBalance = data?.balance_live + data?.balance_slot || 0;
+
   
 
   const handleOpenConfirm = () => {
@@ -108,7 +108,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
           <Stack direction="row"
             alignItems="center">
             <Typography variant="body2">
-              {data?.role.title}
+              {data?.role.name}
             </Typography>
             <Typography variant="body2">
               ({data?.total_user})

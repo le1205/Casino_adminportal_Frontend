@@ -30,19 +30,12 @@ import {
 // sections
 import { UserConnectingTableToolbar, UserConnectingTableRow } from '../../../sections/@dashboard/user/list';
 // api
-import { apiWithPostData } from '../../../utils/api';
+import { apiWithPostData, apiWithDeleteData } from '../../../utils/api';
 // url
-import { userSessionUrl, roleListUrl,} from '../../../utils/urlList';
+import { userSessionUrl, userDeleteSessionUrl,} from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
-
-const ROLE_OPTIONS = [
-  'all',
-  'admin',
-  'partner',
-  'user',
-];
 
 const TABLE_HEAD = [
   { id: 'id', label: 'id', align: 'left' },
@@ -83,13 +76,11 @@ export default function UserConnectPage() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
-  const [totalRole, setTotalRole] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [filterRole, setFilterRole] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterEndDate, setFilterEndDate] = useState(new Date);
   const [filterStartDate, setFilterStartDate] = useState(new Date);
-  const amountRef = useRef('');
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -123,6 +114,20 @@ export default function UserConnectPage() {
 
   const handleClickSearch = () => {
     sessionList();
+  };
+  
+  const handleClickLogout = (id) => {
+    try {
+      console.log(id);
+      const url = userDeleteSessionUrl + id;
+      const data = {};
+      const headers = {};
+      apiWithDeleteData(url, data, headers).then((response) => {
+        console.log("delete respnose>> ", response);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const sessionList = () => {
@@ -273,7 +278,6 @@ export default function UserConnectPage() {
         };
 
         const {count, results} = resData;
-        console.log("results>>>", results);
         const users = [];
         results.forEach(item => {
           const user = {
@@ -369,6 +373,7 @@ export default function UserConnectPage() {
                         row={row}
                         selected={selected.includes(row.id)}
                         onSelectRow={() => onSelectRow(row.id)}
+                        onSelectLogout= {() => handleClickLogout(row._id)}
                       />
                     ))}
 

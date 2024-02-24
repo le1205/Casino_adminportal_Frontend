@@ -181,6 +181,9 @@ const en = {
   casinoLoosing:`loosing (casino)`,
   role:`role`,
   agent:`agent`,
+  eamil:`email`,
+  exchangeRate:`exchange rate`,
+  noData:`No Data`,
 };
 
 export default en;

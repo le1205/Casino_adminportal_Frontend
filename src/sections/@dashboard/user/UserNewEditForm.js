@@ -80,6 +80,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
     password: Yup.string().required('Password is required'),
     nickName: Yup.string().required('NickName is required'),
     exchangePassword: Yup.string().required('Exchange password is required'),
+    email: Yup.string().required('email is required'),
   });
 
   const defaultValues = useMemo(
@@ -88,6 +89,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
       password: currentUser?.password || '',
       nickName: currentUser?.nickName || '',
       exchangePassword: currentUser?.exchangePassword || '',
+      eamil: currentUser?.email || '',
       birthday: currentUser?.birthday || '',
       phoneNumber: currentUser?.phoneNumber || '',
       bankInfo: currentUser?.bankInfo || '',
@@ -102,6 +104,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
       casinoLoosing: currentUser?.casinoLoosing || 0,
       role: currentUser?.role || '',
       agent: currentUser?.agent || '',
+      exchangeRate: currentUser?.exchangeRate || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -183,7 +186,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
       const url = createUserUrl;
       const headers = {};
       const body = {
-        email: "",
+        email: data?.email || "",
         username: data?.id || "",
         password: data?.password || "",
         passwordDeposit: data?.exchangePassword || "",
@@ -203,6 +206,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
         agent: data?.agent || "",
         verify: true,
         status: data?.betAvailable || true,
+        rate: data?.exchangeRate || "",
       };
       console.log("BODY>>>", body);
       apiWithPostData(url, body, headers).then((response) => {
@@ -256,6 +260,8 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
               <RHFTextField name="password" label={`${translate('password')}`} />
               <RHFTextField name="nickName" label={`${translate('nickName')}`} />
               <RHFTextField name="exchangePassword" label={`${translate('exchangePassword')}`}  />
+              <RHFTextField name="email" label={`${translate('email')}`}  />
+              <RHFTextField name="exchangeRate" label={`${translate('exchangeRate')}`}  />
               <RHFTextField name="birthday" label={`${translate('birthday')}`}/>
               <RHFTextField name="phoneNumber" label={`${translate('phoneNumber')}`}/>
               <RHFSelect native name="bankInfo" label={`${translate('bankInfo')}`} placeholder={`${translate('bankInfo')}`}  >

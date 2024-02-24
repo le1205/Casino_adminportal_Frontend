@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Typography, Stack } from '@mui/material';
 //
 import Image from '../image';
+// locales
+import { useLocales } from '../../locales';
 
 // ----------------------------------------------------------------------
 
@@ -13,7 +15,8 @@ EmptyContent.propTypes = {
   description: PropTypes.string,
 };
 
-export default function EmptyContent({ title, description, img, sx, ...other }) {
+export default function EmptyContent({ title, description, img, sx, ...other }) {  
+  const { translate } = useLocales();
   return (
     <Stack
       alignItems="center"
@@ -34,7 +37,7 @@ export default function EmptyContent({ title, description, img, sx, ...other }) 
       />
 
       <Typography variant="h5" gutterBottom>
-        {title}
+        {`${translate(title)}`}
       </Typography>
 
       {description && (

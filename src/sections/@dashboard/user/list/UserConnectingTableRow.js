@@ -26,13 +26,11 @@ import { convertLocalDateTime } from '../../../../utils/convert';
 UserConnectingTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
-  onEditRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
-  onSelectRow: PropTypes.func,
-  onSelectMoney: PropTypes.func,
+  onSelectLogout: PropTypes.func,
 };
 
-export default function UserConnectingTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectMoney }) {
+export default function UserConnectingTableRow({ row, selected, onDeleteRow, onSelectLogout }) {
   const {_id, ip, username, company, role, cash,  lastDate, isVerified,  status, lastGame} = row;
   
   const { translate } = useLocales();
@@ -92,7 +90,7 @@ export default function UserConnectingTableRow({ row, selected, onEditRow, onSel
         </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          <Button variant="contained" color="error" size="small"> 
+          <Button variant="contained" color="error" size="small" onClick={onSelectLogout}> 
             {`${translate('logout')}`}
           </Button>
         </TableCell>

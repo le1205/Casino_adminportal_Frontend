@@ -71,3 +71,19 @@ export const apiWithPutData = async (url, data) => {
     const response = await axios(config);
     return response.data;
 }
+
+export const apiWithDeleteData = async (url, data) => {
+    const config = {
+        method: 'delte',
+        url: HOST_API_SERVER + url,
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': 'true',
+            'authorization':localStorage.getItem('accessToken') || "",
+        },
+        data
+    };
+    const response = await axios(config);
+    return response.data;
+}

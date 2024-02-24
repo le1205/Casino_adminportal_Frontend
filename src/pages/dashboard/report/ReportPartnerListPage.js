@@ -106,6 +106,8 @@ export default function ReportPartnerListPage() {
   const [totalDepWith, setTotalDepWith] = useState(0);
   const [tableData, setTableData] = useState([]);
   const [count, setCount] = useState(0);
+  const [filterEndDate, setFilterEndDate] = useState(new Date);
+  const [filterStartDate, setFilterStartDate] = useState(new Date);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -118,8 +120,6 @@ export default function ReportPartnerListPage() {
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const denseHeight = dense ? 52 : 72;
-
-  const isFiltered = filterName !== '' || filterRole !== 'all' || filterStatus !== 'all';
 
   const isNotFound =
     (!dataFiltered.length && !!filterName) ||
@@ -140,9 +140,16 @@ export default function ReportPartnerListPage() {
       }
     }
   };
+  const handleResetFilter = () => {
+    setFilterRole('all');
+  };
 
   const handleEditRow = (id) => {
     navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
+  };
+
+  const handleClickSearch = () => {
+    getAllTotalList();
   };
 
   const handleClickDown = (key) => {
@@ -185,7 +192,11 @@ export default function ReportPartnerListPage() {
       setPage(0);
       const url = allTotalListUrl;
       const headers = {};
-      apiWithPostData(url, {}, headers).then((response) => {
+      const data = {
+        startDate: filterStartDate,
+        endDate: filterEndDate,
+      }
+      apiWithPostData(url, data, headers).then((response) => {
         const valueData = {
           ...response
         };
@@ -317,6 +328,20 @@ export default function ReportPartnerListPage() {
           ]}
         />
         <Card>
+          
+          <ReportTableToolbar
+            filterEndDate={filterEndDate}
+            filterStartDate={filterStartDate}
+            onResetFilter={handleResetFilter}
+            onClickSearch={handleClickSearch}
+            onFilterStartDate={(newValue) => {
+              setFilterStartDate(newValue);
+            }}
+            onFilterEndDate={(newValue) => {
+              setFilterEndDate(newValue);
+            }}
+          />
+
           <Typography variant="h6" sx={{ color: 'text.secondary', pt:1, pl:1, }}>
             Total Search Result
           </Typography>

@@ -21,10 +21,9 @@ BetTotalTableRow.propTypes = {
   onEditRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
   onSelectRow: PropTypes.func,
-  onSelectMoney: PropTypes.func,
 };
 
-export default function BetTotalTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onSelectMoney }) {
+export default function BetTotalTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, }) {
   const {username, round_id, provider_name, game_title, tx_type, bet, win, balance,  create_at, category, id } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);

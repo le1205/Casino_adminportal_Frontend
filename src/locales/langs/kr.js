@@ -181,6 +181,9 @@ const kr = {
   casinoLoosing:`루징 (카지노)`,
   role:`롤`,
   agent:`추천인`,
+  email:`이메일`,
+  exchangeRate:`환률`,
+  noData:`데이터가 없습니다`,
 };
 
 export default kr;

@@ -1,29 +1,34 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/material';
+import { Stack, TextField, MenuItem, Button } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
 // components
 import Iconify from '../../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
+const INPUT_WIDTH = 200;
+
 ReportTableToolbar.propTypes = {
   isFiltered: PropTypes.bool,
-  filterName: PropTypes.string,
-  filterRole: PropTypes.string,
-  onFilterName: PropTypes.func,
-  onFilterRole: PropTypes.func,
   onResetFilter: PropTypes.func,
+  onFilterEndDate: PropTypes.func,
+  onFilterService: PropTypes.func,
+  onFilterStartDate: PropTypes.func,
+  onClickSearch: PropTypes.func,
+  filterEndDate: PropTypes.instanceOf(Date),
+  filterStartDate: PropTypes.instanceOf(Date),
   optionsRole: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default function ReportTableToolbar({
   isFiltered,
-  filterName,
-  filterRole,
-  optionsRole,
-  onFilterName,
-  onFilterRole,
   onResetFilter,
+  onFilterEndDate,
+  onFilterStartDate,
+  filterEndDate,
+  filterStartDate,
+  onClickSearch,
 }) {
   return (
     <Stack
@@ -35,55 +40,44 @@ export default function ReportTableToolbar({
       }}
       sx={{ px: 2.5, py: 3 }}
     >
-      <TextField
-        fullWidth
-        select
-        label="Role"
-        value={filterRole}
-        onChange={onFilterRole}
-        SelectProps={{
-          MenuProps: {
-            PaperProps: {
-              sx: {
-                maxHeight: 260,
-              },
-            },
-          },
-        }}
-        sx={{
-          maxWidth: { sm: 240 },
-          textTransform: 'capitalize',
-        }}
-      >
-        {optionsRole.map((option) => (
-          <MenuItem
-            key={option}
-            value={option}
+      
+      <DatePicker
+        label="Start date"
+        value={filterStartDate}
+        onChange={onFilterStartDate}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            fullWidth
             sx={{
-              mx: 1,
-              borderRadius: 0.75,
-              typography: 'body2',
-              textTransform: 'capitalize',
+              maxWidth: { md: INPUT_WIDTH },
             }}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </TextField>
-
-      <TextField
-        fullWidth
-        value={filterName}
-        onChange={onFilterName}
-        placeholder="Search..."
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
-            </InputAdornment>
-          ),
-        }}
+          />
+        )}
       />
+
+      <DatePicker
+        label="End date"
+        value={filterEndDate}
+        onChange={onFilterEndDate}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            fullWidth
+            sx={{
+              maxWidth: { md: INPUT_WIDTH },
+            }}
+          />
+        )}
+      />
+      
+      <Button
+        variant="contained"
+        onClick={onClickSearch}
+        startIcon={<Iconify icon="eva:search-fill"/>}
+      >
+        Search
+      </Button>
 
       {isFiltered && (
         <Button
