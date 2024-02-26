@@ -5,10 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import {
   Card,
   Table,
+  Button,
   Divider,
   TableBody,
   Container,
+  Dialog,
+  TextField,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
   TableContainer,
+  DialogActions,
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
@@ -16,6 +23,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import Scrollbar from '../../../components/scrollbar';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import ConfirmDialog from '../../../components/confirm-dialog';
 import { useSettingsContext } from '../../../components/settings';
 import LoadingScreen from '../../../components/loading-screen';
 import {
@@ -32,7 +40,7 @@ import { UserConnectingTableToolbar, UserConnectingTableRow } from '../../../sec
 // api
 import { apiWithPostData, apiWithDeleteData } from '../../../utils/api';
 // url
-import { userSessionUrl, userDeleteSessionUrl,} from '../../../utils/urlList';
+import { userSessionUrl, realBalanceUpdateUrl,} from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
@@ -46,7 +54,8 @@ const TABLE_HEAD = [
   { id: 'depowith', label: 'depowith', align: 'left' },
   { id: 'lastGame', label: 'lastGame', align: 'left' },
   { id: 'loginPossible', label: 'loginPossible', align:'left' },
-  { id: 'betPossible', label: 'betPossible', align:'left' },
+  // { id: 'betPossible', label: 'betPossible', align:'left' },
+  { id: 'action', label: 'action', align: 'left' },
   { id: 'confirm', label: 'confirm', align:'left' },
   { id: 'logout', label: 'logout', align:'left' },
 ];
@@ -81,6 +90,13 @@ export default function UserConnectPage() {
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterEndDate, setFilterEndDate] = useState(new Date);
   const [filterStartDate, setFilterStartDate] = useState(new Date);
+  const [openBalance, setOpenBalance] = useState(false);
+  const [isDeposit, setIsDeposit] = useState(true);
+  const [selectedRow, setSelectedRow] = useState({});
+  const [alertContent, setAlertContent] = useState('');
+  const amountRef = useRef('');
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -111,19 +127,102 @@ export default function UserConnectPage() {
     setFilterRole('all');
     setFilterStatus('all');
   };
+  
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
+
+  const handleOpenAlert = () => {
+    setOpenAlert(true);
+  };
+
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false);
+  };
+
+  const handleCloseBalance = () => {
+    setOpenBalance(false);
+  };
+
+  const handleClickBalance = (row) => {
+    setSelectedRow(row);
+    setOpenBalance(true);
+  };
 
   const handleClickSearch = () => {
     sessionList();
   };
   
+
+  const handleDepositBalance = () => {
+    setIsDeposit(true);
+    const amount = amountRef.current.value;
+    if(amount === '' || amount === 0)
+    {
+      const content = "지급할 수량을 입력하세요.";
+      setAlertContent(content);
+      handleOpenAlert();
+    }
+    else {
+      setOpenConfirm(true);
+    }
+  };
+
+  const handleWithdrawBalance = () => {
+    setIsDeposit(false);
+    const amount = amountRef.current.value;
+    if(amount === '' || amount === 0)
+    {
+      const content = "회수할 수량을 입력하세요.";
+      setAlertContent(content);
+      handleOpenAlert();
+    }
+    else if (amount > selectedRow.cash){
+      const content = "보유캐시보다 작은수량을 입력하세요. ";
+      setAlertContent(content);
+      handleOpenAlert();
+    }
+    else {
+      setOpenConfirm(true);
+    }
+  };
+  
+  const updateSession = (id, amount, type) => {
+    tableData.forEach(element => {
+      if(id=== element.id) {
+        element.cash = type === 'withdraw' ? element.cash - Number(amount) : element.cash + Number(amount);
+      }
+    });
+  };
+  
   const handleClickLogout = (id) => {
     try {
-      console.log(id);
-      const url = userDeleteSessionUrl + id;
-      const data = {};
+      // console.log(id);
+      // const url = userDeleteSessionUrl + id;
+      // const data = {};
+      // const headers = {};
+      // apiWithDeleteData(url, data, headers).then((response) => {
+      //   console.log("delete respnose>> ", response);
+      // });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleUpdateBalance = () => {
+    setOpenConfirm(false);
+    try {
+      const url = realBalanceUpdateUrl;
+      const amount = amountRef.current.value;
+      const type = isDeposit ? 'deposit' : 'withdraw';
+      const balanceId = selectedRow.id;
       const headers = {};
-      apiWithDeleteData(url, data, headers).then((response) => {
-        console.log("delete respnose>> ", response);
+      apiWithPostData(url, { amount, type, balanceId}, headers).then((response) => {
+        handleCloseBalance();
+        if(response === true) {
+          updateSession(balanceId, amount, type);
+        }
+        // usersList();
       });
     } catch (error) {
       console.log(error);
@@ -141,143 +240,7 @@ export default function UserConnectPage() {
       }
       const headers = {};
       apiWithPostData(url, data, headers).then((response) => {
-        const resData = {
-          "results": [
-            {
-              "_id": "65d85e959ebe835afd7ae708",
-              "userId": "65b50a8d0ca0f44e512d4888",
-              "__v": 0,
-              "accessToken": "4f4811b301321fb3528b111ab73f8a91",
-              "createdAt": "2024-02-23T09:00:05.100Z",
-              "ip": "127.0.0.1",
-              "refreshToken": "4f4811b301321fb3528b111ab73f8a91",
-              "updatedAt": "2024-02-23T16:59:18.144Z",
-              "useragent": {
-                "isYaBrowser": false,
-                "isAuthoritative": true,
-                "isMobile": false,
-                "isMobileNative": false,
-                "isTablet": false,
-                "isiPad": false,
-                "isiPod": false,
-                "isiPhone": false,
-                "isiPhoneNative": false,
-                "isAndroid": false,
-                "isAndroidNative": false,
-                "isBlackberry": false,
-                "isOpera": false,
-                "isIE": false,
-                "isEdge": false,
-                "isIECompatibilityMode": false,
-                "isSafari": false,
-                "isFirefox": false,
-                "isWebkit": false,
-                "isChrome": true,
-                "isKonqueror": false,
-                "isOmniWeb": false,
-                "isSeaMonkey": false,
-                "isFlock": false,
-                "isAmaya": false,
-                "isPhantomJS": false,
-                "isEpiphany": false,
-                "isDesktop": true,
-                "isWindows": false,
-                "isLinux": false,
-                "isLinux64": false,
-                "isMac": true,
-                "isChromeOS": false,
-                "isBada": false,
-                "isSamsung": false,
-                "isRaspberry": false,
-                "isBot": false,
-                "isCurl": false,
-                "isAndroidTablet": false,
-                "isWinJs": false,
-                "isKindleFire": false,
-                "isSilk": false,
-                "isCaptive": false,
-                "isSmartTV": false,
-                "isUC": false,
-                "isFacebook": false,
-                "isAlamoFire": false,
-                "isElectron": false,
-                "silkAccelerated": false,
-                "browser": "Chrome",
-                "version": "121.0.0.0",
-                "os": "OS X",
-                "platform": "Apple Mac",
-                "geoIp": {},
-                "source": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
-                "isWechat": false
-              },
-              "user": {
-                "_id": "65b50a8d0ca0f44e512d4888",
-                "email": "wndyd11@gmail.com",
-                "password": "$2a$10$zjD2IqrfboSJotNvFWcXTuJBm1Yz7UmQ.gFb.tQItUPZmPLXFj0va",
-                "username": "wndyd11",
-                "firstname": "",
-                "lastname": "",
-                "oddsformat": "decimal",
-                "cryptoAccount": "",
-                "publicAddress": "",
-                "avatar": "",
-                "ip": "127.0.0.1",
-                "referral": "uDIKE2FLJq",
-                "amount": 10000,
-                "referralPercent": 5,
-                "creatorId": "65b509620ca0f44e512d4267",
-                "status": true,
-                "passwordDeposit": "10941094",
-                "bankOwner": "",
-                "bankAccount": "",
-                "bankName": "",
-                "phone": "",
-                "phoneType": "",
-                "Birthday": "",
-                "Nickname": "glaemsp",
-                "slotRate": 0,
-                "liveRate": 0,
-                "pointSlot": 0,
-                "pointLive": 0,
-                "pointSlotAgs": 0,
-                "pointLiveAgs": 0,
-                "pointSlotFiver": 0,
-                "pointLiveFiver": 0,
-                "loseLiveRate": 0,
-                "loseSlotRate": 0,
-                "withdrawRate": 0,
-                "verify": true,
-                "isBlock": false,
-                "userPointSlot": 0,
-                "userPointLive": 0,
-                "token": "4f2172351322383c75c30f1c0c8ce94e",
-                "user_id": "1900411",
-                "vituralMoney": 0,
-                "rolesId": "65279c0e089f88b6bec5aedf",
-                "createdAt": "2024-01-27T13:52:16.332Z",
-                "updatedAt": "2024-02-23T09:00:21.286Z",
-                "__v": 0,
-                "balance": 580,
-                "userActive": {
-                  "id": 31484803691,
-                  "round_id": "15371861090453",
-                  "username": "wndyd11",
-                  "provider_name": "PragmaticPlay(BT)",
-                  "game_title": "원숭이 7마리",
-                  "tx_type": "win",
-                  "bet": 0,
-                  "win": 0,
-                  "balance": 580,
-                  "create_at": "2024-02-24 01:59:44",
-                  "category": "Slots"
-                }
-              }
-            }
-          ],
-          "count": 1
-        };
-
-        const {count, results} = resData;
+        const {count, results} = response;
         const users = [];
         results.forEach(item => {
           const user = {
@@ -374,6 +337,7 @@ export default function UserConnectPage() {
                         selected={selected.includes(row.id)}
                         onSelectRow={() => onSelectRow(row.id)}
                         onSelectLogout= {() => handleClickLogout(row._id)}
+                        onSelectMoney={() => handleClickBalance(row)}
                       />
                     ))}
 
@@ -400,6 +364,71 @@ export default function UserConnectPage() {
           />
         </Card>
       </Container>
+
+      
+      <Dialog open={openBalance} onClose={handleCloseBalance}>
+        <DialogTitle>회원캐시 관리자 입출금</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            현재 보유캐시: {selectedRow.cash}
+          </DialogContentText>
+          <TextField
+            autoFocus
+            fullWidth
+            type="number"
+            margin="dense"
+            variant="outlined"
+            label="Amount"
+            inputRef={amountRef}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDepositBalance}variant="contained" color="success">
+            지급
+          </Button>
+          <Button onClick={handleWithdrawBalance} variant="contained" color="warning">
+            회수
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <ConfirmDialog
+        open={openConfirm}
+        onClose={handleCloseConfirm}
+        title="Confirm"
+        content={
+          <>
+            <strong> {amountRef.current? amountRef.current.value : 0} </strong> {isDeposit? '지급' : '회수'}  하시겠습니까 ?
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => {
+              handleUpdateBalance();
+            }}
+          >
+            Confirm
+          </Button>
+        }
+      />
+
+      <Dialog open={openAlert} onClose={handleCloseAlert} sx={{ minWidth: 400 }}>
+        <DialogTitle>Alert</DialogTitle>
+
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {alertContent}
+          </DialogContentText>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={handleCloseAlert} autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
       
       {(isLoading === true) && <LoadingScreen/>} 
     </>

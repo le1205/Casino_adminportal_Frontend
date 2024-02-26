@@ -57,6 +57,7 @@ const TABLE_HEAD_TOTAL_ONE = [
   { id: '1', label: '', align: 'center' },
   { id: '2', label: '', align: 'center' },
   { id: '3', label: '', align: 'center' },
+  { id: '4', label: '', align: 'center' },
 ];
 const TABLE_HEAD_TOTAL_TWO = [
   { id: 'casino', label: 'casino', align: 'center' },
@@ -192,11 +193,16 @@ export default function ReportPartnerListPage() {
       setPage(0);
       const url = allTotalListUrl;
       const headers = {};
+      const startDate = filterStartDate;
+      startDate.setHours(0, 0, 0);
+      const endDate = filterEndDate;
+      endDate.setHours(23, 59, 59);
       const data = {
-        startDate: filterStartDate,
-        endDate: filterEndDate,
+        "startDate": startDate,
+        "endDate": endDate,
       }
       apiWithPostData(url, data, headers).then((response) => {
+        // console.log("here>>>", response);
         const valueData = {
           ...response
         };
@@ -204,6 +210,8 @@ export default function ReportPartnerListPage() {
           ...item
         }));
         const listDataUser = valueMain.filter((item) => item.creatorId === userData._id);
+        
+        // console.log("listDataUser", listDataUser);
         const treedata = handleCountData(listDataUser, valueMain);
         setTotalData(valueData);
         setDataActive(response.ListTotal);
@@ -348,9 +356,9 @@ export default function ReportPartnerListPage() {
           <Grid container spacing={3} direction="row">
             <Grid item xs={12} md={6} > 
               <Table size= 'small' sx={{ minWidth: 600, mt:6 }}>
-                  <TableHeadCustom
+                  {/* <TableHeadCustom
                     headLabel={TABLE_HEAD_TOTAL_ONE}
-                  />
+                  /> */}
                   <TableBody sx={{ pt:3, }}>
                     <TableRow key="total_search_one_1">
                       <TableCell align='left'>

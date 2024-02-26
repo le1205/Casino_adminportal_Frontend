@@ -1,27 +1,20 @@
 import { Helmet } from 'react-helmet-async';
-import { paramCase } from 'change-case';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 // @mui
 import {
   Tab,
   Tabs,
   Card,
   Table,
-  Button,
-  Tooltip,
   Divider,
   TableBody,
   Container,
-  IconButton,
   TableContainer,
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
-import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
-import ConfirmDialog from '../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
 import LoadingScreen from '../../../components/loading-screen';
@@ -77,7 +70,6 @@ export default function BetCommonPage() {
     setPage,
     //
     selected,
-    setSelected,
     onSelectRow,
     onSelectAllRows,
     //
@@ -88,10 +80,8 @@ export default function BetCommonPage() {
   } = useTable();
 
   const { themeStretch } = useSettingsContext();
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
-  const [openConfirm, setOpenConfirm] = useState(false);
   const [filterName, setFilterName] = useState('');
   const [gameType, setGameType] = useState('live');
   const [filterEndDate, setFilterEndDate] = useState(new Date);
@@ -103,22 +93,12 @@ export default function BetCommonPage() {
     filterName,
   });
 
-  const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
   const denseHeight = dense ? 52 : 72;
 
   const isFiltered = filterName !== '';
 
   const isNotFound =
     (!dataFiltered.length && !!filterName) ||( !tableData.length);
-
-  const handleOpenConfirm = () => {
-    setOpenConfirm(true);
-  };
-
-  const handleCloseConfirm = () => {
-    setOpenConfirm(false);
-  };
 
   const handleFilterStatus = (event, newValue) => {
     setPage(0);
@@ -131,38 +111,6 @@ export default function BetCommonPage() {
     setFilterName(event.target.value);
   };
 
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
-
-    if (page > 0) {
-      if (dataInPage.length < 2) {
-        setPage(page - 1);
-      }
-    }
-  };
-
-  const handleDeleteRows = (selectedRows) => {
-    const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
-    setSelected([]);
-    setTableData(deleteRows);
-
-    if (page > 0) {
-      if (selectedRows.length === dataInPage.length) {
-        setPage(page - 1);
-      } else if (selectedRows.length === dataFiltered.length) {
-        setPage(0);
-      } else if (selectedRows.length > dataInPage.length) {
-        const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
-        setPage(newPage);
-      }
-    }
-  };
-
-  const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
-  };
 
   const handleResetFilter = () => {
     setFilterName('');
@@ -178,9 +126,13 @@ export default function BetCommonPage() {
       setPage(0);
       const url = gameLogUrl;
       const headers = {};
+      const startDate = filterStartDate;
+      startDate.setHours(0, 0, 0);
+      const endDate = filterEndDate;
+      endDate.setHours(23, 59, 59);
       const data = {
-        "start": filterStartDate,
-        "end": filterEndDate,
+        "start": startDate,
+        "end": endDate,
         "game_type": game,
       };
       apiWithPostData(url, data, headers).then((response) => {
@@ -198,7 +150,7 @@ export default function BetCommonPage() {
   useEffect(() => {
     gameLog(gameType);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openConfirm]);
+  }, []);
 
   return (
     <>
@@ -212,7 +164,7 @@ export default function BetCommonPage() {
           links={[
             { name: 'dashboard', href: PATH_DASHBOARD.root },
             { name: 'betting', href: PATH_DASHBOARD.bet.root },
-            { name: 'Total' },
+            { name: 'total' },
           ]}
         />
 
@@ -259,13 +211,6 @@ export default function BetCommonPage() {
                   tableData.map((row) => row.id)
                 )
               }
-              action={
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={handleOpenConfirm}>
-                    <Iconify icon="eva:trash-2-outline" />
-                  </IconButton>
-                </Tooltip>
-              }
             />
 
             <Scrollbar>
@@ -294,8 +239,6 @@ export default function BetCommonPage() {
                         row={row}
                         selected={selected.includes(row.id)}
                         onSelectRow={() => onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.name)}
                       />
                     ))}
 
@@ -322,29 +265,6 @@ export default function BetCommonPage() {
           />
         </Card>
       </Container>
-
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows(selected);
-              handleCloseConfirm();
-            }}
-          >
-            Delete
-          </Button>
-        }
-      />
       
       {(isLoading === true) && <LoadingScreen/>} 
     </>

@@ -25,3 +25,6 @@ export function fToNow(date) {
       })
     : '';
 }
+
+export const fLocalDateTime = (timeString) => new Date(timeString).toISOString().replace(/T/, ' ').replace(/\..+/, '') 
+

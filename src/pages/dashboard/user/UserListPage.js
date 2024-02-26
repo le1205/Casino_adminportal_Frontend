@@ -40,17 +40,21 @@ import {
 } from '../../../components/table';
 // sections
 import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/user/list';
+// sections
+import UserEditForm from '../../../sections/@dashboard/user/UserEditForm';
 // api
-import { apiWithPostData } from '../../../utils/api';
+import { apiWithPostData, apiWithDeleteData, } from '../../../utils/api';
 // url
-import { adminListUrl, balanceUpdateUrl, roleListUrl } from '../../../utils/urlList';
+import { adminListUrl, balanceUpdateUrl, roleListUrl, adminDeleteUrl, changePasswordUrl } from '../../../utils/urlList';
+// locales
+import { useLocales } from '../../../locales';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'id', label: 'id', align: 'left' },
   { id: 'name', label: 'name', align: 'left' },
-  { id: 'company', label: 'company', align: 'left' },
+  { id: 'creator', label: 'creator', align: 'left' },
   { id: 'level', label: 'level', align: 'left' },
   { id: 'cash', label: 'cash', align: 'left' },
   // { id: 'point', label: 'point', align: 'left' },
@@ -88,29 +92,25 @@ export default function UserListPage() {
   const { themeStretch } = useSettingsContext();
 
   const navigate = useNavigate();
-
+  const { translate } = useLocales();
   const [isLoading, setIsLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [totalRole, setTotalRole] = useState([]);
-
   const [openConfirm, setOpenConfirm] = useState(false);
-
   const [openAlert, setOpenAlert] = useState(false);
-
   const [openBalance, setOpenBalance] = useState(false);
-
+  const [openRemove, setOpenRemove] = useState(false);
+  const [openChangePassword, setOpenChangePassword] = useState(false);
+  const [openChangeStatus, setOpenChangeStatus] = useState(false);
   const [isDeposit, setIsDeposit] = useState(true);
-
   const [selectedRow, setSelectedRow] = useState({});
-
   const [alertContent, setAlertContent] = useState('');
-
   const [filterName, setFilterName] = useState('');
-
   const [filterRole, setFilterRole] = useState('all');
-
   const [filterStatus, setFilterStatus] = useState('all');
   const amountRef = useRef('');
+  const passwordRef = useRef('');
+  const confirmPasswordRef = useRef('');
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -121,11 +121,8 @@ export default function UserListPage() {
   });
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
   const denseHeight = dense ? 52 : 72;
-
   const isFiltered = filterName !== '' || filterRole !== 'all' || filterStatus !== 'all';
-
   const isNotFound =
     (!dataFiltered.length && !!filterName) ||
     (!dataFiltered.length && !!filterRole) ||
@@ -170,6 +167,33 @@ export default function UserListPage() {
   const handleClickBalance = (row) => {
     setSelectedRow(row);
     setOpenBalance(true);
+  };
+
+  const handleClickRemove = (row) => {
+    setSelectedRow(row);
+    setOpenRemove(true);
+  };
+
+  const handleCloseRemove = () => {
+    setOpenRemove(false);
+  };
+
+  const handleClickChangePassword = (row) => {
+    setSelectedRow(row);
+    setOpenChangePassword(true);
+  };
+
+  const handleCloseChangePassword = () => {
+    setOpenChangePassword(false);
+  };
+
+  const handleClickChangeStatus = (row) => {
+    setSelectedRow(row);
+    setOpenChangeStatus(true);
+  };
+
+  const handleCloseChangeStatus = () => {
+    setOpenChangeStatus(false);
   };
 
   const handleDepositBalance = () => {
@@ -226,12 +250,113 @@ export default function UserListPage() {
         if(response === true) {
           updateUser(balanceId, amount, type);
         }
-        // usersList();
       });
     } catch (error) {
       console.log(error);
     }
   };
+
+  const updateUserRemove = (id) => {
+    const tempArr = tableData;
+    // eslint-disable-next-line array-callback-return, consistent-return
+    const data = tempArr.filter((item)=>{
+      if(item._id !== id){
+        return item
+      }
+    });
+    setTableData(data)
+  };
+
+  const handleRemoveUser = () => {
+    setOpenConfirm(false);
+    try {
+      const url = adminDeleteUrl + selectedRow._id;
+      const headers = {};
+      const data = {};
+      apiWithDeleteData(url, data, headers).then((response) => {
+        handleCloseRemove();
+        if (response?.deletedCount > 0) {
+          updateUserRemove(selectedRow._id);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleChangePassword = () => {
+    setOpenConfirm(false);
+    const password = passwordRef.current.value;
+    const confirmPassword = confirmPasswordRef.current.value;
+    if(password === '' || password === undefined)
+    {
+      const content = "새 비밀번호를 입력하세요";
+      setAlertContent(content);
+      handleOpenAlert();
+    }
+    else if(confirmPassword === '' || confirmPassword === undefined)
+    {
+      const content = "비밀번호 확인을 입력하세요";
+      setAlertContent(content);
+      handleOpenAlert();
+    }
+    else if(password !== confirmPassword )
+    {
+      const content = "비밀번호를 확인하세요";
+      setAlertContent(content);
+      handleOpenAlert();
+    }
+    else {
+      try {
+        const url = changePasswordUrl;
+        const headers = {};
+        const data = {
+          newpass: password,
+          userId: selectedRow._id
+        };
+        apiWithPostData(url, data, headers).then((response) => {
+          handleCloseChangePassword();
+          if(response === "Success!") {
+            const content = "비밀번호 변경 성공";
+            setAlertContent(content);
+            handleOpenAlert();
+          }
+          else {
+            const content = "비밀번호 변경 실패";
+            setAlertContent(content);
+            handleOpenAlert();
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const handleUpdateSuccess = (data) =>{
+    tableData.forEach(element => {
+      if(selectedRow._id=== element._id) {
+        element.isVerified = data.verify || false;
+        element.status = data.isBlock || false;
+        element.nickName = data.Nickname || '';
+        element.birthday = data.Birthday || '';
+        element.phoneNumber = data.phone || '';
+        element.bankInfo = data.bankName || '';
+        element.bankAccount = data.bankAccount || '';
+        element.loginAvailable = data.verify || true;
+        element.betAvailable = data.isBlock || true;
+        element.depositOwner = data.bankOwner || '';
+        element.community = data.community || '';
+        element.slotRolling = data.slotRate || 0;
+        element.slotLoosing = data.loseSlotRate || 0;
+        element.casinoRolling = data.liveRate || 0;
+        element.casinoLoosing = data.loseLiveRate || 0;
+        element.agent = data.agent || '';
+        element.exchangeRate = data.withdrawRate || '';
+      }
+    });
+    setOpenChangeStatus(false);
+  }
 
   const usersList = () => {
     try {
@@ -248,18 +373,36 @@ export default function UserListPage() {
         results.forEach((item, index) => {
           const user = {
             _id: item._id || '',
-            id: item.user_id || '---',
-            name: item.username || '---',
-            company: item.company || '---',
-            level: item.level || '---',
+            id: item.user_id || '',
+            name: item.username || '',
+            company: item.company || '',
+            creator: item.creator || '',
+            level: item.level || '',
             cash: item.balanceMain || 0,
             point: item.pointSlot || 0,
-            inOut: item.inOut || '---',
+            inOut: item.inOut || '',
             totalLoose: item.loseSlotRate || 0,
             lastDate: item.updatedAt,
             isVerified: item.verify || false,
             status: item.isBlock || false,
-            role: item.role.name || '---',
+            role: item.role.name || '',
+            
+            nickName: item.Nickname || '',
+            birthday: item.Birthday || '',
+            phoneNumber: item.phone || '',
+            bankInfo: item.bankName || '',
+            bankAccount: item.bankAccount || '',
+            loginAvailable: item.verify || true,
+            betAvailable: item.isBlock || true,
+            depositOwner: item.bankOwner || '',
+            community: item.community || '',
+            slotRolling: item.slotRate || 0,
+            slotLoosing: item.loseSlotRate || 0,
+            casinoRolling: item.liveRate || 0,
+            casinoLoosing: item.loseLiveRate || 0,
+            agent: item.agent || '',
+            exchangeRate: item.withdrawRate || '',
+
           }
           users.push(user);
         });
@@ -379,6 +522,9 @@ export default function UserListPage() {
                         onSelectRow={() => onSelectRow(row.id)}
                         onEditRow={() => handleEditRow(row.name)}
                         onSelectMoney={() => handleClickBalance(row)}
+                        onSelectRemove={() => handleClickRemove(row)}
+                        onSelectChangePassword={() => handleClickChangePassword(row)}
+                        onSelectChangeStatus={() => handleClickChangeStatus(row)}
                       />
                     ))}
 
@@ -431,6 +577,55 @@ export default function UserListPage() {
           </Button>
         </DialogActions>
       </Dialog>
+      
+      <Dialog open={openRemove} onClose={handleCloseRemove}>
+        <DialogTitle>확인</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            정말 {selectedRow.name} 회원님을 삭제하시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleRemoveUser}variant="contained" color="success">
+            확인
+          </Button>
+          <Button onClick={handleCloseRemove} variant="contained" color="warning">
+            취소
+          </Button>
+        </DialogActions>
+      </Dialog>
+      
+      <Dialog open={openChangePassword} onClose={handleCloseChangePassword}  sx={{ minWidth: 600 }}>
+        <DialogTitle>{`${translate('changeUserStatus')}`}</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            fullWidth
+            type="password"
+            margin="dense"
+            variant="outlined"
+            label={`${translate('password')}`}
+            inputRef={passwordRef}
+          />
+          <TextField
+            autoFocus
+            fullWidth
+            type="password"
+            margin="dense"
+            variant="outlined"
+            label={`${translate('confirmPassword')}`}
+            inputRef={confirmPasswordRef}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleChangePassword}variant="contained" color="success">
+          {`${translate('change')}`}
+          </Button>
+          <Button onClick={handleCloseChangePassword} variant="contained" color="warning">
+          {`${translate('cancel')}`}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <ConfirmDialog
         open={openConfirm}
@@ -453,6 +648,10 @@ export default function UserListPage() {
           </Button>
         }
       />
+
+      <Dialog open = {openChangeStatus} onClose={handleCloseChangeStatus}>
+        <UserEditForm isEdit currentUser={selectedRow} onSelectCancel={handleCloseChangeStatus} onUpdateSuccess={handleUpdateSuccess}/>
+      </Dialog>
 
       <Dialog open={openAlert} onClose={handleCloseAlert} sx={{ minWidth: 400 }}>
         <DialogTitle>Alert</DialogTitle>

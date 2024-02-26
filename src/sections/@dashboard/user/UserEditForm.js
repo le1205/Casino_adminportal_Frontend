@@ -5,32 +5,31 @@ import { useNavigate } from 'react-router-dom';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-// @mui
-import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Typography, Tabs, Tab,  Table, TableRow, TableBody, TableCell,  ButtonGroup, Button, Input} from '@mui/material';
+
+import { Box, Card, Grid, Stack, Typography, Button, } from '@mui/material';
 // locales
 import { useLocales } from '../../../locales';
-// routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+
 import { useSnackbar } from '../../../components/snackbar';
 import FormProvider, {
   RHFSelect,
   RHFSwitch,
   RHFTextField,
-  RHFEditor,
 } from '../../../components/hook-form';
 // api
-import { apiWithPostData } from '../../../utils/api';
+import { apiWithPostData, apiWithPutData } from '../../../utils/api';
 // url
-import { adminListUrl, createUserUrl, roleListUrl } from '../../../utils/urlList';
+import { adminListUrl, updateUserUrl, roleListUrl } from '../../../utils/urlList';
 // utils
 import {parseJson } from '../../../auth/utils';
 
 // ----------------------------------------------------------------------
 
-UserNewEditForm.propTypes = {
+UserEditForm.propTypes = {
   isEdit: PropTypes.bool,
   currentUser: PropTypes.object,
+  onSelectCancel:PropTypes.func,
+  onUpdateSuccess:PropTypes.func,
 };
 
 const loginUser = parseJson(localStorage.getItem('user') || "");
@@ -64,7 +63,7 @@ const banks = [
 
 
 
-export default function UserNewEditForm({ isEdit = false, currentUser }) {
+export default function UserEditForm({ isEdit = true, currentUser, onSelectCancel, onUpdateSuccess }) {
   const navigate = useNavigate();
   const { translate } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
@@ -73,13 +72,12 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
 
   const NewUserSchema = Yup.object().shape({
     id: Yup.string().required('Id is required'),
-    password: Yup.string().required('Password is required'),
     nickName: Yup.string().required('NickName is required'),
-    exchangePassword: Yup.string().required('Exchange password is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
+      _id: currentUser?._id || '',
       id: currentUser?.id || '',
       password: currentUser?.password || '',
       nickName: currentUser?.nickName || '',
@@ -180,7 +178,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
 
   const onSubmit = async (data) => {
     try {
-      const url = createUserUrl;
+      const url = updateUserUrl + currentUser._id;
       const headers = {};
       const body = {
         email: `${data?.id }@gmail.com` || "",
@@ -201,16 +199,14 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
         withdrawRate: 0,
         role: data?.role || "user",
         agent: data?.agent || "",
-        verify: true,
+        verify: data?.loginAvailable || true,
         status: data?.betAvailable || true,
         rate: data?.exchangeRate || "",
       };
-      console.log("BODY>>>", body);
-      apiWithPostData(url, body, headers).then((response) => {
-        console.log(response);
+      apiWithPutData(url, body, headers).then((response) => {
+        onUpdateSuccess(response);
         reset();
-        enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-        navigate(PATH_DASHBOARD.user.list);
+        enqueueSnackbar('갱신 성공!');
       });
     } catch (error) {
       console.log(error);
@@ -220,7 +216,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={12}>
           <Card sx={{ p: 3 }}>
             <Box
               rowGap={3}
@@ -253,7 +249,10 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                 }
                 sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
               />
-              <RHFTextField name="id" label={`${translate('id')}`} />
+              <RHFTextField name="id" 
+                inputProps={
+                    { readOnly: true }
+                } label={`${translate('id')}`} />
               <RHFTextField name="password" label={`${translate('password')}`} />
               <RHFTextField name="nickName" label={`${translate('nickName')}`} />
               <RHFTextField name="exchangePassword" label={`${translate('exchangePassword')}`}  />
@@ -299,82 +298,16 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
 
               <RHFEditor simple name="memo" />
             </Stack> */}
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!isEdit ? 'Create User' : 'Save Changes'}
-              </LoadingButton>
+            <Stack direction="row" justifyContent='flex-end' spacing={2}  sx={{ mt: 3, textAlign: 'right'}}>
+              <Button type='submit' variant="contained" color="success">
+              {`${translate('change')}`}
+              </Button>
+              <Button onClick={onSelectCancel} variant="contained" color="warning">
+              {`${translate('cancel')}`}
+              </Button>
             </Stack>
           </Card>
         </Grid>
-        {/* <Grid item xs={12} md={6}>
-          <Card sx={{ p: 3 }} >
-            
-          <Stack spacing={2} sx={{ width: 1 }}>
-              <Tabs value={currentTab} onChange={(event, newValue) => setCurrentTab(newValue)}>
-                
-                <Tab key="one" value="one" label="Rate Seeting by game (Casino)" />
-                <Tab key="two" value="two" label="Rate Seeting by game (Slot)" />
-              </Tabs>
-              {(currentTab === "one") && <Box
-                  key="one"
-                  sx={{ p: 2, borderRadius: 1, bgcolor: 'background.neutral' }}
-                >
-                  
-                  <Grid container spacing={2}>
-                    
-                    <Table sx={{ minWidth: 800 }}>
-                      <TableHeadCustom headLabel={TABLE_HEAD} />
-                      <TableBody>
-                          <TableRow key="casino_0">
-                            <TableCell align='left'>
-                              <Stack direction="row" spacing={2}>
-                                <Typography variant="subtitle2" sx={{ color: 'text.secondary', pt:1 }}>
-                                  Rolling
-                                </Typography>
-                                <ButtonGroup key="casino_0" variant="outlined"  color="info">
-                                  <Button>-</Button>
-                                  <Input
-                                    disableUnderline
-                                    size="small"
-                                    variant="outlined"
-                                    inputProps={{  type: 'number' }}
-                                    sx={{
-                                      typography: 'h10',
-                                      width:'20',
-                                      '& input': {
-                                        p: 0,
-                                        textAlign: 'center',
-                                      },
-                                    }}
-                                  />
-                                  <Button>+</Button>
-                                </ButtonGroup>
-                              </Stack>
-                            </TableCell>
-                            <TableCell align="center" />
-                            <TableCell align="center" />
-                            <TableCell align="center" />
-                          </TableRow>
-                          <TableRow key="casino_1">
-                            <TableCell>Losing</TableCell>
-                            <TableCell align="center" />
-                            <TableCell align="center" />
-                            <TableCell align="center" />
-                          </TableRow>
-                      </TableBody>
-                    </Table>
-                  </Grid>
-                </Box>}
-              {(currentTab === "two") && 
-                <Box
-                  key="two"
-                  sx={{ p: 2, borderRadius: 1, bgcolor: 'background.neutral' }}
-                >
-                  Rate Seeting by game (Slot)
-                </Box>}
-            </Stack>
-          </Card>
-        </Grid> */}
       </Grid>
     </FormProvider>
   );

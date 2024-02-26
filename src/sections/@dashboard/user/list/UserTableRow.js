@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 // @mui
 import {
   Stack,
+  Tooltip,
   TableRow,
   TableCell,
   Typography,
@@ -9,9 +10,13 @@ import {
 import PersonIcon from '@mui/icons-material/Person';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
+import KeyIcon from '@mui/icons-material/Key';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+// locales
+import { useLocales } from '../../../../locales';
 
 // utils
-import { convertLocalDateTime } from '../../../../utils/convert';
+import { fLocalDateTime } from '../../../../utils/formatTime';
 
 // ----------------------------------------------------------------------
 
@@ -21,11 +26,15 @@ UserTableRow.propTypes = {
   onEditRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   onSelectMoney: PropTypes.func,
+  onSelectRemove: PropTypes.func,
+  onSelectChangePassword: PropTypes.func,
+  onSelectChangeStatus: PropTypes.func,
 };
 
-export default function UserTableRow({ row, selected, onEditRow, onSelectRow,  onSelectMoney }) {
-  const { name, id, company, role, cash,  inOut, totalLoose, lastDate, point } = row;
-  const dateString = convertLocalDateTime(lastDate) ;
+export default function UserTableRow({ row, selected, onEditRow, onSelectRow,  onSelectMoney, onSelectRemove, onSelectChangePassword, onSelectChangeStatus }) {
+  const { name, id, creator, role, cash,  inOut, totalLoose, lastDate, point } = row;
+  const { translate } = useLocales();
+  const dateString = fLocalDateTime(lastDate) ;
   
   return (
       <TableRow hover selected={selected}>
@@ -39,7 +48,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow,  o
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{company}</TableCell>
+        <TableCell align="left">{creator}</TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
           {role}
@@ -63,12 +72,38 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow,  o
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <PersonIcon color="primary"/>
-            <AttachMoneyIcon color="warning"  
+            <Tooltip title={`${translate('changeUserStatus')}`}>
+              <PersonIcon color="primary"  
+                onClick={() => {
+                  onSelectChangeStatus();
+                }}
+              />
+            </Tooltip>
+            
+            <Tooltip title={`${translate('cashDepWith')}`}>
+              <AttachMoneyIcon color="warning"  
                 onClick={() => {
                   onSelectMoney();
-                }}/>
-            <LocalParkingIcon color="error"/>
+                }}
+              />
+            </Tooltip>
+            <Tooltip title={`${translate('pointDepWith')}`}>
+              <LocalParkingIcon color="secondary"/>
+            </Tooltip>
+            <Tooltip title={`${translate('changePassword')}`}>
+              <KeyIcon color="error"
+                onClick={() => {
+                  onSelectChangePassword();
+                }}
+              />
+            </Tooltip>
+            <Tooltip title={`${translate('removeUser')}`}>
+              <PersonRemoveIcon color="black" 
+                onClick={() => {
+                  onSelectRemove();
+                }}
+              />
+            </Tooltip>
           </Stack>
         </TableCell>
 

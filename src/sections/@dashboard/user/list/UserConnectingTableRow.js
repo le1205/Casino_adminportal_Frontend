@@ -20,7 +20,7 @@ import ConfirmDialog from '../../../../components/confirm-dialog';
 import { useLocales } from '../../../../locales';
 
 // utils
-import { convertLocalDateTime } from '../../../../utils/convert';
+import { fLocalDateTime } from '../../../../utils/formatTime';
 // ----------------------------------------------------------------------
 
 UserConnectingTableRow.propTypes = {
@@ -28,16 +28,17 @@ UserConnectingTableRow.propTypes = {
   selected: PropTypes.bool,
   onDeleteRow: PropTypes.func,
   onSelectLogout: PropTypes.func,
+  onSelectMoney: PropTypes.func,
 };
 
-export default function UserConnectingTableRow({ row, selected, onDeleteRow, onSelectLogout }) {
+export default function UserConnectingTableRow({ row, selected, onDeleteRow, onSelectLogout, onSelectMoney }) {
   const {_id, ip, username, company, role, cash,  lastDate, isVerified,  status, lastGame} = row;
   
   const { translate } = useLocales();
 
   const [openConfirm, setOpenConfirm] = useState(false);
   
-  const dateString = convertLocalDateTime(lastDate) ;
+  const dateString = fLocalDateTime(lastDate) ;
 
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
@@ -79,8 +80,17 @@ export default function UserConnectingTableRow({ row, selected, onDeleteRow, onS
           <Switch  checked={isVerified} />
         </TableCell>
 
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+        {/* <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
             <Switch  checked={status} />
+        </TableCell> */}
+        
+        <TableCell>
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <AttachMoneyIcon color="warning"  
+                onClick={() => {
+                  onSelectMoney();
+                }}/>
+          </Stack>
         </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>

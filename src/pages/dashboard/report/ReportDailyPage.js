@@ -141,9 +141,13 @@ export default function ReportDailyPage() {
       setIsLoading(true);
       const url = dailyReportUrl;
       const headers = {};
+      const startDate = filterStartDate;
+      startDate.setHours(0, 0, 0);
+      const endDate = filterEndDate;
+      endDate.setHours(23, 59, 59);
       const data = {
-        "startDate": filterStartDate,
-        "endDate": filterEndDate,
+        "startDate": startDate,
+        "endDate": endDate,
       };
       apiWithPostData(url, data, headers).then((response) => {
         const dailyArr = [];
