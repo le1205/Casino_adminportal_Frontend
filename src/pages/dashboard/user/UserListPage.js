@@ -48,11 +48,13 @@ import { apiWithPostData, apiWithDeleteData, } from '../../../utils/api';
 import { adminListUrl, balanceUpdateUrl, roleListUrl, adminDeleteUrl, changePasswordUrl } from '../../../utils/urlList';
 // locales
 import { useLocales } from '../../../locales';
+// utils
+import {parseJson } from '../../../auth/utils';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'id', label: 'id', align: 'left' },
+  { id: 'no', label: 'no', align: 'left' },
   { id: 'name', label: 'name', align: 'left' },
   { id: 'creator', label: 'creator', align: 'left' },
   { id: 'level', label: 'level', align: 'left' },
@@ -90,6 +92,8 @@ export default function UserListPage() {
   } = useTable();
 
   const { themeStretch } = useSettingsContext();
+
+  const loginUser = parseJson(localStorage.getItem('user') || "");
 
   const navigate = useNavigate();
   const { translate } = useLocales();
@@ -373,6 +377,7 @@ export default function UserListPage() {
         results.forEach((item, index) => {
           const user = {
             _id: item._id || '',
+            no: index + 1,
             id: item.user_id || '',
             name: item.username || '',
             company: item.company || '',
@@ -430,12 +435,14 @@ export default function UserListPage() {
           title: 'all',
         }];
         results.forEach((item, index) => {
-          const role = {
-            name: item.name || '',
-            order: item.order || '',
-            title: item.title || '',
+          if(parseInt(item?.order, 10) > parseInt(loginUser?.roleMain?.order, 10)) {
+            const role = {
+              name: item.name || '',
+              order: item.order || '',
+              title: item.title || '',
+            }
+            roles.push(role);
           }
-          roles.push(role);
         });
         setTotalRole(roles);
       });
@@ -453,6 +460,7 @@ export default function UserListPage() {
     // console.log(md5Signature);
     roleList();
     usersList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

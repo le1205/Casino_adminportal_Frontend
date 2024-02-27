@@ -163,6 +163,7 @@ const en = {
   bettingProfit:`Betting Profit`,
   loginTime:`Login Time`,
   lastIp:`Last IP`,
+  ip:`IP`,
   lastGame:`Last Game`,
   loginPossible:`Login Possible`,
   betPossible:`Betting Possible`,
@@ -224,6 +225,7 @@ const en = {
   totalBalance:`total balance`,
   subHoldingMoney:`sub holding money`,
   subHoldingPoint:`sub holding point`,
+  connectTime:`connect time`,
 };
 
 export default en;

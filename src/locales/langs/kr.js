@@ -163,6 +163,7 @@ const kr = {
   bettingProfit:`베팅 손익`,
   loginTime:`로그인 시간`,
   lastIp:`마지막 IP`,
+  ip:`IP`,
   lastGame:`최근 실행게임`,
   loginPossible:`로그인 기능`,
   betPossible:`베팅 가능`,
@@ -224,6 +225,7 @@ const kr = {
   totalBalance:`총 정산금`,
   subHoldingMoney:`하부 보유머니`,
   subHoldingPoint:`하부 보유포인트`,
+  connectTime:`접속 일시`,
 };
 
 export default kr;

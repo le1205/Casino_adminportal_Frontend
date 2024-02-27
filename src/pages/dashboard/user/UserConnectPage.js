@@ -38,9 +38,11 @@ import {
 // sections
 import { UserConnectingTableToolbar, UserConnectingTableRow } from '../../../sections/@dashboard/user/list';
 // api
-import { apiWithPostData, apiWithDeleteData } from '../../../utils/api';
+import { apiWithPostData, apiWithGetData, apiWithDeleteData } from '../../../utils/api';
 // url
-import { userSessionUrl, realBalanceUpdateUrl,} from '../../../utils/urlList';
+import { userSessionUrl, realBalanceUpdateUrl, userBalanceUrl, userDeleteSessionUrl} from '../../../utils/urlList';
+// url
+import { validateIPaddress,} from '../../../utils/validate';
 
 // ----------------------------------------------------------------------
 
@@ -49,14 +51,14 @@ const TABLE_HEAD = [
   { id: 'id', label: 'id', align: 'left' },
   { id: 'company', label: 'company', align: 'left' },
   { id: 'cash', label: 'cash', align: 'left' },
-  { id: 'loginTime', label: 'loginTime', align: 'left' },
-  { id: 'lastIp', label: 'lastIp', align: 'left' },
-  { id: 'depowith', label: 'depowith', align: 'left' },
+  { id: 'connectTime', label: 'connectTime', align: 'left' },
+  { id: 'ip', label: 'ip', align: 'left' },
+  // { id: 'depowith', label: 'depowith', align: 'left' },
   { id: 'lastGame', label: 'lastGame', align: 'left' },
   { id: 'loginPossible', label: 'loginPossible', align:'left' },
   // { id: 'betPossible', label: 'betPossible', align:'left' },
   { id: 'action', label: 'action', align: 'left' },
-  { id: 'confirm', label: 'confirm', align:'left' },
+  // { id: 'confirm', label: 'confirm', align:'left' },
   { id: 'logout', label: 'logout', align:'left' },
 ];
 
@@ -106,28 +108,14 @@ export default function UserConnectPage() {
     filterStatus,
   });
 
-  const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const denseHeight = dense ? 52 : 72;
-
-  const isFiltered = filterName !== '' || filterRole !== 'all' || filterStatus !== 'all';
 
   const isNotFound =
     (!dataFiltered.length && !!filterName) ||
     (!dataFiltered.length && !!filterRole) ||
     (!dataFiltered.length && !!filterStatus);
-  
-  const handleFilterName = (event) => {
-    setPage(0);
-    setFilterName(event.target.value);
-  };
     
-  const handleResetFilter = () => {
-    setFilterName('');
-    setFilterRole('all');
-    setFilterStatus('all');
-  };
-  
   const handleCloseAlert = () => {
     setOpenAlert(false);
   };
@@ -149,8 +137,23 @@ export default function UserConnectPage() {
     setOpenBalance(true);
   };
 
-  const handleClickSearch = () => {
-    sessionList();
+  const handleClickRefresh = (row) => {
+    setSelectedRow(row);
+    try {
+      const url = userBalanceUrl + row.id;
+      const headers = {};
+      apiWithGetData(url, {}, headers).then((response) => {
+        if(response?.balance) {
+          tableData.forEach(element => {
+            if(row._id === element._id) {
+              element.cash = response?.balance;
+            }
+          });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   
 
@@ -197,13 +200,13 @@ export default function UserConnectPage() {
   
   const handleClickLogout = (id) => {
     try {
-      // console.log(id);
-      // const url = userDeleteSessionUrl + id;
-      // const data = {};
-      // const headers = {};
-      // apiWithDeleteData(url, data, headers).then((response) => {
-      //   console.log("delete respnose>> ", response);
-      // });
+      console.log(id);
+      const url = userDeleteSessionUrl + id;
+      const data = {};
+      const headers = {};
+      apiWithDeleteData(url, data, headers).then((response) => {
+        console.log("delete respnose>> ", response);
+      });
     } catch (error) {
       console.log(error);
     }
@@ -222,7 +225,6 @@ export default function UserConnectPage() {
         if(response === true) {
           updateSession(balanceId, amount, type);
         }
-        // usersList();
       });
     } catch (error) {
       console.log(error);
@@ -243,10 +245,11 @@ export default function UserConnectPage() {
         const {count, results} = response;
         const users = [];
         results.forEach(item => {
+          const ipAddress = validateIPaddress(item.ip) ? item.ip : '159.35.21.216';
           const user = {
             _id: item._id || '',
             id: item.userId || '',
-            ip: item.ip || '',
+            ip: ipAddress,
             username: item.user?.username || '',
             cash: item.user?.balance  || 0,
             lastDate: item.updatedAt,
@@ -293,7 +296,7 @@ export default function UserConnectPage() {
         <Card>
           <Divider />
 
-          <UserConnectingTableToolbar
+          {/* <UserConnectingTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
             filterRole={filterRole}
@@ -306,7 +309,7 @@ export default function UserConnectPage() {
             onFilterEndDate={(newValue) => {
               setFilterEndDate(newValue);
             }}
-          />
+          /> */}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
 
@@ -338,6 +341,7 @@ export default function UserConnectPage() {
                         onSelectRow={() => onSelectRow(row.id)}
                         onSelectLogout= {() => handleClickLogout(row._id)}
                         onSelectMoney={() => handleClickBalance(row)}
+                        onSelectRefresh={() => handleClickRefresh(row)}
                       />
                     ))}
 

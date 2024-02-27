@@ -12,6 +12,7 @@ import {
 import PersonIcon from '@mui/icons-material/Person';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
+import RefreshIcon from '@mui/icons-material/Refresh';
 // components
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
@@ -29,9 +30,10 @@ UserConnectingTableRow.propTypes = {
   onDeleteRow: PropTypes.func,
   onSelectLogout: PropTypes.func,
   onSelectMoney: PropTypes.func,
+  onSelectRefresh: PropTypes.func,
 };
 
-export default function UserConnectingTableRow({ row, selected, onDeleteRow, onSelectLogout, onSelectMoney }) {
+export default function UserConnectingTableRow({ row, selected, onDeleteRow, onSelectLogout, onSelectMoney, onSelectRefresh }) {
   const {_id, ip, username, company, role, cash,  lastDate, isVerified,  status, lastGame} = row;
   
   const { translate } = useLocales();
@@ -58,7 +60,18 @@ export default function UserConnectingTableRow({ row, selected, onDeleteRow, onS
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{cash.toLocaleString()}</TableCell>
+        <TableCell align="left">
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Typography variant="subtitle2" noWrap>
+              {cash.toLocaleString()}
+            </Typography>
+            <RefreshIcon color="success"  
+              onClick={() => {
+                onSelectRefresh();
+              }}
+            />
+          </Stack>
+        </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
           {dateString}
@@ -68,9 +81,9 @@ export default function UserConnectingTableRow({ row, selected, onDeleteRow, onS
           {ip}
         </TableCell>
 
-        <TableCell align="left">
+        {/* <TableCell align="left">
           {0}
-        </TableCell>
+        </TableCell> */}
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
           {lastGame}
@@ -87,17 +100,18 @@ export default function UserConnectingTableRow({ row, selected, onDeleteRow, onS
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
             <AttachMoneyIcon color="warning"  
-                onClick={() => {
-                  onSelectMoney();
-                }}/>
+              onClick={() => {
+                onSelectMoney();
+              }}
+            />
           </Stack>
         </TableCell>
 
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+        {/* <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
           <Button variant="contained" color="warning" size="small"> 
             {`${translate('bettingList')}`}
           </Button>
-        </TableCell>
+        </TableCell> */}
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
           <Button variant="contained" color="error" size="small" onClick={onSelectLogout}> 

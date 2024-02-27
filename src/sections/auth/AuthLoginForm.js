@@ -31,15 +31,15 @@ export default function AuthLoginForm() {
     password: Yup.string().required('Password is required'),
   });
 
-  const defaultValues = {
-    email: 'adminhq',
-    password: 'dkagh@adminhq',
-  };
-
   // const defaultValues = {
-  //   email: '',
-  //   password: '',
+  //   email: 'adminhq',
+  //   password: 'dkagh@adminhq',
   // };
+
+  const defaultValues = {
+    email: '',
+    password: '',
+  };
 
   const methods = useForm({
     resolver: yupResolver(LoginSchema),

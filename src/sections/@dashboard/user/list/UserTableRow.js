@@ -32,13 +32,13 @@ UserTableRow.propTypes = {
 };
 
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow,  onSelectMoney, onSelectRemove, onSelectChangePassword, onSelectChangeStatus }) {
-  const { name, id, creator, role, cash,  inOut, totalLoose, lastDate, point } = row;
+  const { name, id, no, creator, role, cash,  inOut, totalLoose, lastDate, point } = row;
   const { translate } = useLocales();
   const dateString = fKoreanDate(lastDate) ;
   
   return (
       <TableRow hover selected={selected}>
-        <TableCell align="left">{id}</TableCell>
+        <TableCell align="left">{no}</TableCell>
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
@@ -87,9 +87,9 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow,  o
                 }}
               />
             </Tooltip>
-            <Tooltip title={`${translate('pointDepWith')}`}>
+            {/* <Tooltip title={`${translate('pointDepWith')}`}>
               <LocalParkingIcon color="secondary"/>
-            </Tooltip>
+            </Tooltip> */}
             <Tooltip title={`${translate('changePassword')}`}>
               <KeyIcon color="error"
                 onClick={() => {

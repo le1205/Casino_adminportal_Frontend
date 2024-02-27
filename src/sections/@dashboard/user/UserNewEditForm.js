@@ -226,7 +226,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
               }}
             >
 
-              <RHFSwitch
+              {/* <RHFSwitch
                 name="loginAvailable"
                 labelPlacement="start"
                 label={
@@ -246,22 +246,12 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                   </Typography>
                 }
                 sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-              />
+              /> */}
               <RHFTextField name="id" label={`${translate('id')}`} />
-              <RHFTextField name="password" label={`${translate('password')}`} />
               <RHFTextField name="nickName" label={`${translate('nickName')}`} />
+              <RHFTextField name="password" label={`${translate('password')}`} />
               <RHFTextField name="exchangePassword" label={`${translate('exchangePassword')}`}  />
-              <RHFSelect native name="role" label={`${translate('role')}`} placeholder={`${translate('role')}`}  >
-                <option value=""  />
-                {totalRole.map((element) => (
-                  <option key={element.order} value={element.title}  >
-                    {element.name}
-                  </option>
-                ))}
-              </RHFSelect>
-              <RHFTextField name="withdrawRate" label={`${translate('withdrawRate')}`}  />
               <RHFTextField name="birthday" label={`${translate('birthday')}`}/>
-              <RHFTextField name="phoneNumber" label={`${translate('phoneNumber')}`}/>
               <RHFSelect native name="bankInfo" label={`${translate('bankInfo')}`} placeholder={`${translate('bankInfo')}`}  >
                 <option value=""  />
                 {banks.map((agent) => (
@@ -273,10 +263,20 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
               <RHFTextField name="bankAccount"  label={`${translate('bankAccount')}`} />
               <RHFTextField name="depositOwner" label={`${translate('depositOwner')}`} />
               <RHFTextField name="community" label={`${translate('community')}`} />
+              <RHFTextField name="phoneNumber" label={`${translate('phoneNumber')}`}/>
               <RHFTextField name="slotRolling" label={`${translate('slotRolling')}`} />
               <RHFTextField name="slotLoosing" label={`${translate('slotLoosing')}`} />
               <RHFTextField name="casinoRolling" label={`${translate('casinoRolling')}`} />
               <RHFTextField name="casinoLoosing" label={`${translate('casinoLoosing')}`} />
+              <RHFTextField name="withdrawRate" label={`${translate('withdrawRate')}`}  />
+              <RHFSelect native name="role" label={`${translate('role')}`} placeholder={`${translate('role')}`}  >
+                <option value=""  />
+                {totalRole.map((element) => (
+                  <option key={element.order} value={element.title}  >
+                    {element.name}
+                  </option>
+                ))}
+              </RHFSelect>
               <RHFSelect native name="agent" label={`${translate('agent')}`} placeholder={`${translate('agent')}`}  >
                 <option value=""  />
                 {totalAgent.map((element) => (
