@@ -20,13 +20,14 @@ import FormProvider, {
   RHFTextField,
   RHFUploadAvatar,
 } from '../../../../components/hook-form';
+import {parseJson } from '../../../../auth/utils';
 
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral() {
   const { enqueueSnackbar } = useSnackbar();
 
-  const { user } = localStorage.getItem('user') || "";
+  const { user } = parseJson(localStorage.getItem('user') || "");
 
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required('Name is required'),

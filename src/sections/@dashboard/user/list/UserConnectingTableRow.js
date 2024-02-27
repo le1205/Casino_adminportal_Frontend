@@ -20,7 +20,7 @@ import ConfirmDialog from '../../../../components/confirm-dialog';
 import { useLocales } from '../../../../locales';
 
 // utils
-import { fLocalDateTime } from '../../../../utils/formatTime';
+import { fKoreanDate } from '../../../../utils/formatTime';
 // ----------------------------------------------------------------------
 
 UserConnectingTableRow.propTypes = {
@@ -38,7 +38,7 @@ export default function UserConnectingTableRow({ row, selected, onDeleteRow, onS
 
   const [openConfirm, setOpenConfirm] = useState(false);
   
-  const dateString = fLocalDateTime(lastDate) ;
+  const dateString = fKoreanDate(lastDate) ;
 
   const handleCloseConfirm = () => {
     setOpenConfirm(false);

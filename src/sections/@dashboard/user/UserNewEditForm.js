@@ -5,9 +5,7 @@ import { useNavigate } from 'react-router-dom';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-// @mui
-import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Typography, Tabs, Tab,  Table, TableRow, TableBody, TableCell,  ButtonGroup, Button, Input} from '@mui/material';
+import { Box, Card, Grid, Stack, Typography, Button,} from '@mui/material';
 // locales
 import { useLocales } from '../../../locales';
 // routes
@@ -63,7 +61,6 @@ const banks = [
 ];
 
 
-
 export default function UserNewEditForm({ isEdit = false, currentUser }) {
   const navigate = useNavigate();
   const { translate } = useLocales();
@@ -99,7 +96,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
       casinoLoosing: currentUser?.casinoLoosing || 0,
       role: currentUser?.role || '',
       agent: currentUser?.agent || '',
-      exchangeRate: currentUser?.exchangeRate || '',
+      withdrawRate: currentUser?.withdrawRate || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -140,7 +137,6 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
     } catch (error) {
       console.log(error);
     }
-
   };
   
   const usersList = () => {
@@ -194,18 +190,16 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
         bankOwner: data?.depositOwner || "",
         Nickname: data?.nickName || "",
         phoneType: "",
-        liveRate: data?.casinoRolling || 0,
-        slotRate: data?.slotRolling || 0,
-        loseSlotRate: data?.slotLoosing || 0,
-        loseLiveRate: data?.casinoLoosing || 0,
-        withdrawRate: 0,
+        liveRate: Number(data?.casinoRolling) || 0,
+        slotRate: Number(data?.slotRolling) || 0,
+        loseSlotRate: Number(data?.slotLoosing) || 0,
+        loseLiveRate: Number(data?.casinoLoosing) || 0,
+        withdrawRate: Number(data?.withdrawRate) || 0,
         role: data?.role || "user",
         agent: data?.agent || "",
         verify: true,
         status: data?.betAvailable || true,
-        rate: data?.exchangeRate || "",
       };
-      console.log("BODY>>>", body);
       apiWithPostData(url, body, headers).then((response) => {
         console.log(response);
         reset();
@@ -265,7 +259,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                   </option>
                 ))}
               </RHFSelect>
-              <RHFTextField name="exchangeRate" label={`${translate('exchangeRate')}`}  />
+              <RHFTextField name="withdrawRate" label={`${translate('withdrawRate')}`}  />
               <RHFTextField name="birthday" label={`${translate('birthday')}`}/>
               <RHFTextField name="phoneNumber" label={`${translate('phoneNumber')}`}/>
               <RHFSelect native name="bankInfo" label={`${translate('bankInfo')}`} placeholder={`${translate('bankInfo')}`}  >
@@ -300,9 +294,9 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
               <RHFEditor simple name="memo" />
             </Stack> */}
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!isEdit ? 'Create User' : 'Save Changes'}
-              </LoadingButton>
+              <Button type='submit' variant="contained" color="success">
+                {`${translate('createMember')}`}
+              </Button>
             </Stack>
           </Card>
         </Grid>

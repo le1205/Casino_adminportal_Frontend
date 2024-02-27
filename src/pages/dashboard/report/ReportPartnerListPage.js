@@ -19,6 +19,8 @@ import {
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
+// locales
+import { useLocales } from '../../../locales';
 // components
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
@@ -36,6 +38,8 @@ import {
 } from '../../../components/table';
 // sections
 import { ReportTableToolbar, ReportTableRow } from '../../../sections/@dashboard/report/list';
+// utils
+import {parseJson } from '../../../auth/utils';
 // api
 import { apiWithPostData } from '../../../utils/api';
 // url
@@ -53,18 +57,12 @@ const TABLE_HEAD = [
   { id: 'total', label: 'total', align: 'left' },
 ];
 
-const TABLE_HEAD_TOTAL_ONE = [
-  { id: '1', label: '', align: 'center' },
-  { id: '2', label: '', align: 'center' },
-  { id: '3', label: '', align: 'center' },
-  { id: '4', label: '', align: 'center' },
-];
 const TABLE_HEAD_TOTAL_TWO = [
   { id: 'casino', label: 'casino', align: 'center' },
   { id: 'slot', label: 'slot', align: 'center' },
   { id: 'total', label: 'total', align: 'center' },
 ];
-const userData = localStorage.getItem('user') || "";
+const userData = parseJson(localStorage.getItem('user') || "");
 
 // ----------------------------------------------------------------------
 
@@ -86,10 +84,10 @@ export default function ReportPartnerListPage() {
   } = useTable();
 
   const { themeStretch } = useSettingsContext();
-
+  const { translate } = useLocales();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
   const [filterName, setFilterName] = useState('');
   const [filterRole, setFilterRole] = useState('all');
@@ -211,7 +209,8 @@ export default function ReportPartnerListPage() {
         }));
         const listDataUser = valueMain.filter((item) => item.creatorId === userData._id);
         
-        // console.log("listDataUser", listDataUser);
+        console.log("userData >>>", userData);
+        console.log("userData _id >>", userData._id);
         const treedata = handleCountData(listDataUser, valueMain);
         setTotalData(valueData);
         setDataActive(response.ListTotal);
@@ -332,7 +331,7 @@ export default function ReportPartnerListPage() {
           links={[
             { name: 'dashboard', href: PATH_DASHBOARD.root },
             { name: 'settlement', href: PATH_DASHBOARD.report.root },
-            { name: 'Partner Report' },
+            { name: 'partnerReport' },
           ]}
         />
         <Card>
@@ -361,48 +360,48 @@ export default function ReportPartnerListPage() {
                   /> */}
                   <TableBody sx={{ pt:3, }}>
                     <TableRow key="total_search_one_1">
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Money:
+                            {`${translate('holdingMoney')}`}
                           </Typography>
                           <Typography variant="body2">
                           {totalData?.totalMoney?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            User Deposit:
+                            {`${translate('userDeposit')}`}
                           </Typography>
                           <Typography variant="body2">
                             {totalData?.totald?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left'  sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            User Widthraw:
+                            {`${translate('userWithdraw')}`}
                           </Typography>
                           <Typography variant="body2">
                             {totalData?.totalw?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Deposit-Withdraw:
+                            {`${translate('depositMinWithdraw')}`}
                           </Typography>
                           <Typography variant="body2">
                             {totalDepWith?.toLocaleString()}
@@ -411,48 +410,48 @@ export default function ReportPartnerListPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow key="total_search_one_2">
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Holding Point:
+                            {`${translate('holdingPoint')}`}
                           </Typography>
                           <Typography variant="body2">
                             {totalHoldingPoint?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Partner Deposit:
+                            {`${translate('partnerDeposit')}`}
                           </Typography>
                           <Typography variant="body2">
                             {totalPartnerDeposit?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Partner Widthraw:
+                            {`${translate('partnerWidthraw')}`}
                           </Typography>
                           <Typography variant="body2">
                             {totalPartnerWithdraw?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Partner Deposit-Withdraw:
+                            {`${translate('partnerDepMinWid')}`}
                           </Typography>
                           <Typography variant="body2">
                             {totalPartnerIncome?.toLocaleString()}
@@ -461,48 +460,48 @@ export default function ReportPartnerListPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow key="total_search_one_3">
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Users:
+                            {`${translate('userAmount')}`}
                           </Typography>
                           <Typography variant="body2">
                             {totalData?.mapData?.length}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Admin Deposit:
+                            {`${translate('adminDeposit')}`}
                           </Typography>
                           <Typography variant="body2">
                             {totalAdminDeposit?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Admin Widthraw:
+                            {`${translate('adminWidthraw')}`}
                           </Typography>
                           <Typography variant="body2">
                             {totalAdminWithdraw?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Admin Deposit-Withdraw:
+                            {`${translate('adminDepMinWith')}`}
                           </Typography>
                           <Typography variant="body2">
                             {totalAdminIncome?.toLocaleString()}
@@ -520,24 +519,24 @@ export default function ReportPartnerListPage() {
                   />
                   <TableBody>
                     <TableRow key="total_search_two_1">
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Betting:
+                            {`${translate('betting')}`}:
                           </Typography>
                           <Typography variant="body2">
                             {dataActive?.bet_live?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Betting:
+                            {`${translate('betting')}`}:
                           </Typography>
                           <Typography variant="body2">
                             
@@ -545,12 +544,12 @@ export default function ReportPartnerListPage() {
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Total Bet:
+                            {`${translate('totalBet')}`}:
                           </Typography>
                           <Typography variant="body2">
                             {
@@ -562,36 +561,36 @@ export default function ReportPartnerListPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow key="total_search_two_2">
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Win:
+                            {`${translate('win')}`}:
                           </Typography>
                           <Typography variant="body2">
                             {dataActive?.win_live?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Win:
+                            {`${translate('win')}`}:
                           </Typography>
                           <Typography variant="body2">
                             {dataActive?.win_slot?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Total Win:
+                            {`${translate('totalWin')}`}:
                           </Typography>
                           <Typography variant="body2">
                           {
@@ -603,36 +602,36 @@ export default function ReportPartnerListPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow key="total_search_two_3">
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Rolling:
+                            {`${translate('rolling')}`}:
                           </Typography>
                           <Typography variant="body2">
                             {dataActive?.bet_money_live?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Rolling:
+                            {`${translate('rolling')}`}:
                           </Typography>
                           <Typography variant="body2">
                             {dataActive?.bet_money_slot?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Total Rolling:
+                            {`${translate('totalRollAmount')}`}:
                           </Typography>
                           <Typography variant="body2">
                             {
@@ -644,36 +643,36 @@ export default function ReportPartnerListPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow key="total_search_two_4">
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Losing:
+                            {`${translate('losing')}`}:
                           </Typography>
                           <Typography variant="body2">
                             {dataActive?.lose_money_live?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Losing:
+                            {`${translate('losing')}`}:
                           </Typography>
                           <Typography variant="body2">
                             {dataActive?.lose_money_slot?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Total Losing:
+                            {`${translate('totalLosing')}`}:
                           </Typography>
                           <Typography variant="body2">
                             {
@@ -685,36 +684,36 @@ export default function ReportPartnerListPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow key="total_search_two_5">
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Balance:
+                            {`${translate('balance')}`}:
                           </Typography>
                           <Typography variant="body2">
                             {dataActive?.balance_live?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Balance:
+                            {`${translate('balance')}`}:
                           </Typography>
                           <Typography variant="body2">
                             {dataActive?.balance_slot?.toLocaleString()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
                           <Typography variant="body2">
-                            Total Balance:
+                            {`${translate('totalBalance')}`}:
                           </Typography>
                           <Typography variant="body2">
                             {

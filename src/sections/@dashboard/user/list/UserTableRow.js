@@ -16,7 +16,7 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { useLocales } from '../../../../locales';
 
 // utils
-import { fLocalDateTime } from '../../../../utils/formatTime';
+import { fKoreanDate } from '../../../../utils/formatTime';
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ UserTableRow.propTypes = {
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow,  onSelectMoney, onSelectRemove, onSelectChangePassword, onSelectChangeStatus }) {
   const { name, id, creator, role, cash,  inOut, totalLoose, lastDate, point } = row;
   const { translate } = useLocales();
-  const dateString = fLocalDateTime(lastDate) ;
+  const dateString = fKoreanDate(lastDate) ;
   
   return (
       <TableRow hover selected={selected}>

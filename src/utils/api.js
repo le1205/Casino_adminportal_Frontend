@@ -1,13 +1,9 @@
 import axios from "axios";
-import {  useReducer,  } from 'react';
-import { useNavigate } from 'react-router-dom';
 // routes
-import { PATH_DASHBOARD, PATH_AUTH } from '../routes/paths';
+import { PATH_AUTH } from '../routes/paths';
 
 // config
 import { HOST_API_SERVER, SECRET } from '../config-global';
-//
-import { isValidToken, setSession } from '../auth/utils';
 
 
 export const apiWithPostData = async (url, params, headers) => {
@@ -30,12 +26,9 @@ export const apiWithPostData = async (url, params, headers) => {
         const response = await axios(config);
         return response.data;
       } catch (error) {
-        console.log("here>>>", error);
         if (error?.response && error?.response?.status === 401) {
             localStorage.clear();
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const navigate = useNavigate();
-            navigate(PATH_AUTH.login, { replace: true });
+            window.location.href = PATH_AUTH.login;
         }
         return error;
     }
@@ -56,8 +49,17 @@ export const apiWithGetData = async (url, data, headers) => {
         },
         data
     };
-    const response = await axios(config);
-    return response.data;
+    
+    try {
+        const response = await axios(config);
+        return response.data;
+      } catch (error) {
+        if (error?.response && error?.response?.status === 401) {
+            localStorage.clear();
+            window.location.href = PATH_AUTH.login;
+        }
+        return error;
+    }
 }
 
 
@@ -95,8 +97,17 @@ export const apiWithPutData = async (url, data, headers) => {
         },
         data
     };
-    const response = await axios(config);
-    return response.data;
+    
+    try {
+        const response = await axios(config);
+        return response.data;
+      } catch (error) {
+        if (error?.response && error?.response?.status === 401) {
+            localStorage.clear();
+            window.location.href = PATH_AUTH.login;
+        }
+        return error;
+    }
 }
 
 export const apiWithDeleteData = async (url, data, headers) => {
@@ -114,6 +125,15 @@ export const apiWithDeleteData = async (url, data, headers) => {
         },
         data
     };
-    const response = await axios(config);
-    return response.data;
+    
+    try {
+        const response = await axios(config);
+        return response.data;
+      } catch (error) {
+        if (error?.response && error?.response?.status === 401) {
+            localStorage.clear();
+            window.location.href = PATH_AUTH.login;
+        }
+        return error;
+    }
 }

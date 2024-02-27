@@ -6,13 +6,15 @@ import { useSettingsContext } from '../../components/settings';
 import {
   AppWelcome,
 } from '../../sections/@dashboard/general/app';
+// utils
+import {parseJson } from '../../auth/utils';
 // assets
 import { SeoIllustration } from '../../assets/illustrations';
 
 // ----------------------------------------------------------------------
 
 export default function GeneralAppPage() {
-  const { user } = localStorage.getItem('user') || "";
+  const { user } = parseJson(localStorage.getItem('user') || "");
 
   const { themeStretch } = useSettingsContext();
 

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { format, getTime, formatDistanceToNow } from 'date-fns';
 
 // ----------------------------------------------------------------------
@@ -26,5 +27,11 @@ export function fToNow(date) {
     : '';
 }
 
-export const fLocalDateTime = (timeString) => new Date(timeString).toISOString().replace(/T/, ' ').replace(/\..+/, '') 
+export function fKoreanDate(date) {
+  moment.locale('ko');
+  const fm ='YYYY-MM-DD HH:mm:ss';
+  
+  return date ? moment(date).format(fm) : '';
+}
+
 

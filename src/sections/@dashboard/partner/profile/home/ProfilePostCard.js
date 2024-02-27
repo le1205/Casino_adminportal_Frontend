@@ -25,6 +25,8 @@ import { fShortenNumber } from '../../../../../utils/formatNumber';
 import Image from '../../../../../components/image';
 import Iconify from '../../../../../components/iconify';
 import { CustomAvatar, CustomAvatarGroup } from '../../../../../components/custom-avatar';
+// utils
+import {parseJson } from '../../../../../auth/utils';
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +35,7 @@ ProfilePostCard.propTypes = {
 };
 
 export default function ProfilePostCard({ post }) {
-  const { user } = localStorage.getItem('user') || "";
+  const { user } = parseJson(localStorage.getItem('user') || "");
 
   const commentInputRef = useRef(null);
 

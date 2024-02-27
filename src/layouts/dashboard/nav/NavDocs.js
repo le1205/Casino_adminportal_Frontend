@@ -2,13 +2,15 @@
 import { Stack, Button, Typography, Box } from '@mui/material';
 // auth
 import { useAuthContext } from '../../../auth/useAuthContext';
+// utils
+import {parseJson } from '../../../auth/utils';
 // locales
 import { useLocales } from '../../../locales';
 
 // ----------------------------------------------------------------------
 
 export default function NavDocs() {
-  const { user } = localStorage.getItem('user') || "";
+  const { user } = parseJson(localStorage.getItem('user') || "");
 
   const { translate } = useLocales();
 

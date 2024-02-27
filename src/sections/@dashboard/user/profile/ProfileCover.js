@@ -9,6 +9,7 @@ import { useAuthContext } from '../../../../auth/useAuthContext';
 // components
 import Image from '../../../../components/image';
 import { CustomAvatar } from '../../../../components/custom-avatar';
+import {parseJson } from '../../../../auth/utils';
 
 // ----------------------------------------------------------------------
 
@@ -50,7 +51,7 @@ ProfileCover.propTypes = {
 };
 
 export default function ProfileCover({ name, role, cover }) {
-  const { user } = localStorage.getItem('user') || "";
+  const { user } = parseJson(localStorage.getItem('user') || "");
 
   return (
     <StyledRoot>

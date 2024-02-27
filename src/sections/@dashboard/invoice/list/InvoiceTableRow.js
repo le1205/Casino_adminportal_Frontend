@@ -8,7 +8,7 @@ import {
 // components
 import Label from '../../../../components/label';
 // utils
-import { fLocalDateTime } from '../../../../utils/formatTime';
+import { fKoreanDate } from '../../../../utils/formatTime';
 
 // ----------------------------------------------------------------------
 
@@ -20,7 +20,7 @@ InvoiceTableRow.propTypes = {
 
 export default function InvoiceTableRow({ row, selected, onEditRow, }) {
   const {_id, userId, createdAt, currentBalance, beforeBalance, type, user, amount } = row;
-  const dateString = fLocalDateTime(createdAt) ;
+  const dateString = fKoreanDate(createdAt) ;
 
   return (
     <TableRow hover selected={selected}>

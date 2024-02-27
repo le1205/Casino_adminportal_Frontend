@@ -11,6 +11,9 @@ import {
 } from '@mui/material';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import { useTheme } from '@mui/material/styles';
+// locales
+import { useLocales } from '../../../../locales';
 // components
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
@@ -34,6 +37,8 @@ ReportTableRow.propTypes = {
 export default function ReportTableRow({ row, display, selected, onEditRow, onSelectRow, onDeleteRow, onClickDownArrow, onClickUpArrow, count}) {
   const data = row;
   const {role} = row;
+  const { translate } = useLocales();
+  const theme = useTheme();
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -145,12 +150,12 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
           </Stack>
         </TableCell>
 
-        <TableCell>
+        <TableCell sx={{ textTransform: 'capitalize' }}>
           <Stack direction="row"
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Money:
+              {`${translate('holdingMoney')}`}
             </Typography>
             <Typography variant="body2">
               {data?.balanceMain?.toLocaleString()}
@@ -160,7 +165,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Holding Point:
+              {`${translate('holdingPoint')}`}
             </Typography>
             <Typography variant="body2">
               {holdingPoint?.toLocaleString() || 0}
@@ -169,31 +174,31 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
           <Stack direction="row"
             alignItems="center"
             justifyContent="space-between">
-            <Typography variant="body2">
-              Sub Holding Money:
+            <Typography variant="body2" sx={{ color: theme.palette.info.main }}>
+              {`${translate('subHoldingMoney')}`}:
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body2" sx={{ color: theme.palette.info.main }}>
               0
             </Typography>
           </Stack>
           <Stack direction="row"
             alignItems="center"
             justifyContent="space-between">
-            <Typography variant="body2">
-              Sub Holding Point:
+            <Typography variant="body2" sx={{ color: theme.palette.info.main }}>
+            {`${translate('subHoldingPoint')}`}:
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body2" sx={{ color: theme.palette.info.main }}>
               0
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">
+        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
           <Stack direction="row"
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              User Deposit:
+              {`${translate('userDeposit')}`}
             </Typography>
             <Typography variant="body2">
               {data?.total_deposit?.toLocaleString() || 0}
@@ -203,7 +208,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              User Widthraw:
+              {`${translate('userWithdraw')}`}
             </Typography>
             <Typography variant="body2">
               {data?.total_withdraw?.toLocaleString() || 0}
@@ -213,7 +218,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Partner Deposit-Withdraw:
+              {`${translate('partnerDepMinWid')}`}
             </Typography>
             <Typography variant="body2">
               0
@@ -223,7 +228,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Deposit-Withdraw:
+              {`${translate('depositMinWithdraw')}`}
             </Typography>
             <Typography variant="body2">
               0
@@ -231,13 +236,13 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
           </Stack>
         </TableCell>
 
-        <TableCell align="left">
+        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
           
           <Stack direction="row"
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Betting:
+              {`${translate('betting')}`}:
             </Typography>
             <Typography variant="body2">
               {data?.bet_live?.toLocaleString()}
@@ -247,7 +252,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Win:
+              {`${translate('win')}`}:
             </Typography>
             <Typography variant="body2">
               {data?.win_live?.toLocaleString()}
@@ -257,7 +262,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Rolling:
+              {`${translate('rolling')}`}:
             </Typography>
             <Typography variant="body2">
               {data?.bet_money_live?.toLocaleString()}
@@ -267,7 +272,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Losing:
+              {`${translate('losing')}`}:
             </Typography>
             <Typography variant="body2">
               {data?.lose_money_live?.toLocaleString()}
@@ -277,20 +282,20 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Balance:
+              {`${translate('balance')}`}:
             </Typography>
-            <Typography variant="body2" color='text.warn'>
+            <Typography variant="body2" sx={{ color: theme.palette.info.main }}>
               {data?.balance_live?.toLocaleString()}
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell align="left" >
+        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
           <Stack direction="row"
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Betting:
+              {`${translate('betting')}`}:
             </Typography>
             <Typography variant="body2">
               {data?.bet_slot?.toLocaleString()}
@@ -300,7 +305,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Win:
+              {`${translate('win')}`}:
             </Typography>
             <Typography variant="body2">
               {data?.win_slot?.toLocaleString()}
@@ -310,7 +315,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Rolling:
+              {`${translate('rolling')}`}:
             </Typography>
             <Typography variant="body2">
               {data?.bet_money_slot?.toLocaleString()}
@@ -320,7 +325,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Losing:
+              {`${translate('losing')}`}:
             </Typography>
             <Typography variant="body2">
               {data?.lose_money_slot?.toLocaleString()}
@@ -330,21 +335,21 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Balance:
+              {`${translate('balance')}`}:
             </Typography>
-            <Typography variant="body2" color='text.warn'>
+            <Typography variant="body2" sx={{ color: theme.palette.info.main }}>
               {data?.balance_slot?.toLocaleString()}
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">
+        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
           
           <Stack direction="row"
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Betting:
+              {`${translate('totalBet')}`}:
             </Typography>
             <Typography variant="body2">
               {totalBet?.toLocaleString()}
@@ -354,7 +359,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Win:
+              {`${translate('totalWin')}`}:
             </Typography>
             <Typography variant="body2">
               {totalWin?.toLocaleString()}
@@ -364,7 +369,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Rolling:
+              {`${translate('totalRollAmount')}`}:
             </Typography>
             <Typography variant="body2">
               {totalRolling?.toLocaleString()}
@@ -374,7 +379,7 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Losing:
+              {`${translate('totalLosing')}`}:
             </Typography>
             <Typography variant="body2">
               {totalLoosing?.toLocaleString()}
@@ -384,9 +389,9 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             alignItems="center"
             justifyContent="space-between">
             <Typography variant="body2">
-              Balance:
+              {`${translate('totalBalance')}`}:
             </Typography>
-            <Typography variant="body2" color='text.warn'>
+            <Typography variant="body2" sx={{ color: theme.palette.info.main }}>
               {totalBalance?.toLocaleString()}
             </Typography>
           </Stack>

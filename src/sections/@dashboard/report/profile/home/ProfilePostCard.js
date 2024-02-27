@@ -21,6 +21,7 @@ import { useAuthContext } from '../../../../../auth/useAuthContext';
 // utils
 import { fDate } from '../../../../../utils/formatTime';
 import { fShortenNumber } from '../../../../../utils/formatNumber';
+import {parseJson } from '../../../../../auth/utils';
 // components
 import Image from '../../../../../components/image';
 import Iconify from '../../../../../components/iconify';
@@ -33,7 +34,7 @@ ProfilePostCard.propTypes = {
 };
 
 export default function ProfilePostCard({ post }) {
-  const { user } = localStorage.getItem('user') || "";
+  const { user } = parseJson(localStorage.getItem('user') || "");
 
   const commentInputRef = useRef(null);
 
