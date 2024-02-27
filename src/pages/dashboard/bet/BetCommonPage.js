@@ -5,12 +5,15 @@ import {
   Tab,
   Tabs,
   Card,
+  Stack,
   Table,
   Divider,
+  Typography,
   TableBody,
   Container,
   TableContainer,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
@@ -31,9 +34,9 @@ import {
 // sections
 import { BetTotalTableToolbar, BetTotalTableRow } from '../../../sections/@dashboard/bet/list';
 // api
-import { apiWithPostData } from '../../../utils/api';
+import { apiWithPostData, apiWithGetData } from '../../../utils/api';
 // url
-import { gameLogUrl } from '../../../utils/urlList';
+import { gameLogUrl, adminListUrl, getListRoleUrl } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
@@ -43,6 +46,7 @@ const STATUS_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
+  { id: 'creator', label: 'creator', align: 'center' },
   { id: 'index', label: 'bettingNo', align: 'center' },
   { id: 'id', label: 'id', align: 'center' },
   { id: 'provider', label: 'provider', align: 'center' },
@@ -78,6 +82,7 @@ export default function BetCommonPage() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
+  const theme = useTheme();
 
   const { themeStretch } = useSettingsContext();
   const [isLoading, setIsLoading] = useState(false);
@@ -86,16 +91,28 @@ export default function BetCommonPage() {
   const [gameType, setGameType] = useState('live');
   const [filterEndDate, setFilterEndDate] = useState(new Date);
   const [filterStartDate, setFilterStartDate] = useState(new Date);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
+  const [totalRole, setTotalRole] = useState([{
+    _id: 0,
+    id: 0,
+    name: "all",
+  }]);
+  const [totalUsers, setTotalUsers] = useState([]);
+  const [filterRole, setFilterRole] = useState('all');
+  const [adminList, setAdminList] = useState([]);
+  const [list, setList] = useState([]);
+  const [listLog, setListLog] = useState([]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(order, orderBy),
-    filterName,
+    filterRole,
   });
 
   const denseHeight = dense ? 52 : 72;
 
-  const isFiltered = filterName !== '';
+  const isFiltered =  filterRole !== 'all';
 
   const isNotFound =
     (!dataFiltered.length && !!filterName) ||( !tableData.length);
@@ -106,18 +123,60 @@ export default function BetCommonPage() {
     gameLog(newValue);
   };
 
-  const handleFilterName = (event) => {
-    setPage(0);
-    setFilterName(event.target.value);
+  const handleResetFilter = () => {
+    setFilterRole('all');
   };
 
-
-  const handleResetFilter = () => {
-    setFilterName('');
+  const handleFilterRole = (event) => {
+    setPage(0);
+    setFilterRole(event.target.value);
   };
 
   const handleClickSearch = () => {
+    setPage(0)
+    setFilterRole('all');
     gameLog(gameType);
+  };
+  
+  const usersList = () => {
+    try {
+      const url = adminListUrl;
+      const headers = {};
+      const data = {};
+      apiWithPostData(url, data, headers).then((response) => {
+        const { results } = response;
+        const users = [{
+          _id: 0,
+          id: 0,
+          name: "all",
+        }];
+        results.forEach((item, index) => {
+          const user = {
+            _id: item._id || '',
+            id: item.user_id || '',
+            name: item.username || '',
+          }
+          users.push(user);
+        });
+        setTotalRole(users);
+        setTotalUsers(results);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  const getListRole = () => {
+    try {
+      const url = getListRoleUrl;
+      const headers = {};
+      const data = {};
+      apiWithGetData(url, data, headers).then((response) => {
+        setAdminList(response);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const gameLog = (game) => {
@@ -137,7 +196,7 @@ export default function BetCommonPage() {
       };
       apiWithPostData(url, data, headers).then((response) => {
         const dailyArr = response;
-        setTableData(dailyArr);
+        setList(dailyArr);
         setIsLoading(false);
       });
     } catch (error) {
@@ -146,11 +205,100 @@ export default function BetCommonPage() {
     }
 
   };
+  
+  const handleFilterItem = (data, totalUser, adminsList) => {
+    if (data.length !== 0) {
+        const listMain = [];
+        // eslint-disable-next-line array-callback-return
+        data.map((item) => {
+            const value = totalUser.find((user) => user.username === item.username);
+            if (value) {
+                listMain.push({
+                    ...item,
+                    user: value
+                });
+            }
+        });
+        
+        if (listMain.length !== 0) {
+            let listAgentMain = [];
+            // eslint-disable-next-line array-callback-return
+            listMain.map((item) => {
+                const value = adminsList.find((user) => user._id === item?.user?.creatorId);
+                if (value) {
+                    listAgentMain.push({
+                        ...item,
+                        agent: value
+                    });
+                }
+            });
+            listAgentMain = listAgentMain.flat().sort((a, b) => new Date(b.create_at) - new Date(a.create_at));
+
+            if (listAgentMain.length !== 0) {
+                const distributorList = listAgentMain.map((ditem) => ({
+                        ...ditem,
+                        distributor: adminList.find((user) => user._id === ditem?.agent?.creatorId)
+                    }));
+                const companyList = distributorList.map((citem) => ({
+                        ...citem,
+                        company: adminList.find((user) => user._id === citem?.distributor?.creatorId)
+                    }));
+                const subadminList = companyList.map((sitem) => ({
+                        ...sitem,
+                        subadmin: adminList.find((user) => user._id === sitem?.company?.creatorId)
+                    }));
+                const adminFinalList = subadminList.map((aitem) => ({
+                        ...aitem,
+                        admin: adminList.find((user) => user._id === aitem?.subadmin?.creatorId)
+                    }));
+                setTableData(adminFinalList);
+                console.log("list>>>", adminFinalList);
+                return;
+            }
+        }
+        setTableData([]);
+    }
+    setTableData([]);
+};
 
   useEffect(() => {
+    usersList();
+    getListRole();
     gameLog(gameType);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    let valAmount = 0;
+    let valCount = 0;
+    dataFiltered.forEach(element => {
+      valAmount += element.bet;
+      valCount += 1;
+    });
+    setTotalAmount(valAmount);
+    setTotalCount(valCount);
+  }, [dataFiltered]);
+
+  useEffect(() => {
+    if(totalUsers.length === 0 || adminList.length === 0 || list.length === 0) {
+      return;
+    }
+    handleFilterItem(list, totalUsers, adminList);
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalUsers, adminList, list]);
+
+  
+  useEffect(() => {
+    let valAmount = 0;
+    let valCount = 0;
+    dataFiltered.forEach(element => {
+      valAmount += element.bet;
+      valCount += 1;
+    });
+    setTotalAmount(valAmount);
+    setTotalCount(valCount);
+  }, [dataFiltered]);
 
   return (
     <>
@@ -186,12 +334,13 @@ export default function BetCommonPage() {
 
           <BetTotalTableToolbar
             isFiltered={isFiltered}
-            filterName={filterName}
             filterEndDate={filterEndDate}
             filterStartDate={filterStartDate}
-            onFilterName={handleFilterName}
+            filterRole={filterRole}
+            optionsRole={totalRole}
             onResetFilter={handleResetFilter}
             onClickSearch={handleClickSearch}
+            onFilterRole={handleFilterRole}
             onFilterStartDate={(newValue) => {
               setFilterStartDate(newValue);
             }}
@@ -199,6 +348,21 @@ export default function BetCommonPage() {
               setFilterEndDate(newValue);
             }}
           />
+          
+          <Stack direction="row" justifyContent="flex-end" alignItems="center" spacing={3} sx={{ textTransform: 'capitalize', mt: -4, pb:1, mr:6 }}>
+            <Typography variant="subtitle1" noWrap sx={{ color: theme.palette.success.main}}>
+              베팅총금액:
+            </Typography>
+            <Typography variant="subtitle1" noWrap  sx={{ color: theme.palette.success.main}}>
+              {totalAmount?.toLocaleString()}
+            </Typography>
+            <Typography variant="subtitle1" noWrap  sx={{ color: theme.palette.warning.main, pl:2}}>
+              Total:
+            </Typography>
+            <Typography variant="subtitle1" noWrap  sx={{ color: theme.palette.warning.main}}>
+              {totalCount?.toLocaleString()}
+            </Typography>
+          </Stack>
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
@@ -273,7 +437,7 @@ export default function BetCommonPage() {
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, comparator, filterName, filterStatus }) {
+function applyFilter({ inputData, comparator, filterRole, }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -283,15 +447,9 @@ function applyFilter({ inputData, comparator, filterName, filterStatus }) {
   });
 
   inputData = stabilizedThis.map((el) => el[0]);
-
-  if (filterName) {
-    inputData = inputData.filter(
-      (user) => user.username.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
-    );
-  }
-
-  if (filterStatus !== 'all') {
-    inputData = inputData.filter((user) => user.status === filterStatus);
+  
+  if (filterRole !== 'all') {
+    inputData = inputData.filter((user) => user.username === filterRole);
   }
 
   return inputData;

@@ -31,7 +31,7 @@ export default function CustomBreadcrumbs({
 
   return (
     <Box sx={{ mb: 1, ...sx }}>
-      <Stack direction="row" alignItems="center">
+      <Stack direction="row" alignItems="center" sx={{ textTransform: 'capitalize' }}>
         <Box sx={{ flexGrow: 1 }}>
           {/* HEADING */}
           {heading && (

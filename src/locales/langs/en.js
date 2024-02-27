@@ -148,7 +148,7 @@ const en = {
   totalMembers:`Total Members`,
   betMembers: `Bet Members`,
   newMembers: `New Members`,
-  loginMembers: `Conncting Members`,
+  loginMembers: `Connecting Members`,
   userMoney: `User Money`,
   userPoint: `User Point`,
   totalDeposit: `Total Deposit`,
@@ -226,6 +226,7 @@ const en = {
   subHoldingMoney:`sub holding money`,
   subHoldingPoint:`sub holding point`,
   connectTime:`connect time`,
+  amountList:`amount list`,
 };
 
 export default en;

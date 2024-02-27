@@ -12,6 +12,8 @@ import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
+// utils
+import {parseJson } from '../../../../auth/utils';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +26,8 @@ BetTotalTableRow.propTypes = {
 };
 
 export default function BetTotalTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, }) {
-  const {username, round_id, provider_name, game_title, tx_type, bet, win, balance,  create_at, category, id } = row;
+  const {username, round_id, provider_name, game_title, tx_type, bet, win, balance,  create_at, category, id, agent } = row;
+  const { loginUser } = parseJson(localStorage.getItem('user') || "");
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -47,6 +50,7 @@ export default function BetTotalTableRow({ row, selected, onEditRow, onSelectRow
   return (
     <>
       <TableRow hover selected={selected}>
+        <TableCell align="center">{agent?.username || loginUser?.username }</TableCell>
 
         <TableCell align="center">{id}</TableCell>
 

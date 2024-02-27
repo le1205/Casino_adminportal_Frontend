@@ -25,7 +25,7 @@ export default function InvoiceTableRow({ row, selected, onEditRow, }) {
   return (
     <TableRow hover selected={selected}>
 
-        <TableCell align="center">{}</TableCell>
+        {/* <TableCell align="center">{}</TableCell>
 
         <TableCell align="center">{}</TableCell>
 
@@ -33,7 +33,7 @@ export default function InvoiceTableRow({ row, selected, onEditRow, }) {
           {}
         </TableCell>
 
-        <TableCell align="center">{}</TableCell>
+        <TableCell align="center">{}</TableCell> */}
 
         <TableCell align="center" >
           {user?.username}

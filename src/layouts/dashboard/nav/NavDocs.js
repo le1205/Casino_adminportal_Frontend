@@ -29,13 +29,13 @@ export default function NavDocs() {
       <Box component="img" src="/assets/illustrations/illustration_docs.svg" />
 
       <div>
-        <Typography gutterBottom variant="subtitle1">
+        {/* <Typography gutterBottom variant="subtitle1">
           {`${translate('docs.hi')}, ${user?.displayName}`}
         </Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary', whiteSpace: 'pre-line' }}>
           {`${translate('docs.description')}`}
-        </Typography>
+        </Typography> */}
       </div>
     </Stack>
   );

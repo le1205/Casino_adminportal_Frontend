@@ -51,6 +51,7 @@ import {
   InvoiceOutReportPage,
   InvoiceAdminListPage,
   InvoiceHistoryPage,
+  InvoiceAmountPage,
   // Dashboard: Report
   ReportPartnerListPage,
   ReportUserListPage,
@@ -186,6 +187,7 @@ export default function Router() {
             { path: 'out-apply', element: <InvoiceOutApplyPage /> },
             { path: 'out-report', element: <InvoiceOutReportPage /> },
             { path: 'admin-list', element: <InvoiceAdminListPage /> },
+            { path: 'amount', element: <InvoiceAmountPage /> },
             { path: 'history', element: <InvoiceHistoryPage /> },
           ],
         },

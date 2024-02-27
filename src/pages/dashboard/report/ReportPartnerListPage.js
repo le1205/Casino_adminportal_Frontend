@@ -209,8 +209,6 @@ export default function ReportPartnerListPage() {
         }));
         const listDataUser = valueMain.filter((item) => item.creatorId === userData._id);
         
-        console.log("userData >>>", userData);
-        console.log("userData _id >>", userData._id);
         const treedata = handleCountData(listDataUser, valueMain);
         setTotalData(valueData);
         setDataActive(response.ListTotal);

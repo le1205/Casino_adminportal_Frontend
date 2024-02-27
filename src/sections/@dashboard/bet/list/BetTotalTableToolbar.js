@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Stack, InputAdornment, TextField, Button } from '@mui/material';
+import { Stack, InputAdornment, TextField, Button, MenuItem } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 // components
 import Iconify from '../../../../components/iconify';
@@ -11,8 +11,7 @@ const INPUT_WIDTH = 200;
 
 BetTotalTableToolbar.propTypes = {
   isFiltered: PropTypes.bool,
-  filterName: PropTypes.string,
-  onFilterName: PropTypes.func,
+  filterRole: PropTypes.string,
   onFilterRole: PropTypes.func,
   onResetFilter: PropTypes.func,
   onFilterEndDate: PropTypes.func,
@@ -26,9 +25,9 @@ BetTotalTableToolbar.propTypes = {
 
 export default function BetTotalTableToolbar({
   isFiltered,
-  filterName,
+  filterRole,
+  onFilterRole,
   optionsRole,
-  onFilterName,
   onResetFilter,
   onFilterEndDate,
   onFilterStartDate,
@@ -46,6 +45,41 @@ export default function BetTotalTableToolbar({
       }}
       sx={{ px: 2.5, py: 3 }}
     > 
+      <TextField
+        fullWidth
+        select
+        label="User"
+        value={filterRole}
+        onChange={onFilterRole}
+        SelectProps={{
+          MenuProps: {
+            PaperProps: {
+              sx: {
+                maxHeight: 260,
+              },
+            },
+          },
+        }}
+        sx={{
+          maxWidth: { sm: 240 },
+          textTransform: 'capitalize',
+        }}
+      >
+        {optionsRole.map((option) => (
+          <MenuItem
+            key={option?.name}
+            value={option?.name}
+            sx={{
+              mx: 1,
+              borderRadius: 0.75,
+              typography: 'body2',
+              textTransform: 'capitalize',
+            }}
+          >
+            {option?.name}
+          </MenuItem>
+        ))}
+      </TextField>
 
       <DatePicker
         label="Start date"
@@ -75,24 +109,6 @@ export default function BetTotalTableToolbar({
             }}
           />
         )}
-      />
-
-      <TextField
-        fullWidth
-        value={filterName}
-        onChange={onFilterName}
-        placeholder="Input User ID to Search..."
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
-            </InputAdornment>
-          ),
-        }}
-        sx={{
-          maxWidth: { sm: 480 },
-          textTransform: 'capitalize',
-        }}
       />
       
       <Button

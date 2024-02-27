@@ -22,16 +22,15 @@ import { fKoreanDate } from '../../../../utils/formatTime';
 
 UserTableRow.propTypes = {
   row: PropTypes.object,
+  index: PropTypes.number,
   selected: PropTypes.bool,
-  onEditRow: PropTypes.func,
-  onSelectRow: PropTypes.func,
   onSelectMoney: PropTypes.func,
   onSelectRemove: PropTypes.func,
   onSelectChangePassword: PropTypes.func,
   onSelectChangeStatus: PropTypes.func,
 };
 
-export default function UserTableRow({ row, selected, onEditRow, onSelectRow,  onSelectMoney, onSelectRemove, onSelectChangePassword, onSelectChangeStatus }) {
+export default function UserTableRow({ row, selected, index,  onSelectMoney, onSelectRemove, onSelectChangePassword, onSelectChangeStatus }) {
   const { name, id, no, creator, role, cash,  inOut, totalLoose, lastDate, point } = row;
   const { translate } = useLocales();
   const dateString = fKoreanDate(lastDate) ;

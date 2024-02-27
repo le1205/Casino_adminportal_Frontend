@@ -226,6 +226,7 @@ const kr = {
   subHoldingMoney:`하부 보유머니`,
   subHoldingPoint:`하부 보유포인트`,
   connectTime:`접속 일시`,
+  amountList:`보유 금액`,
 };
 
 export default kr;

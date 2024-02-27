@@ -59,6 +59,7 @@ export const InvoiceOutApplyPage = Loadable(lazy(() => import('../pages/dashboar
 export const InvoiceOutReportPage = Loadable(lazy(() => import('../pages/dashboard/invoice/InvoiceOutReportPage')));
 export const InvoiceAdminListPage = Loadable(lazy(() => import('../pages/dashboard/invoice/InvoiceAdminListPage')));
 export const InvoiceHistoryPage = Loadable(lazy(() => import('../pages/dashboard/invoice/InvoiceHistoryPage')));
+export const InvoiceAmountPage = Loadable(lazy(() => import('../pages/dashboard/invoice/InvoiceAmountPage')));
 
 // DASHBOARD: REPORT
 export const ReportPartnerListPage = Loadable(lazy(() => import('../pages/dashboard/report/ReportPartnerListPage')));

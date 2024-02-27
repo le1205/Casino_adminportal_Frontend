@@ -38,10 +38,10 @@ import { balanceHistoryUrl } from '../../../utils/urlList';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'admin', label: 'admin', align: 'center' },
-  { id: 'subadmin', label: 'subadmin', align: 'center' },
-  { id: 'company', label: 'company', align: 'center' },
-  { id: 'distributor', label: 'distributor', align: 'center' },
+  // { id: 'admin', label: 'admin', align: 'center' },
+  // { id: 'subadmin', label: 'subadmin', align: 'center' },
+  // { id: 'company', label: 'company', align: 'center' },
+  // { id: 'distributor', label: 'distributor', align: 'center' },
   { id: 'agent', label: 'agent', align: 'center' },
   { id: 'user', label: 'user', align: 'center' },
   { id: 'permission', label: 'permission', align: 'center' },

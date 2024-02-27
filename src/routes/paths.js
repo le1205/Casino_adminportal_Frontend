@@ -81,6 +81,7 @@ export const PATH_DASHBOARD = {
     outApply: path(ROOTS_DASHBOARD, '/invoice/out-apply'),
     outReport: path(ROOTS_DASHBOARD, '/invoice/out-report'),
     adminList: path(ROOTS_DASHBOARD, '/invoice/admin-list'),
+    amount: path(ROOTS_DASHBOARD, '/invoice/amount'),
     history: path(ROOTS_DASHBOARD, '/invoice/history'),
   },
   report: {
