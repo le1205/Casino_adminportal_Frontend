@@ -1,13 +1,19 @@
 import { Helmet } from 'react-helmet-async';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 // @mui
 import {
-  Box,
   Card,
   Table,
+  Button,
   Divider,
   TableBody,
   Container,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  TextField,
+  DialogActions,
   TableContainer,
 } from '@mui/material';
 // routes
@@ -17,6 +23,7 @@ import Scrollbar from '../../../components/scrollbar';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
 import LoadingScreen from '../../../components/loading-screen';
+import ConfirmDialog from '../../../components/confirm-dialog';
 import {
   useTable,
   getComparator,
@@ -28,17 +35,17 @@ import {
   TablePaginationCustom,
 } from '../../../components/table';
 // sections
-import { InvoiceTableToolbar, InvoiceAmountTableRow } from '../../../sections/@dashboard/invoice/list';
+import { InvoiceAmountTableToolbar, InvoiceAmountTableRow } from '../../../sections/@dashboard/invoice/list';
 // utils
 import {parseJson } from '../../../auth/utils';
 // api
 import { apiWithPostData } from '../../../utils/api';
 // url
-import { balanceListUrl } from '../../../utils/urlList';
+import { balanceListUrl, balanceUpdateUrl } from '../../../utils/urlList';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'distributor', label: 'distributor', align: 'center' },
+  // { id: 'distributor', label: 'distributor', align: 'center' },
   { id: 'creator', label: 'creator', align: 'center' },
   { id: 'user', label: 'user', align: 'center' },
   { id: 'amount', label: 'amount', align: 'center' },
@@ -66,12 +73,17 @@ export default function InvoiceAmountPage() {
     onChangeRowsPerPage,
   } = useTable();
   const { user } = parseJson(localStorage.getItem('user') || "");
+  const amountRef = useRef('');
 
   const { themeStretch } = useSettingsContext();const [isLoading, setIsLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [selectedRow, setSelectedRow] = useState({});
   const [openBalance, setOpenBalance] = useState(false);
+  const [isDeposit, setIsDeposit] = useState(true);
+  const [alertContent, setAlertContent] = useState('');
+  const [openAlert, setOpenAlert] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -85,11 +97,96 @@ export default function InvoiceAmountPage() {
 
   const isNotFound =
     (!dataFiltered.length && !!filterName) ||( !tableData.length);
-    
+
+  const handleFilterName = (event) => {
+    setPage(0);
+    setFilterName(event.target.value);
+  };
+
+  const handleResetFilter = () => {
+    setFilterName('');
+  };
+  
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
+
+  const handleOpenAlert = () => {
+    setOpenAlert(true);
+  };  
+
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false);
+  };
 
   const handleClickBalance = (row) => {
     setSelectedRow(row);
     setOpenBalance(true);
+  };
+
+  const handleCloseBalance = () => {
+    setOpenBalance(false);
+  };
+
+  const handleDepositBalance = () => {
+    setIsDeposit(true);
+    const amount = amountRef.current.value;
+    if(amount === '' || amount === 0)
+    {
+      const content = "Please input amount to deposit.";
+      setAlertContent(content);
+      handleOpenAlert();
+    }
+    else {
+      setOpenConfirm(true);
+    }
+  };
+
+  const handleWithdrawBalance = () => {
+    setIsDeposit(false);
+    const amount = amountRef.current.value;
+    if(amount === '' || amount === 0)
+    {
+      const content = "Please input amount to withdraw.";
+      setAlertContent(content);
+      handleOpenAlert();
+    }
+    else if (amount > selectedRow.cash){
+      const content = "Please input amount less than cash amount.";
+      setAlertContent(content);
+      handleOpenAlert();
+    }
+    else {
+      setOpenConfirm(true);
+    }
+  };
+
+  const updateUser = (id, amount, type) => {
+    tableData.forEach(element => {
+      if(id=== element._id) {
+        element.balance = type === 'withdraw' ? element.balance - Number(amount) : element.balance + Number(amount);
+      }
+    });
+  };
+  
+
+  const handleUpdateBalance = () => {
+    setOpenConfirm(false);
+    try {
+      const url = balanceUpdateUrl;
+      const amount = amountRef.current.value;
+      const type = isDeposit ? 'deposit' : 'withdraw';
+      const balanceId = selectedRow._id;
+      const headers = {};
+      apiWithPostData(url, { amount, type, balanceId}, headers).then((response) => {
+        handleCloseBalance();
+        if(response === true) {
+          updateUser(balanceId, amount, type);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const balanceList = () => {
@@ -139,6 +236,14 @@ export default function InvoiceAmountPage() {
 
           <Card>
             <Divider />
+
+            <InvoiceAmountTableToolbar
+              isFiltered={isFiltered}
+              filterName={filterName}
+              onFilterName={handleFilterName}
+              onResetFilter={handleResetFilter}
+            />
+
             <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
               <TableSelectedAction
                 dense={dense}
@@ -204,6 +309,71 @@ export default function InvoiceAmountPage() {
             />
           </Card>
       </Container>
+      
+      <Dialog open={openBalance} onClose={handleCloseBalance}>
+        <DialogTitle>회원캐시 관리자 입출금</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            현재 보유캐시: {selectedRow.balance}
+          </DialogContentText>
+          <TextField
+            autoFocus
+            fullWidth
+            type="number"
+            margin="dense"
+            variant="outlined"
+            label="Amount"
+            inputRef={amountRef}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDepositBalance}variant="contained" color="success">
+            지급
+          </Button>
+          <Button onClick={handleWithdrawBalance} variant="contained" color="warning">
+            회수
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <ConfirmDialog
+        open={openConfirm}
+        onClose={handleCloseConfirm}
+        title="Confirm"
+        content={
+          <>
+            Are you sure want to {isDeposit? 'deposit' : 'withdraw'} <strong> {amountRef.current? amountRef.current.value : 0} </strong> ?
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => {
+              handleUpdateBalance();
+            }}
+          >
+            Confirm
+          </Button>
+        }
+      />
+
+      <Dialog open={openAlert} onClose={handleCloseAlert} sx={{ minWidth: 400 }}>
+        <DialogTitle>Alert</DialogTitle>
+
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {alertContent}
+          </DialogContentText>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={handleCloseAlert} autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {(isLoading === true) && <LoadingScreen/>} 
     </>
   );

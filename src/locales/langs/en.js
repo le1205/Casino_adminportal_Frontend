@@ -227,6 +227,9 @@ const en = {
   subHoldingPoint:`sub holding point`,
   connectTime:`connect time`,
   amountList:`amount list`,
+  accept:`accept`,
+  pending:'pending',
+  updateSuccess:'Update Success!',
 };
 
 export default en;

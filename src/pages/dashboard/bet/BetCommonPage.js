@@ -47,8 +47,8 @@ const STATUS_OPTIONS = [
 
 const TABLE_HEAD = [
   { id: 'creator', label: 'creator', align: 'center' },
-  { id: 'index', label: 'bettingNo', align: 'center' },
   { id: 'id', label: 'id', align: 'center' },
+  { id: 'index', label: 'bettingNo', align: 'center' },
   { id: 'provider', label: 'provider', align: 'center' },
   { id: 'gameType', label: 'gameType', align: 'center' },
   { id: 'gameName', label: 'gameName', align: 'center' },
@@ -102,7 +102,6 @@ export default function BetCommonPage() {
   const [filterRole, setFilterRole] = useState('all');
   const [adminList, setAdminList] = useState([]);
   const [list, setList] = useState([]);
-  const [listLog, setListLog] = useState([]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -252,14 +251,13 @@ export default function BetCommonPage() {
                         admin: adminList.find((user) => user._id === aitem?.subadmin?.creatorId)
                     }));
                 setTableData(adminFinalList);
-                console.log("list>>>", adminFinalList);
                 return;
             }
         }
         setTableData([]);
     }
     setTableData([]);
-};
+  };
 
   useEffect(() => {
     usersList();

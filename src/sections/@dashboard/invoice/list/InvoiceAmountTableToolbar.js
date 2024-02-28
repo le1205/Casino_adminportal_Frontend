@@ -1,36 +1,25 @@
 import PropTypes from 'prop-types';
 // @mui
 import { Stack, InputAdornment, TextField, Button } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
 // components
 import Iconify from '../../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
-const INPUT_WIDTH = 200;
+const INPUT_WIDTH = 300;
 
-InvoiceTableToolbar.propTypes = {
+InvoiceAmountTableToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterName: PropTypes.string,
   onResetFilter: PropTypes.func,
-  onFilterEndDate: PropTypes.func,
-  onFilterStartDate: PropTypes.func,
   onFilterName: PropTypes.func,
-  onClickSearch: PropTypes.func,
-  filterEndDate: PropTypes.instanceOf(Date),
-  filterStartDate: PropTypes.instanceOf(Date),
 };
 
-export default function InvoiceTableToolbar({
+export default function InvoiceAmountTableToolbar({
   isFiltered,
   filterName,
   onResetFilter,
   onFilterName,
-  onFilterEndDate,
-  onFilterStartDate,
-  filterEndDate,
-  filterStartDate,
-  onClickSearch,
 }) {
   return (
     <Stack
@@ -41,38 +30,7 @@ export default function InvoiceTableToolbar({
         sm: 'row',
       }}
       sx={{ px: 2.5, py: 3 }}
-    > 
-
-      <DatePicker
-        label="Start date"
-        value={filterStartDate}
-        onChange={onFilterStartDate}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            fullWidth
-            sx={{
-              maxWidth: { md: INPUT_WIDTH },
-            }}
-          />
-        )}
-      />
-
-      <DatePicker
-        label="End date"
-        value={filterEndDate}
-        onChange={onFilterEndDate}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            fullWidth
-            sx={{
-              maxWidth: { md: INPUT_WIDTH },
-            }}
-          />
-        )}
-      />
-      
+    >       
 
       <TextField
         fullWidth
@@ -91,14 +49,6 @@ export default function InvoiceTableToolbar({
         }}
       />
       
-      <Button
-        variant="contained"
-        onClick={onClickSearch}
-        startIcon={<Iconify icon="eva:search-fill"/>}
-      >
-        Search
-      </Button>
-
       {isFiltered && (
         <Button
           color="error"

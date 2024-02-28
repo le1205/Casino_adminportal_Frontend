@@ -9,6 +9,8 @@ import {
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 // locales
 import { useLocales } from '../../../../locales';
+// utils
+import {parseJson } from '../../../../auth/utils';
 
 // ----------------------------------------------------------------------
 
@@ -21,15 +23,11 @@ InvoiceAmountTableRow.propTypes = {
 export default function InvoiceAmountTableRow({ row, selected, onSelectMoney}) {
   const {_id, balance, creatorUsername, email, username } = row;
   const { translate } = useLocales();
+  const loginUser = parseJson(localStorage.getItem('user') || "");
   return (
     <TableRow hover selected={selected}>
-
         <TableCell align="center" >
-          {}
-        </TableCell>
-
-        <TableCell align="center" >
-          {creatorUsername}
+          {creatorUsername || loginUser?.username}
         </TableCell>
 
         <TableCell align="center" >
@@ -37,7 +35,7 @@ export default function InvoiceAmountTableRow({ row, selected, onSelectMoney}) {
         </TableCell>
 
         <TableCell align="center">
-          {balance}
+          {balance?.toLocaleString()}
         </TableCell>
 
         <TableCell align="center">

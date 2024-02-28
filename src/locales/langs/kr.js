@@ -227,6 +227,9 @@ const kr = {
   subHoldingPoint:`하부 보유포인트`,
   connectTime:`접속 일시`,
   amountList:`보유 금액`,
+  accept:`승인`,
+  pending:'대기',
+  updateSuccess:'상태 갱신 성공!',
 };
 
 export default kr;

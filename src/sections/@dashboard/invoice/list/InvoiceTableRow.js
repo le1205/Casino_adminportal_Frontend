@@ -9,6 +9,7 @@ import {
 import Label from '../../../../components/label';
 // utils
 import { fKoreanDate } from '../../../../utils/formatTime';
+import {parseJson } from '../../../../auth/utils';
 
 // ----------------------------------------------------------------------
 
@@ -19,8 +20,11 @@ InvoiceTableRow.propTypes = {
 };
 
 export default function InvoiceTableRow({ row, selected, onEditRow, }) {
-  const {_id, userId, createdAt, currentBalance, beforeBalance, type, user, amount } = row;
+  const {_id,  createdAt, currentBalance, beforeBalance, type, user, amount, agent, role } = row;
   const dateString = fKoreanDate(createdAt) ;
+  const userName = user[0]?.username || "";
+
+  const loginUser = parseJson(localStorage.getItem('user') || "");
 
   return (
     <TableRow hover selected={selected}>
@@ -36,15 +40,15 @@ export default function InvoiceTableRow({ row, selected, onEditRow, }) {
         <TableCell align="center">{}</TableCell> */}
 
         <TableCell align="center" >
-          {user?.username}
+          {agent?.username || loginUser?.username}
         </TableCell>
 
         <TableCell align="center" >
-          {}
+          {userName}
         </TableCell>
 
         <TableCell align="center" >
-          {}
+          {role?.name}
         </TableCell>
 
         <TableCell align="center">
@@ -56,7 +60,7 @@ export default function InvoiceTableRow({ row, selected, onEditRow, }) {
         </TableCell>
 
         <TableCell align="center">
-          {currentBalance?.toLocaleString()}
+          {currentBalance > 0 ? currentBalance.toLocaleString() : 0}
         </TableCell>
         
 
