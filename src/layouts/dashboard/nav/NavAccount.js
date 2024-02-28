@@ -9,11 +9,11 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import { useLocales } from '../../../locales';
 
 // utils
-import {parseJson } from '../../../auth/utils';
+import { parseJson } from '../../../auth/utils';
 // api
 import { apiWithGetData } from '../../../utils/api';
 // url
-import { userBalanceUrl, } from '../../../utils/urlList';
+import { getUserPointUrl, getVirutalAmountUrl, userBalanceUrl } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
@@ -33,66 +33,85 @@ export default function NavAccount() {
 
   const [balance, setBalance] = useState(0);
   const [point, setPoint] = useState(0);
-  
-  const user = parseJson(localStorage.getItem('user') || "");
-  
+
+  const user = parseJson(localStorage.getItem('user') || '');
   const userBalance = () => {
     try {
-      const url = userBalanceUrl + user._id;
+      if(user.username === process.env.REACT_APP_ADMIN_HEADCOACH || user.username === process.env.REACT_APP_ADMIN_DEVELOPER){
+        const url = userBalanceUrl + user._id;
+        const headers = {};
+        apiWithGetData(url, {}, headers).then((response) => {
+          setBalance(response?.balance.toLocaleString() || 0);
+        });
+      }
+      else {
+        const url = getVirutalAmountUrl; 
+        const headers = {};
+        apiWithGetData(url, {}, headers).then((response) => {
+          console.log(response);
+        });
+      }
+     
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getUsePoint = () => {
+    try {
+      const url = getUserPointUrl;
       const headers = {};
       apiWithGetData(url, {}, headers).then((response) => {
-        setBalance(response?.balance.toLocaleString() || 0);
+        setPoint(response?.total.toLocaleString() || 0);
       });
     } catch (error) {
       console.log(error);
     }
   };
-  
   useEffect(() => {
     userBalance();
-    const optimer = setInterval(userBalance, 6000)
-    return ()=>clearInterval(optimer)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    getUsePoint();
+    const optimer = setInterval(userBalance, 3000);
+    const optimer1 = setInterval(getUsePoint, 20000);
+
+    return () => {
+      clearInterval(optimer);
+      clearInterval(optimer1);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return (
     <Link component={RouterLink} to={PATH_DASHBOARD.user.account} underline="none" color="inherit">
       <StyledRoot>
         <Box sx={{ ml: 1, minWidth: 0 }}>
-          
-          <Stack direction="row"
-            alignItems="center"
-            justifyContent="space-between">
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Typography variant="subtitle2" noWrap sx={{ color: 'text.secondary' }}>
               {/* {user?.role} */}
               {`${translate(user?.role)}`}
             </Typography>
-            <Typography variant="subtitle1" noWrap sx={{ pl: 6}}>
+            <Typography variant="subtitle1" noWrap sx={{ pl: 6 }}>
               {user?.username}
             </Typography>
           </Stack>
-          
-          <Stack direction="row"
-            alignItems="center"
-            justifyContent="space-between">
+
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Typography variant="subtitle2" noWrap sx={{ color: 'text.secondary' }}>
-            {`${translate('credit')}`}
+              {`${translate('credit')}`}
             </Typography>
             <Typography variant="subtitle2" noWrap sx={{ color: theme.palette.warning.main }}>
               {balance}
             </Typography>
           </Stack>
-          
-          <Stack direction="row"
-            alignItems="center"
-            justifyContent="space-between">
-            <Typography variant="subtitle2" noWrap sx={{ color: 'text.secondary' }}>
-            {`${translate('point')}`}
-            </Typography>
-            <Typography variant="subtitle2" noWrap sx={{  color: theme.palette.success.main}}>
-              {point}
-            </Typography>
-          </Stack>
+          {process.env.REACT_APP_ADMIN_HEADCOACH !== user.username && (
+            <Stack direction="row" alignItems="center" justifyContent="space-between">
+              <Typography variant="subtitle2" noWrap sx={{ color: 'text.secondary' }}>
+                {`${translate('point')}`}
+              </Typography>
+              <Typography variant="subtitle2" noWrap sx={{ color: theme.palette.success.main }}>
+                {point}
+              </Typography>
+            </Stack>
+          )}
         </Box>
       </StyledRoot>
     </Link>

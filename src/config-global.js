@@ -38,6 +38,8 @@ export const SECRET = {
   secretOpcode: process.env.REACT_APP_SECRET_OPCODE,
   secretKey: process.env.REACT_APP_SECRET_KEY,
   secretToken: process.env.REACT_APP_SECRET_TOKEN,
+  adminHeadcoach: process.env.ADMIN_HEADCOACH,
+
 };
 
 // LAYOUT
