@@ -15,7 +15,7 @@ import { fKoreanDate } from '../../../../utils/formatTime';
 
 // ----------------------------------------------------------------------
 
-InvoiceWithdrawTableRow.propTypes = {
+InvoiceDepositTableRow.propTypes = {
   row: PropTypes.object,
   pendingCount: PropTypes.number,
   selected: PropTypes.bool,
@@ -23,7 +23,7 @@ InvoiceWithdrawTableRow.propTypes = {
   onSelectCancel: PropTypes.func,
 };
 
-export default function InvoiceWithdrawTableRow({ row, selected, onSelectAccept, onSelectCancel, pendingCount}) {
+export default function InvoiceDepositTableRow({ row, selected, onSelectAccept, onSelectCancel, pendingCount}) {
   const {_id, amount, userId, creatorId, createdAt, status } = row;
   const { translate } = useLocales();
   const loginUser = parseJson(localStorage.getItem('user') || "");

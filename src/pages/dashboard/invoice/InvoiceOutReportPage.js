@@ -1,10 +1,9 @@
 import { Helmet } from 'react-helmet-async';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect,} from 'react';
 // @mui
 import {
   Card,
   Table,
-  Button,
   Divider,
   TableBody,
   Container,
@@ -42,7 +41,6 @@ import {  getWithdrawListUrl, subAcceptUrl, subCancelUrl } from '../../../utils/
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  // { id: 'distributor', label: 'distributor', align: 'center' },
   { id: 'creator', label: 'creator', align: 'center' },
   { id: 'user', label: 'user', align: 'center' },
   { id: 'amount', label: 'amount', align: 'center' },
@@ -73,7 +71,6 @@ export default function InvoiceOutReportPage() {
   } = useTable();
   const { translate } = useLocales();
   const loginUser  = parseJson(localStorage.getItem('user') || "");
-  const amountRef = useRef('');
 
   const { themeStretch } = useSettingsContext();
   const { enqueueSnackbar } = useSnackbar();
@@ -107,6 +104,7 @@ export default function InvoiceOutReportPage() {
 
   const handleClickAccept = (row) => {
     setSelectedRow(row);
+    setIsLoading(true);
     try {
       const url = subAcceptUrl;
       const headers = {};
@@ -115,18 +113,21 @@ export default function InvoiceOutReportPage() {
         type: "withdraw"
       };
       apiWithPostData(url, data, headers).then((response) => {
+        setIsLoading(false);
         if(response === true) {
           updateUser(row._id, "Accept");
           enqueueSnackbar(translate('updateSuccess'));
         }
       });
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
 
   const handleClickCancel = (row) => {
     setSelectedRow(row);
+    setIsLoading(true);
     try {
       const url = subCancelUrl;
       const headers = {};
@@ -135,12 +136,14 @@ export default function InvoiceOutReportPage() {
         type: "withdraw"
       };
       apiWithPostData(url, data, headers).then((response) => {
+        setIsLoading(false);
         if(response === true) {
           updateUser(row._id, "Cancel");
           enqueueSnackbar(translate('updateSuccess'));
         }
       });
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
