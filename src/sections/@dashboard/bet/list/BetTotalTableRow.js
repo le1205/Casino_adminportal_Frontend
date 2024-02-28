@@ -52,9 +52,9 @@ export default function BetTotalTableRow({ row, selected, onEditRow, onSelectRow
       <TableRow hover selected={selected}>
         <TableCell align="center">{agent?.username || loginUser?.username }</TableCell>
 
-        <TableCell align="center">{id}</TableCell>
-
         <TableCell align="center">{username}</TableCell>
+
+        <TableCell align="center">{id}</TableCell>
 
         <TableCell>
           {provider_name}
