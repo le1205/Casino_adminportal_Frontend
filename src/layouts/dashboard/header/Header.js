@@ -1,9 +1,13 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Stack, AppBar, Toolbar, IconButton, Card, Divider } from '@mui/material';
+import { Stack, AppBar, Toolbar, IconButton, Card, Badge } from '@mui/material';
+import PaidIcon from '@mui/icons-material/Paid';
+import PersonAddRoundedIcon from '@mui/icons-material/PersonAddRounded';
+import NotificationsNoneRoundedIcon from '@mui/icons-material/NotificationsNoneRounded';
+import CreditScoreRoundedIcon from '@mui/icons-material/CreditScoreRounded';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // utils
@@ -21,12 +25,17 @@ import Scrollbar from '../../../components/scrollbar';
 //
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
+// assets
+import audioWithdraw from '../../../assets/mp3/withdraw.mp3';
+import audioDeposit from '../../../assets/mp3/deposit.mp3';
+import audioAddUser from '../../../assets/mp3/add-users.mp3';
+import audioCustomer from '../../../assets/mp3/requre account.mp3';
 
 import HeaderAnalytic from '../../../sections/@dashboard/header/headerAnalytic';
 // api
 import { apiWithPostData } from '../../../utils/api';
 // url
-import { adminHeaderDashboardUrl, } from '../../../utils/urlList';
+import { adminHeaderDashboardUrl, adminHeaderCountUrl } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
@@ -64,10 +73,23 @@ export default function Header({ onOpenNav }) {
   const [totalWin, setTotalWin] = useState(0);
   const [rolling, setRolling] = useState(0);
   const [bettingProfit, setBettingProfit] = useState(0);
+  const [countDeposit, setCountDeposit] = useState(0);
+  const [countWithdraw, setCountWithdraw] = useState(0);
+  const [countNofi, setCountNofi] = useState(0);
+  const [countUser, setCountUser] = useState(0);
+  const widthdrawRef = useRef();
+  const deposutRef = useRef();
+  const customerRef = useRef();
    
   
   useEffect(() => {
-    getHeaderDashboard()
+    getHeaderDashboard();
+    getHeaderCount();
+    
+    const optimer = setInterval(getHeaderCount, 3000);
+    return () => {
+      clearInterval(optimer);
+    };
   }, []);
   
   const getHeaderDashboard = () => {
@@ -96,7 +118,52 @@ export default function Header({ onOpenNav }) {
     } catch (error) {
       console.log(error);
     }
+  };
+  
+  const getHeaderCount = () => {
+    try {
+      const url = adminHeaderCountUrl;
+      const headers = {};
+      apiWithPostData(url, {}, headers).then((response) => {
+        const { nofi } = response;
+        setCountDeposit (response?.countDeposit || 0);
+        setCountWithdraw (response?.countWithdraw || 0);
+        setCountNofi (response?.countNofi || 0);
+        setCountUser (response?.countUser || 0);
 
+        if(nofi?.countDeposit === true) {
+          new Audio(audioDeposit).play();
+          deposutRef.current = setInterval(() => {
+              new Audio(audioDeposit).play();
+          }, 1000);
+          return;
+        }
+        new Audio(audioDeposit).pause();
+        
+        if(nofi?.countWithdraw === true) {
+          new Audio(audioWithdraw).play();
+          widthdrawRef.current = setInterval(() => {
+              new Audio(audioWithdraw).play();
+          }, 1000);
+          return;
+        }
+        new Audio(audioWithdraw).pause();
+        if (nofi?.countNofi === true) {
+            new Audio(audioCustomer).play();
+            customerRef.current = setInterval(() => {
+                new Audio(audioCustomer).play();
+            }, 3000);
+            return;
+        }
+        new Audio(audioCustomer).pause();
+        if(nofi?.countUser === true) {
+          new Audio(audioAddUser).play();
+        }
+        new Audio(audioAddUser).pause();
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const movePage = (path) => {
@@ -114,7 +181,7 @@ export default function Header({ onOpenNav }) {
       )}
 
       <Stack
-        flexGrow={4}
+        flexGrow={3.5}
         direction="row"
         alignItems="center"
         justifyContent="flex"
@@ -185,11 +252,11 @@ export default function Header({ onOpenNav }) {
                   price={cManager}
                   color={theme.palette.warning.main}
                 /> */}
-                <HeaderAnalytic
+                {/* <HeaderAnalytic
                   title="managerPartner"
                   price={pManager}
                   color={theme.palette.warning.main}
-                />
+                /> */}
 
                 <HeaderAnalytic
                   title="bettingCount"
@@ -233,8 +300,26 @@ export default function Header({ onOpenNav }) {
           justifyContent="flex-end"
           spacing={{ xs: 0.5, sm: 1.5 }}
         >
-        <LanguagePopover />
-        <AccountPopover />
+          {/* <NotificationsPopover /> */}
+        
+          <Badge badgeContent={countDeposit} color="error">
+            <PaidIcon color='success'  sx={{ cursor: 'pointer'}}  onClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}/>
+          </Badge>
+
+          <Badge badgeContent={countWithdraw} color="error">
+            <CreditScoreRoundedIcon color='success'  sx={{ cursor: 'pointer'}}  onClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}/>
+          </Badge>
+        
+          <Badge badgeContent={countNofi} color="error">
+            <NotificationsNoneRoundedIcon color='success'  sx={{ cursor: 'pointer'}}  onClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}/>
+          </Badge>
+        
+          <Badge badgeContent={countUser} color="error">
+            <PersonAddRoundedIcon color='success'  sx={{ cursor: 'pointer'}}  onClick={() => movePage(PATH_DASHBOARD.user.list)}/>
+          </Badge>
+
+          <LanguagePopover />
+          <AccountPopover />
         </Stack>
       </Stack>
 

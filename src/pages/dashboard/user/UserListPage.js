@@ -13,6 +13,9 @@ import {
   TableBody,
   Container,
   Dialog,
+  Stack,
+  TableRow,
+  TableCell,
   TableContainer,
   DialogTitle,
   DialogContent,
@@ -112,6 +115,7 @@ export default function UserListPage() {
   const [filterName, setFilterName] = useState('');
   const [filterRole, setFilterRole] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [balanceAmount, setBalanceAmount] = useState(0);
   const amountRef = useRef('');
   const passwordRef = useRef('');
   const confirmPasswordRef = useRef('');
@@ -165,6 +169,7 @@ export default function UserListPage() {
   };
 
   const handleCloseBalance = () => {
+    setBalanceAmount(0);
     setOpenBalance(false);
   };
 
@@ -198,6 +203,15 @@ export default function UserListPage() {
 
   const handleCloseChangeStatus = () => {
     setOpenChangeStatus(false);
+  };
+
+  const handleChangeAmount = (event) => {
+    if(event?.target?.value) {
+      setBalanceAmount(parseInt(event?.target?.value, 10));
+    }
+    else {
+      setBalanceAmount(0);
+    }
   };
 
   const handleDepositBalance = () => {
@@ -369,7 +383,7 @@ export default function UserListPage() {
       const headers = {};
       const data = {
         page:1,
-        pageSize:100,
+        pageSize:300,
       };
       apiWithPostData(url, data, headers).then((response) => {
         const { results } = response;
@@ -563,7 +577,7 @@ export default function UserListPage() {
       
       <Dialog open={openBalance} onClose={handleCloseBalance}>
         <DialogTitle>회원캐시 관리자 입출금</DialogTitle>
-        <DialogContent>
+        <DialogContent direction="column">
           <DialogContentText>
             현재 보유캐시: {selectedRow.cash}
           </DialogContentText>
@@ -574,8 +588,55 @@ export default function UserListPage() {
             margin="dense"
             variant="outlined"
             label="Amount"
+            value={balanceAmount}
+            onChange={handleChangeAmount}
             inputRef={amountRef}
           />
+          
+            <Stack direction="row" align="left" spacing={2} sx={{pt: 2}}>
+              <Button variant="outlined" color="inherit" sx={{minWidth: 80}} onClick={() => setBalanceAmount(balanceAmount + 1000)}>
+                1천원
+              </Button>
+              <Button variant="outlined" color="inherit" sx={{minWidth: 80}} onClick={() => setBalanceAmount(balanceAmount + 2000)}>
+                2천원
+              </Button>
+              <Button variant="outlined" color="inherit" sx={{minWidth: 80}} onClick={() => setBalanceAmount(balanceAmount + 3000)}>
+                3천원
+              </Button>
+              <Button variant="outlined" color="inherit" sx={{minWidth: 80}} onClick={() => setBalanceAmount(balanceAmount + 5000)}>
+                5천원
+              </Button>
+            </Stack>
+          
+            <Stack direction="row" align="left" spacing={2} sx={{pt: 2}}>
+              <Button variant="outlined" color="inherit" sx={{minWidth: 80}} onClick={() => setBalanceAmount(balanceAmount + 10000)}>
+                1만원
+              </Button>
+              <Button variant="outlined" color="inherit" sx={{minWidth: 80}} onClick={() => setBalanceAmount(balanceAmount + 30000)}>
+                3만원
+              </Button>
+              <Button variant="outlined" color="inherit" sx={{minWidth: 80}} onClick={() => setBalanceAmount(balanceAmount + 50000)}>
+                5만원
+              </Button>
+              <Button variant="outlined" color="inherit" sx={{minWidth: 80}} onClick={() => setBalanceAmount(balanceAmount + 100000)}>
+                10만원
+              </Button>
+            </Stack>
+          
+            <Stack direction="row" align="left" spacing={2} sx={{pt: 2}}>
+              <Button variant="outlined" color="inherit" sx={{minWidth: 80}} onClick={() => setBalanceAmount(balanceAmount + 300000)}>
+                30만원
+              </Button>
+              <Button variant="outlined" color="inherit" sx={{minWidth: 80}} onClick={() => setBalanceAmount(balanceAmount + 500000)}>
+                50만원
+              </Button>
+              <Button variant="outlined" color="inherit" sx={{minWidth: 80}} onClick={() => setBalanceAmount(balanceAmount + 1000000)}>
+                100만원
+              </Button>
+              <Button variant="outlined" color="warning" sx={{minWidth: 80}} onClick={() => setBalanceAmount(0)}>
+                정정
+              </Button>
+            </Stack>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDepositBalance}variant="contained" color="success">
