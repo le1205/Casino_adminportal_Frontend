@@ -27,13 +27,14 @@ import { fKoreanDate } from '../../../../utils/formatTime';
 UserConnectingTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
+  count: PropTypes.bool,
   onDeleteRow: PropTypes.func,
   onSelectLogout: PropTypes.func,
   onSelectMoney: PropTypes.func,
   onSelectRefresh: PropTypes.func,
 };
 
-export default function UserConnectingTableRow({ row, selected, onDeleteRow, onSelectLogout, onSelectMoney, onSelectRefresh }) {
+export default function UserConnectingTableRow({ row, selected, onDeleteRow, onSelectLogout, onSelectMoney, onSelectRefresh, count }) {
   const {_id, ip, username, company, role, cash,  lastDate, isVerified,  status, lastGame} = row;
   
   const { translate } = useLocales();

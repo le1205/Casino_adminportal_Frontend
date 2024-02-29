@@ -43,6 +43,7 @@ import { apiWithPostData, apiWithGetData, apiWithDeleteData } from '../../../uti
 import { userSessionUrl, realBalanceUpdateUrl, userBalanceUrl, userDeleteSessionUrl} from '../../../utils/urlList';
 // url
 import { validateIPaddress,} from '../../../utils/validate';
+import SettingGameSlotPage from '../setting/game/SettingGameSlotPage';
 
 // ----------------------------------------------------------------------
 
@@ -96,6 +97,7 @@ export default function UserConnectPage() {
   const [isDeposit, setIsDeposit] = useState(true);
   const [selectedRow, setSelectedRow] = useState({});
   const [alertContent, setAlertContent] = useState('');
+  const [updateCount, setUpdateCount] = useState(0);
   const amountRef = useRef('');
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
@@ -140,18 +142,24 @@ export default function UserConnectPage() {
   const handleClickRefresh = (row) => {
     setSelectedRow(row);
     try {
+      setIsLoading(true);
       const url = userBalanceUrl + row.id;
       const headers = {};
       apiWithGetData(url, {}, headers).then((response) => {
+        setIsLoading(false);
         if(response?.balance) {
           tableData.forEach(element => {
             if(row._id === element._id) {
+              let count = updateCount;
+              count += 1;
+              setUpdateCount(count);
               element.cash = response?.balance;
             }
           });
         }
       });
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
@@ -336,6 +344,7 @@ export default function UserConnectPage() {
                     .map((row) => (
                       <UserConnectingTableRow
                         key={row.id}
+                        count={updateCount}
                         row={row}
                         selected={selected.includes(row.id)}
                         onSelectRow={() => onSelectRow(row.id)}
