@@ -182,9 +182,9 @@ export default function Router() {
           path: 'invoice',
           children: [
             { element: <Navigate to="/dashboard/invoice/in-apply" replace />, index: true },
-            { path: 'in-apply', element: <InvoiceInApplyPage /> },
+            // { path: 'in-apply', element: <InvoiceInApplyPage /> },
             { path: 'in-report', element: <InvoiceInReportPage /> },
-            { path: 'out-apply', element: <InvoiceOutApplyPage /> },
+            // { path: 'out-apply', element: <InvoiceOutApplyPage /> },
             { path: 'out-report', element: <InvoiceOutReportPage /> },
             { path: 'admin-list', element: <InvoiceAdminListPage /> },
             { path: 'amount', element: <InvoiceAmountPage /> },
