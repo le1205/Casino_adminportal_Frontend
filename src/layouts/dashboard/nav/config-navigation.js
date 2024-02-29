@@ -114,9 +114,9 @@ const navConfig = [
         path: PATH_DASHBOARD.invoice.root,
         icon: ICONS.invoice,
         children: [
-          { title: 'deposit', path: PATH_DASHBOARD.invoice.inApply },
+          // { title: 'deposit', path: PATH_DASHBOARD.invoice.inApply },
           { title: 'depositList', path: PATH_DASHBOARD.invoice.inReport },
-          { title: 'withdraw', path: PATH_DASHBOARD.invoice.outApply },
+          // { title: 'withdraw', path: PATH_DASHBOARD.invoice.outApply },
           { title: 'withdrawList', path: PATH_DASHBOARD.invoice.outReport },
           { title: 'operatorTransaction', path: PATH_DASHBOARD.invoice.adminList },
           { title: 'amountList', path: PATH_DASHBOARD.invoice.amount },

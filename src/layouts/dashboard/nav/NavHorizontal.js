@@ -16,7 +16,7 @@ import navConfig from './config-navigation';
 
 function NavHorizontal() {
   const theme = useTheme();
-
+  const DataNavConfig = navConfig
   return (
     <AppBar
       component="nav"
@@ -33,9 +33,8 @@ function NavHorizontal() {
           }),
         }}
       >
-        <NavSectionHorizontal data={navConfig} />
+        <NavSectionHorizontal data={DataNavConfig} />
       </Toolbar>
-
       <Shadow />
     </AppBar>
   );
