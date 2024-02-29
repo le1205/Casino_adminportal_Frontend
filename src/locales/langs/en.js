@@ -230,6 +230,11 @@ const en = {
   accept:`accept`,
   pending:'pending',
   updateSuccess:'Update Success!',
+  title:'title',
+  remove:'remove',
+  messages:'messages',
+  reading:'reading',
+  done:'done',
 };
 
 export default en;

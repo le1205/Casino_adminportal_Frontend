@@ -82,7 +82,7 @@ export default function BetTotalTableToolbar({
       </TextField>
 
       <DatePicker
-        label="Start date"
+        label="Select date"
         value={filterStartDate}
         onChange={onFilterStartDate}
         renderInput={(params) => (
@@ -96,7 +96,7 @@ export default function BetTotalTableToolbar({
         )}
       />
 
-      <DatePicker
+      {/* <DatePicker
         label="End date"
         value={filterEndDate}
         onChange={onFilterEndDate}
@@ -109,7 +109,7 @@ export default function BetTotalTableToolbar({
             }}
           />
         )}
-      />
+      /> */}
       
       <Button
         variant="contained"

@@ -59,10 +59,16 @@ export default function AuthLoginForm() {
       const headers = {};
       apiWithPostData(url, { email:data.email, password: data.password,}, headers).then((response) => {
         const {session, user } = response;
-        if(session.accessToken) {
+        if(session?.accessToken) {
           setSession(session.accessToken);
           setUser(user);
           navigate(PATH_DASHBOARD.user.list);
+        }
+        else {
+          reset();
+          setError('afterSubmit', {
+            message: response?.response?.data
+          });
         }
       });
     } catch (error) {

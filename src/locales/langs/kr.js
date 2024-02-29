@@ -230,6 +230,11 @@ const kr = {
   accept:`승인`,
   pending:'대기',
   updateSuccess:'상태 갱신 성공!',
+  title:'제목',
+  remove:'삭제',
+  messages:'쪽지',
+  reading:'읽지 않음',
+  done:'읽음',
 };
 
 export default kr;

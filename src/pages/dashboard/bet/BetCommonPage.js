@@ -15,7 +15,9 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 // routes
+import moment from 'moment';
 import { PATH_DASHBOARD } from '../../../routes/paths';
+
 // components
 import Scrollbar from '../../../components/scrollbar';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
@@ -178,26 +180,140 @@ export default function BetCommonPage() {
     }
   };
 
-  const gameLog = (game) => {
+  // const gameLog = (game) => {
+  //   try {
+  //     setIsLoading(true);
+  //     setPage(0);
+  //     const url = gameLogUrl;
+  //     const headers = {};
+  //     const startDate = filterStartDate;
+  //     startDate.setHours(0, 0, 0);
+  //     const endDate = filterEndDate;
+  //     endDate.setHours(23, 59, 59);
+  //     const data = {
+  //       "start": startDate,
+  //       "end": endDate,
+  //       "game_type": game,
+  //       "perPage": 100,
+  //     };
+  //     apiWithPostData(url, data, headers).then((response) => {
+  //       const dailyArr = response;
+  //       console.log(response);
+  //       setList(dailyArr);
+  //       setIsLoading(false);
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //     setIsLoading(false);
+  //   }
+
+  // };
+  
+
+  const gameLog = async (game) => {
     try {
       setIsLoading(true);
       setPage(0);
+      
+      const NewDate = moment(filterStartDate).format('YYYY-MM-DD');
       const url = gameLogUrl;
       const headers = {};
-      const startDate = filterStartDate;
-      startDate.setHours(0, 0, 0);
-      const endDate = filterEndDate;
-      endDate.setHours(23, 59, 59);
       const data = {
-        "start": startDate,
-        "end": endDate,
+        "start": `${NewDate} 00:00:00`,
+        "end": `${NewDate} 01:59:59`,
         "game_type": game,
+        "perPage": 100,
       };
-      apiWithPostData(url, data, headers).then((response) => {
-        const dailyArr = response;
-        setList(dailyArr);
+      const data1 = {
+        "start": `${NewDate} 02:00:00`,
+        "end": `${NewDate} 03:59:59`,
+        "game_type": game,
+        "perPage": 100,
+      };
+      const data2 = {
+        "start": `${NewDate} 04:00:00`,
+        "end": `${NewDate} 05:59:59`,
+        "game_type": game,
+        "perPage": 100,
+      };
+      const data3 = {
+        "start": `${NewDate} 06:00:00`,
+        "end": `${NewDate} 07:59:59`,
+        "game_type": game,
+        "perPage": 100,
+      };
+      const data4 = {
+        "start": `${NewDate} 08:00:00`,
+        "end": `${NewDate} 09:59:59`,
+        "game_type": game,
+        "perPage": 100,
+      };
+      const data5 = {
+        "start": `${NewDate} 10:00:00`,
+        "end": `${NewDate} 11:59:59`,
+        "game_type": game,
+        "perPage": 100,
+      };
+      const data6 = {
+        "start": `${NewDate} 12:00:00`,
+        "end": `${NewDate} 13:59:59`,
+        "game_type": game,
+        "perPage": 100,
+      };
+      const data7 = {
+        "start": `${NewDate} 14:00:00`,
+        "end": `${NewDate} 15:59:59`,
+        "game_type": game,
+        "perPage": 100,
+      };
+      const data8 = {
+        "start": `${NewDate} 16:00:00`,
+        "end": `${NewDate} 17:59:59`,
+        "game_type": game,
+        "perPage": 100,
+      };
+      const data9 = {
+        "start": `${NewDate} 18:00:00`,
+        "end": `${NewDate} 19:59:59`,
+        "game_type": game,
+        "perPage": 100,
+      };
+      const data10 = {
+        "start": `${NewDate} 20:00:00`,
+        "end": `${NewDate} 21:59:59`,
+        "game_type": game,
+        "perPage": 100,
+      };
+      const data11 = {
+        "start": `${NewDate} 22:00:00`,
+        "end": `${NewDate} 23:59:59`,
+        "game_type": game,
+        "perPage": 100,
+      };
+      
+      await Promise.all([
+        apiWithPostData(url, data, headers),
+        apiWithPostData(url, data1, headers),
+        apiWithPostData(url, data2, headers),
+        apiWithPostData(url, data3, headers),
+        apiWithPostData(url, data4, headers),
+        apiWithPostData(url, data5, headers),
+        apiWithPostData(url, data6, headers),
+        apiWithPostData(url, data7, headers),
+        apiWithPostData(url, data8, headers),
+        apiWithPostData(url, data9, headers),
+        apiWithPostData(url, data10, headers),
+        apiWithPostData(url, data11, headers),
+      ]).then((dataArray) => {
+        let value = [];
+        // eslint-disable-next-line array-callback-return
+        dataArray.slice(0, 12).map((item) => {
+            value = [...value, item];
+        });
+        setList(value.flat(1));
         setIsLoading(false);
       });
+
     } catch (error) {
       console.log(error);
       setIsLoading(false);
@@ -286,17 +402,6 @@ export default function BetCommonPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalUsers, adminList, list]);
 
-  
-  useEffect(() => {
-    let valAmount = 0;
-    let valCount = 0;
-    dataFiltered.forEach(element => {
-      valAmount += element.bet;
-      valCount += 1;
-    });
-    setTotalAmount(valAmount);
-    setTotalCount(valCount);
-  }, [dataFiltered]);
 
   return (
     <>
