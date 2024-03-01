@@ -148,11 +148,16 @@ export default function ReportPartnerListPage() {
     navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
   };
 
-  const handleClickDate = (date) => {
+  const handleClickStartDate = (date) => {
     setFilterStartDate(date);
-    const sart = `${moment(date).format('YYYY-MM-DD')  } 00:00:00`;
+    const startDate = `${moment(date).format('YYYY-MM-DD')  } 00:00:00`;
+    setFilterStartDate(startDate);
+  };
+
+  const handleClickEndDate = (date) => {
+    setFilterStartDate(date);
     const end = `${moment(date).format('YYYY-MM-DD')  } 23:59:00`;
-    getAllTotalList(sart, end);
+    setFilterEndDate(end);
   };
 
   const handleClickToday = () => {
@@ -226,8 +231,8 @@ export default function ReportPartnerListPage() {
       const url = allTotalListUrl;
       const headers = {};
       const data = {
-        "startDate": srartDate,
-        "endDate": endDate,
+        "startDate": filterStartDate,
+        "endDate": filterEndDate,
       }
       apiWithPostData(url, data, headers).then((response) => {
         // console.log("here>>>", response);
@@ -369,7 +374,10 @@ export default function ReportPartnerListPage() {
             filterStartDate={filterStartDate}
             onResetFilter={handleResetFilter}
             onFilterStartDate={(newValue) => {
-              handleClickDate(newValue);
+              handleClickStartDate(newValue);
+            }}
+            onFilterEndDate={(newValue) => {
+              handleClickEndDate(newValue);
             }}
             onClickToday = {handleClickToday}
             onClickThisWeek = {handleClickThisWeek}

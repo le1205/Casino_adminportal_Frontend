@@ -415,7 +415,7 @@ export default function BetCommonPage() {
           links={[
             { name: 'dashboard', href: PATH_DASHBOARD.root },
             { name: 'betting', href: PATH_DASHBOARD.bet.root },
-            { name: 'total' },
+            { name: 'all' },
           ]}
         />
 

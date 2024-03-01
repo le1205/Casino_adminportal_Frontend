@@ -235,6 +235,7 @@ const kr = {
   messages:'쪽지',
   reading:'읽지 않음',
   done:'읽음',
+  all:'전체',
 };
 
 export default kr;

@@ -235,6 +235,7 @@ const en = {
   messages:'messages',
   reading:'reading',
   done:'done',
+  all:'all',
 };
 
 export default en;

@@ -311,7 +311,7 @@ export default function Header({ onOpenNav }) {
           </Badge>
         
           <Badge badgeContent={countNofi} color="error">
-            <NotificationsNoneRoundedIcon color='success'  sx={{ cursor: 'pointer'}}  onClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}/>
+            <NotificationsNoneRoundedIcon color='success'  sx={{ cursor: 'pointer'}}  onClick={() => movePage(PATH_DASHBOARD.customer.faq)}/>
           </Badge>
         
           <Badge badgeContent={countUser} color="error">

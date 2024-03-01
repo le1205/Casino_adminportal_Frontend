@@ -20,8 +20,10 @@ ReportTableToolbar.propTypes = {
   onClickThisMonth: PropTypes.func,
   onClickLastMonth: PropTypes.func,
   onFilterStartDate: PropTypes.func,
+  onFilterEndDate: PropTypes.func,
   onClickSearch: PropTypes.func,
   filterStartDate: PropTypes.instanceOf(Date),
+  filterEndDate: PropTypes.instanceOf(Date),
   optionsRole: PropTypes.arrayOf(PropTypes.string),
 };
 
@@ -30,8 +32,11 @@ export default function ReportTableToolbar({
   filterName,
   onResetFilter,
   onFilterStartDate,
+  onFilterEndDate,
   onFilterName,
   filterStartDate,
+  filterEndDate,
+  onClickSearch,
   onClickToday,
   onClickThisWeek,
   onClickLastWeek,
@@ -50,7 +55,7 @@ export default function ReportTableToolbar({
     >
       
       <DatePicker
-        label="Date"
+        label="Start date"
         value={filterStartDate}
         onChange={onFilterStartDate}
         renderInput={(params) => (
@@ -63,7 +68,7 @@ export default function ReportTableToolbar({
           />
         )}
       />
-{/* 
+
       <DatePicker
         label="End date"
         value={filterEndDate}
@@ -77,9 +82,9 @@ export default function ReportTableToolbar({
             }}
           />
         )}
-      /> */}
+      />
       
-      <Button
+      {/* <Button
         variant="contained"
         onClick={onClickToday}
       >
@@ -111,7 +116,8 @@ export default function ReportTableToolbar({
         onClick={onClickLastMonth}
       >
         지난 달
-      </Button>
+      </Button> */}
+      
 
       <TextField
         fullWidth
@@ -129,7 +135,15 @@ export default function ReportTableToolbar({
           ),
         }}
       />
-
+      
+      <Button
+        variant="contained"
+        onClick={onClickSearch}
+        startIcon={<Iconify icon="eva:search-fill"/>}
+      >
+        Search
+      </Button>
+      
       {isFiltered && (
         <Button
           color="error"
