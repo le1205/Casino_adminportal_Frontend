@@ -227,7 +227,7 @@ export default function Header({ onOpenNav }) {
                   title="totalDeposit"
                   price={deposit}
                   color={theme.palette.warning.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.invoice.inApply)}
+                  handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
                 />
                 <HeaderAnalytic
                   title="userMoney"
@@ -247,6 +247,7 @@ export default function Header({ onOpenNav }) {
                   title="bettingProfit"
                   price={bettingProfit}
                   color={theme.palette.text.secondary}
+                  handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
                 /> 
                 
                 {/* <HeaderAnalytic
@@ -271,7 +272,7 @@ export default function Header({ onOpenNav }) {
                   title="totalWithdraw"
                   price={withdraw}
                   color={theme.palette.warning.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.invoice.outApply)}
+                  handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
                 />
                 <HeaderAnalytic
                   title="userPoint"
@@ -291,6 +292,7 @@ export default function Header({ onOpenNav }) {
                   title="totalWin"
                   price={totalWin}
                   color={theme.palette.text.secondary}
+                  handleClick={() => movePage(PATH_DASHBOARD.report.partner)}
                 />
 
                 {/* <HeaderAnalytic

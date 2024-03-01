@@ -35,6 +35,8 @@ export default function HeaderAnalytic({ title, color, price, handleClick, key }
           borderWidth: 6,
           boxShadow: theme.customShadows.z8,
         }}
+        style={{cursor:'pointer'} } 
+        onClick={handleClick}
       >
         <Stack
           direction="column"
