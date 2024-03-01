@@ -10,12 +10,19 @@ import {
   TableBody,
   Container,
   TableContainer,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 // routes
 import moment from 'moment';
 import { PATH_DASHBOARD } from '../../../routes/paths';
-
+// locales
+import { useLocales } from '../../../locales';
 // components
 import Scrollbar from '../../../components/scrollbar';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
@@ -78,9 +85,11 @@ export default function BetCasinoPage() {
     onChangeRowsPerPage,
   } = useTable();
   const theme = useTheme();
+  const { translate } = useLocales();
 
   const { themeStretch } = useSettingsContext();
   const [isLoading, setIsLoading] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [gameType, setGameType] = useState('live');
@@ -97,6 +106,7 @@ export default function BetCasinoPage() {
   const [filterRole, setFilterRole] = useState('all');
   const [adminList, setAdminList] = useState([]);
   const [list, setList] = useState([]);
+  const [alertContent, setAlertContent] = useState(`${translate('couldNotSelectFuture')}`);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -111,6 +121,9 @@ export default function BetCasinoPage() {
   const isNotFound =
     (!dataFiltered.length && !!filterName) ||( !tableData.length);
 
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
 
   const handleResetFilter = () => {
     setFilterRole('all');
@@ -125,6 +138,17 @@ export default function BetCasinoPage() {
     setPage(0)
     setFilterRole('all');
     gameLog(gameType);
+  };
+
+  const handleClickStartDate = (date) => {
+    const now = moment(new Date()).format('YYYY-MM-DD');
+    const selectedDate = moment(date).format('YYYY-MM-DD');
+    if (moment(selectedDate).isAfter(moment(now))) {
+      setOpenAlert(true);
+      setFilterStartDate(new Date());
+      return;
+    }
+    setFilterStartDate(date);
   };
   
   const usersList = () => {
@@ -389,7 +413,7 @@ export default function BetCasinoPage() {
             onClickSearch={handleClickSearch}
             onFilterRole={handleFilterRole}
             onFilterStartDate={(newValue) => {
-              setFilterStartDate(newValue);
+              handleClickStartDate(newValue);
             }}
             onFilterEndDate={(newValue) => {
               setFilterEndDate(newValue);
@@ -398,13 +422,13 @@ export default function BetCasinoPage() {
           
           <Stack direction="row" justifyContent="flex-end" alignItems="center" spacing={3} sx={{ textTransform: 'capitalize', mt: -4, pb:1, mr:6 }}>
             <Typography variant="subtitle1" noWrap sx={{ color: theme.palette.success.main}}>
-              베팅총금액:
+            {`${translate('totalBettingAmount')}`}:
             </Typography>
             <Typography variant="subtitle1" noWrap  sx={{ color: theme.palette.success.main}}>
               {totalAmount?.toLocaleString()}
             </Typography>
             <Typography variant="subtitle1" noWrap  sx={{ color: theme.palette.warning.main, pl:2}}>
-              Total:
+            {`${translate('bettingCount')}`}:
             </Typography>
             <Typography variant="subtitle1" noWrap  sx={{ color: theme.palette.warning.main}}>
               {totalCount?.toLocaleString()}
@@ -476,6 +500,21 @@ export default function BetCasinoPage() {
           />
         </Card>
       </Container>
+
+      <Dialog open={openAlert} onClose={handleCloseAlert} sx={{ minWidth: 400 }}>
+        <DialogTitle  sx={{ textTransform: 'capitalize' }}>{`${translate('alert')}`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {alertContent}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseAlert} autoFocus>
+          {`${translate('ok')}`}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {(isLoading === true) && <LoadingScreen/>} 
     </>
   );

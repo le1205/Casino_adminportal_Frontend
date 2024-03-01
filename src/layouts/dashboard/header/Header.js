@@ -2,8 +2,17 @@ import PropTypes from 'prop-types';
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
-import { useTheme } from '@mui/material/styles';
-import { Stack, AppBar, Toolbar, IconButton, Card, Badge } from '@mui/material';
+import { useTheme, styled } from '@mui/material/styles';
+import { 
+  Stack, 
+  AppBar, 
+  Toolbar, 
+  IconButton, 
+  Card, 
+  Badge,
+  Grid,
+  Paper, 
+} from '@mui/material';
 import PaidIcon from '@mui/icons-material/Paid';
 import PersonAddRoundedIcon from '@mui/icons-material/PersonAddRounded';
 import NotificationsNoneRoundedIcon from '@mui/icons-material/NotificationsNoneRounded';
@@ -42,6 +51,16 @@ import { adminHeaderDashboardUrl, adminHeaderCountUrl } from '../../../utils/url
 Header.propTypes = {
   onOpenNav: PropTypes.func,
 };
+
+
+
+const StyledBlockContainer = styled(Paper)(({ theme }) => ({
+  marginTop:1,
+  padding: theme.spacing(1),
+  border: `solid 1px ${theme.palette.divider}`,
+  borderRadius: Number(theme.shape.borderRadius) * 1.5,
+  backgroundColor: theme.palette.background[theme.palette.mode === 'light' ? 100 : 800],
+}));
 
 export default function Header({ onOpenNav }) {
   const theme = useTheme();
@@ -181,19 +200,17 @@ export default function Header({ onOpenNav }) {
       )}
 
       <Stack
-        flexGrow={3.5}
+        flexGrow={3}
         direction="row"
         alignItems="center"
         justifyContent="flex"
         spacing={{ xs: 0.5, sm: 1.5 }}
       >
-        <Card sx={{ mb: 1 }}>
-            <Scrollbar>
-              <Stack
-                direction="row"
-                sx={{ py: 1 }}
-              >
-                <HeaderAnalytic
+        <Card sx={{ mb: 1, pt:1 }}>
+            
+            <StyledBlockContainer variant="outlined">
+              <Grid container spacing={1} >
+              <HeaderAnalytic
                   title="totalMembers"
                   price={totalMember}
                   color={theme.palette.info.main}
@@ -205,6 +222,38 @@ export default function Header({ onOpenNav }) {
                   color={theme.palette.info.main}
                   handleClick={() => movePage(PATH_DASHBOARD.user.listAccordingPartner)}
                 />
+
+                <HeaderAnalytic
+                  title="totalDeposit"
+                  price={deposit}
+                  color={theme.palette.warning.main}
+                  handleClick={() => movePage(PATH_DASHBOARD.invoice.inApply)}
+                />
+                <HeaderAnalytic
+                  title="userMoney"
+                  price={userMoney}
+                  color={theme.palette.success.main}
+                  handleClick={() => movePage(PATH_DASHBOARD.user.list)}
+                />
+
+                <HeaderAnalytic
+                  title="bettingCount"
+                  price={bettingCount}
+                  color={theme.palette.text.secondary}
+                  handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
+                />
+                
+                 <HeaderAnalytic
+                  title="bettingProfit"
+                  price={bettingProfit}
+                  color={theme.palette.text.secondary}
+                /> 
+                
+                {/* <HeaderAnalytic
+                  title="profitLoss"
+                  price={profitLoss}
+                  color={theme.palette.warning.main}
+                /> */}
                 <HeaderAnalytic
                   title="newMembers"
                   price={newMember}
@@ -217,25 +266,7 @@ export default function Header({ onOpenNav }) {
                   color={theme.palette.info.main}
                   handleClick={() => movePage(PATH_DASHBOARD.user.connect)}
                 />
-                <HeaderAnalytic
-                  title="userMoney"
-                  price={userMoney}
-                  color={theme.palette.success.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.user.list)}
-                />
-                <HeaderAnalytic
-                  title="userPoint"
-                  price={userPoint}
-                  color={theme.palette.success.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.user.list)}
-                />
-
-                <HeaderAnalytic
-                  title="totalDeposit"
-                  price={deposit}
-                  color={theme.palette.warning.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.invoice.inApply)}
-                />
+                
                 <HeaderAnalytic
                   title="totalWithdraw"
                   price={withdraw}
@@ -243,26 +274,10 @@ export default function Header({ onOpenNav }) {
                   handleClick={() => movePage(PATH_DASHBOARD.invoice.outApply)}
                 />
                 <HeaderAnalytic
-                  title="profitLoss"
-                  price={profitLoss}
-                  color={theme.palette.warning.main}
-                />
-                {/* <HeaderAnalytic
-                  title="managerCompany"
-                  price={cManager}
-                  color={theme.palette.warning.main}
-                /> */}
-                {/* <HeaderAnalytic
-                  title="managerPartner"
-                  price={pManager}
-                  color={theme.palette.warning.main}
-                /> */}
-
-                <HeaderAnalytic
-                  title="bettingCount"
-                  price={bettingCount}
-                  color={theme.palette.text.secondary}
-                  handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
+                  title="userPoint"
+                  price={userPoint}
+                  color={theme.palette.success.main}
+                  handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
 
                 <HeaderAnalytic
@@ -278,19 +293,13 @@ export default function Header({ onOpenNav }) {
                   color={theme.palette.text.secondary}
                 />
 
-                <HeaderAnalytic
+                {/* <HeaderAnalytic
                   title="totalRolling"
                   price={rolling}
                   color={theme.palette.text.secondary}
-                />
-
-                {/* <HeaderAnalytic
-                  title="Betting Profit"
-                  price={bettingProfit}
-                  color={theme.palette.text.secondary}
                 /> */}
-              </Stack>
-            </Scrollbar>
+              </Grid>
+            </StyledBlockContainer>
         </Card>
       
         <Stack

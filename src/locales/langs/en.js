@@ -236,6 +236,10 @@ const en = {
   reading:'reading',
   done:'done',
   all:'all',
+  totalBettingAmount:'total betting amount',
+  alert:'alert',
+  ok:'ok',
+  couldNotSelectFuture:'Could not select future date.'
 };
 
 export default en;

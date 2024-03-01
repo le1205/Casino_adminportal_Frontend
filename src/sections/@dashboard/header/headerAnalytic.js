@@ -1,5 +1,11 @@
 import PropTypes from 'prop-types';
-import { Stack, Typography, Box, Card } from '@mui/material';
+import { Stack, 
+  Typography, 
+  Grid, 
+  Paper,
+  Box,
+} from '@mui/material';
+import { useTheme, } from '@mui/material/styles';
 
 // locales
 import { useLocales } from '../../../locales';
@@ -8,35 +14,43 @@ import { useLocales } from '../../../locales';
 HeaderAnalytic.propTypes = {
   title: PropTypes.string,
   color: PropTypes.string,
+  key: PropTypes.string,
   price: PropTypes.number,
   handleClick: PropTypes.func,
 };
 
-export default function HeaderAnalytic({ title, color, price, handleClick }) {
-  
+export default function HeaderAnalytic({ title, color, price, handleClick, key }) {
+  const theme = useTheme();
   
   const { translate } = useLocales();
   return (
-    <Stack
-      direction="row"
-      alignItems="center"
-      justifyContent="center"
-    >
-      <Card 
-        direction="column"
-        spacing={1} 
-        sx={{ mx: 0.5, py:0.5, height:70, width: 90 }} 
-        style={{cursor:'pointer'} } 
-        onClick={handleClick}>
-
-        <Typography variant="subtitle2"  align="center">
-          {`${translate(title)}`}
-          </Typography>
-
-        <Typography variant="subtitle2" align="center" sx={{ color }}>
-          {price?.toLocaleString()}
-        </Typography>
-      </Card>
-    </Stack>
+    
+    <Grid key={key} item xs={2} sx={{minWidth:180}}>
+      <Box
+        borderLeft={2}
+        borderColor={color}
+        sx={{
+          py: 3,
+          textAlign: 'center',
+          borderWidth: 6,
+          boxShadow: theme.customShadows.z8,
+        }}
+      >
+        <Stack
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+        >
+            <Typography variant="subtitle1"  align="center">
+              {`${translate(title)}`}
+            </Typography>
+    
+            <Typography variant="subtitle1" align="center" sx={{ color }}>
+              {price?.toLocaleString()}
+            </Typography>
+        </Stack>
+        
+      </Box>
+    </Grid>
   );
 }

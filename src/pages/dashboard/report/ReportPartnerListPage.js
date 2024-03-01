@@ -13,9 +13,15 @@ import {
   TableRow,
   TableCell,
   Stack,
+  Button,
   Container,
   IconButton,
   TableContainer,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material';
 import moment from 'moment';
 // routes
@@ -89,6 +95,8 @@ export default function ReportPartnerListPage() {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertContent, setAlertContent] = useState(`${translate('couldNotSelectFuture')}`);
   const [openConfirm, setOpenConfirm] = useState(false);
   const [filterName, setFilterName] = useState('');
   const [filterRole, setFilterRole] = useState('all');
@@ -126,6 +134,14 @@ export default function ReportPartnerListPage() {
     (!dataFiltered.length && !!filterRole) ||
     (!dataFiltered.length && !!filterStatus);
 
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
+  
+  const handleOpenAlert = () => {
+    setOpenAlert(true);
+  };
+
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
   };
@@ -149,13 +165,25 @@ export default function ReportPartnerListPage() {
   };
 
   const handleClickStartDate = (date) => {
-    setFilterStartDate(date);
+    const now = moment(new Date()).format('YYYY-MM-DD');
+    const selectedDate = moment(date).format('YYYY-MM-DD');
+    if (moment(selectedDate).isAfter(moment(now))) {
+      setOpenAlert(true);
+      setFilterStartDate(`${moment(new Date()).format('YYYY-MM-DD')  } 00:00:00`);
+      return;
+    }
     const startDate = `${moment(date).format('YYYY-MM-DD')  } 00:00:00`;
     setFilterStartDate(startDate);
   };
 
   const handleClickEndDate = (date) => {
-    setFilterStartDate(date);
+    const now = moment(new Date()).format('YYYY-MM-DD');
+    const selectedDate = moment(date).format('YYYY-MM-DD');
+    if (moment(selectedDate).isAfter(moment(now))) {
+      setOpenAlert(true);
+      setFilterStartDate(`${moment(new Date()).format('YYYY-MM-DD')  } 23:59:00`);
+      return;
+    }
     const end = `${moment(date).format('YYYY-MM-DD')  } 23:59:00`;
     setFilterEndDate(end);
   };
@@ -235,7 +263,6 @@ export default function ReportPartnerListPage() {
         "endDate": filterEndDate,
       }
       apiWithPostData(url, data, headers).then((response) => {
-        // console.log("here>>>", response);
         const valueData = {
           ...response
         };
@@ -845,6 +872,21 @@ export default function ReportPartnerListPage() {
           /> */}
         </Card>
       </Container>
+
+      <Dialog open={openAlert} onClose={handleCloseAlert} sx={{ minWidth: 400 }}>
+        <DialogTitle sx={{ textTransform: 'capitalize' }}>{`${translate('alert')}`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {alertContent}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseAlert} autoFocus>
+          {`${translate('ok')}`}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {(isLoading === true) && <LoadingScreen/>} 
     </>
   );

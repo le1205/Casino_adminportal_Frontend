@@ -236,6 +236,10 @@ const kr = {
   reading:'읽지 않음',
   done:'읽음',
   all:'전체',
+  totalBettingAmount:'베팅 총금액',
+  alert:'알림',
+  ok:'확인',
+  couldNotSelectFuture:'금일까지 선택가능합니다.',
 };
 
 export default kr;

@@ -5,6 +5,7 @@ import {
   Card,
   Table,
   Tooltip,
+  Button,
   Divider,
   TableRow, 
   TableHead, 
@@ -13,7 +14,13 @@ import {
   Container,
   IconButton,
   TableContainer, 
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material';
+import moment from 'moment';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
@@ -101,23 +108,34 @@ export default function ReportDailyPage() {
   } = useTable();
 
   const { themeStretch } = useSettingsContext();
+  const { translate } = useLocales();
   const [isLoading, setIsLoading] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertContent, setAlertContent] = useState(`${translate('couldNotSelectFuture')}`);
   const [tableData, setTableData] = useState([]);
   const [openConfirm, setOpenConfirm] = useState(false);
   const [filterRole, setFilterRole] = useState('all');
-  const [filterEndDate, setFilterEndDate] = useState(new Date);
-  const [filterStartDate, setFilterStartDate] = useState(new Date);
+  const [filterEndDate, setFilterEndDate] = useState(`${moment(new Date()).format('YYYY-MM-DD')  } 23:59:00`);
+  const [filterStartDate, setFilterStartDate] = useState(`${moment(new Date()).format('YYYY-MM-DD')  } 00:00:00`);
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(order, orderBy),
     filterRole,
   });
-  const { translate } = useLocales();
   const denseHeight = dense ? 52 : 72;
   const isFiltered = filterRole !== 'all';
 
   const isNotFound =
     (!dataFiltered.length && !!filterRole)
+
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
+  
+  const handleOpenAlert = () => {
+    setOpenAlert(true);
+  };
+  
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
@@ -136,18 +154,38 @@ export default function ReportDailyPage() {
     dailyReport();
   };
 
+  const handleClickStartDate = (date) => {
+    const now = moment(new Date()).format('YYYY-MM-DD');
+    const selectedDate = moment(date).format('YYYY-MM-DD');
+    if (moment(selectedDate).isAfter(moment(now))) {
+      setOpenAlert(true);
+      setFilterStartDate(`${moment(new Date()).format('YYYY-MM-DD')  } 00:00:00`);
+      return;
+    }
+    const startDate = `${moment(date).format('YYYY-MM-DD')  } 00:00:00`;
+    setFilterStartDate(startDate);
+  };
+
+  const handleClickEndDate = (date) => {
+    const now = moment(new Date()).format('YYYY-MM-DD');
+    const selectedDate = moment(date).format('YYYY-MM-DD');
+    if (moment(selectedDate).isAfter(moment(now))) {
+      setOpenAlert(true);
+      setFilterStartDate(`${moment(new Date()).format('YYYY-MM-DD')  } 23:59:00`);
+      return;
+    }
+    const end = `${moment(date).format('YYYY-MM-DD')  } 23:59:00`;
+    setFilterEndDate(end);
+  };
+
   const dailyReport = () => {
     try {
       setIsLoading(true);
       const url = dailyReportUrl;
       const headers = {};
-      const startDate = filterStartDate;
-      startDate.setHours(0, 0, 0);
-      const endDate = filterEndDate;
-      endDate.setHours(23, 59, 59);
       const data = {
-        "startDate": startDate,
-        "endDate": endDate,
+        "startDate": filterStartDate,
+        "endDate": filterEndDate,
       };
       apiWithPostData(url, data, headers).then((response) => {
         const dailyArr = [];
@@ -213,10 +251,10 @@ export default function ReportDailyPage() {
             onResetFilter={handleResetFilter}
             onClickSearch={handleClickSearch}
             onFilterStartDate={(newValue) => {
-              setFilterStartDate(newValue);
+              handleClickStartDate(newValue);
             }}
             onFilterEndDate={(newValue) => {
-              setFilterEndDate(newValue);
+              handleClickEndDate(newValue);
             }}
           />
 
@@ -302,6 +340,20 @@ export default function ReportDailyPage() {
           />
         </Card>
       </Container>
+
+      <Dialog open={openAlert} onClose={handleCloseAlert} sx={{ minWidth: 400 }}>
+        <DialogTitle sx={{ textTransform: 'capitalize' }}>{`${translate('alert')}`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {alertContent}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseAlert} autoFocus>
+          {`${translate('ok')}`}
+          </Button>
+        </DialogActions>
+      </Dialog>
       
       {(isLoading === true) && <LoadingScreen/>} 
 

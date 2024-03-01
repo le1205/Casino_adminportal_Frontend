@@ -30,7 +30,7 @@ export default function CustomBreadcrumbs({
   const { translate } = useLocales();
 
   return (
-    <Box sx={{ mb: 1, ...sx }}>
+    <Box sx={{ mb: 1, mt:2, ...sx }}>
       <Stack direction="row" alignItems="center" sx={{ textTransform: 'capitalize' }}>
         <Box sx={{ flexGrow: 1 }}>
           {/* HEADING */}

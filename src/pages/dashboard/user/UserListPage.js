@@ -14,8 +14,6 @@ import {
   Container,
   Dialog,
   Stack,
-  TableRow,
-  TableCell,
   TableContainer,
   DialogTitle,
   DialogContent,
@@ -84,7 +82,6 @@ export default function UserListPage() {
     setPage,
     //
     selected,
-    setSelected,
     onSelectRow,
     onSelectAllRows,
     //
@@ -128,7 +125,6 @@ export default function UserListPage() {
     filterStatus,
   });
 
-  const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const denseHeight = dense ? 52 : 72;
   const isFiltered = filterName !== '' || filterRole !== 'all' || filterStatus !== 'all';
   const isNotFound =
