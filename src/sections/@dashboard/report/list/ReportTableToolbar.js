@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Stack, TextField, MenuItem, Button } from '@mui/material';
+import { Stack, TextField, InputAdornment, Button } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 // components
 import Iconify from '../../../../components/iconify';
@@ -11,24 +11,32 @@ const INPUT_WIDTH = 200;
 
 ReportTableToolbar.propTypes = {
   isFiltered: PropTypes.bool,
+  filterName: PropTypes.string,
   onResetFilter: PropTypes.func,
-  onFilterEndDate: PropTypes.func,
-  onFilterService: PropTypes.func,
+  onFilterName: PropTypes.func,
+  onClickToday: PropTypes.func,
+  onClickThisWeek: PropTypes.func,
+  onClickLastWeek: PropTypes.func,
+  onClickThisMonth: PropTypes.func,
+  onClickLastMonth: PropTypes.func,
   onFilterStartDate: PropTypes.func,
   onClickSearch: PropTypes.func,
-  filterEndDate: PropTypes.instanceOf(Date),
   filterStartDate: PropTypes.instanceOf(Date),
   optionsRole: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default function ReportTableToolbar({
   isFiltered,
+  filterName,
   onResetFilter,
-  onFilterEndDate,
   onFilterStartDate,
-  filterEndDate,
+  onFilterName,
   filterStartDate,
-  onClickSearch,
+  onClickToday,
+  onClickThisWeek,
+  onClickLastWeek,
+  onClickThisMonth,
+  onClickLastMonth,
 }) {
   return (
     <Stack
@@ -42,7 +50,7 @@ export default function ReportTableToolbar({
     >
       
       <DatePicker
-        label="Start date"
+        label="Date"
         value={filterStartDate}
         onChange={onFilterStartDate}
         renderInput={(params) => (
@@ -55,7 +63,7 @@ export default function ReportTableToolbar({
           />
         )}
       />
-
+{/* 
       <DatePicker
         label="End date"
         value={filterEndDate}
@@ -69,15 +77,58 @@ export default function ReportTableToolbar({
             }}
           />
         )}
-      />
+      /> */}
       
       <Button
         variant="contained"
-        onClick={onClickSearch}
-        startIcon={<Iconify icon="eva:search-fill"/>}
+        onClick={onClickToday}
       >
-        Search
+        오늘
       </Button>
+      
+      <Button
+        variant="contained"
+        onClick={onClickThisWeek}      >
+        이번 주
+      </Button>
+      
+      <Button
+        variant="contained"
+        onClick={onClickLastWeek}
+      >
+        지난 주
+      </Button>
+      
+      <Button
+        variant="contained"
+        onClick={onClickThisMonth}
+      >
+        이번 달
+      </Button>
+      
+      <Button
+        variant="contained"
+        onClick={onClickLastMonth}
+      >
+        지난 달
+      </Button>
+
+      <TextField
+        fullWidth
+        value={filterName}
+        onChange={onFilterName}
+        placeholder="Search id..."
+        sx={{
+          maxWidth: { md: INPUT_WIDTH },
+        }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+            </InputAdornment>
+          ),
+        }}
+      />
 
       {isFiltered && (
         <Button

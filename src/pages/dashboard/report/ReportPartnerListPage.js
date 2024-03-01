@@ -17,6 +17,7 @@ import {
   IconButton,
   TableContainer,
 } from '@mui/material';
+import moment from 'moment';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // locales
@@ -105,8 +106,8 @@ export default function ReportPartnerListPage() {
   const [totalDepWith, setTotalDepWith] = useState(0);
   const [tableData, setTableData] = useState([]);
   const [count, setCount] = useState(0);
-  const [filterEndDate, setFilterEndDate] = useState(new Date);
-  const [filterStartDate, setFilterStartDate] = useState(new Date);
+  const [filterEndDate, setFilterEndDate] = useState(`${moment(new Date()).format('YYYY-MM-DD')  } 23:59:00`);
+  const [filterStartDate, setFilterStartDate] = useState(`${moment(new Date()).format('YYYY-MM-DD')  } 00:00:00`);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -147,8 +148,41 @@ export default function ReportPartnerListPage() {
     navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
   };
 
-  const handleClickSearch = () => {
-    getAllTotalList();
+  const handleClickDate = (date) => {
+    setFilterStartDate(date);
+    const sart = `${moment(date).format('YYYY-MM-DD')  } 00:00:00`;
+    const end = `${moment(date).format('YYYY-MM-DD')  } 23:59:00`;
+    getAllTotalList(sart, end);
+  };
+
+  const handleClickToday = () => {
+    const sart = `${moment(new Date()).format('YYYY-MM-DD')  } 00:00:00`;
+    const end = `${moment(new Date()).format('YYYY-MM-DD')  } 23:59:00`;
+    getAllTotalList(sart, end);
+  };
+
+  const handleClickThisWeek = () => {
+    const sart = `${moment().startOf('week').format('YYYY-MM-DD')  } 00:00:00`;
+    const end = `${moment().endOf('week').format('YYYY-MM-DD')  } 23:59:00`;
+    getAllTotalList(sart, end);
+  };
+
+  const handleClickLastWeek = () => {
+    const sart = `${moment().startOf('week').subtract(7, 'days').format('YYYY-MM-DD')  } 00:00:00`;
+    const end = `${moment().endOf('week').subtract(7, 'days').format('YYYY-MM-DD')  } 23:59:00`;
+    getAllTotalList(sart, end);
+  };
+
+  const handleClickThisMonth = () => {
+    const sart = `${moment().startOf('month').format('YYYY-MM-DD')  } 00:00:00`;
+    const end = `${moment().endOf('month').format('YYYY-MM-DD')  } 23:59:00`;
+    getAllTotalList(sart, end);
+  };
+
+  const handleClickLastMonth = () => {
+    const sart = `${moment().startOf('month').subtract(1, 'month').format('YYYY-MM-DD')  } 00:00:00`;
+    const end = `${moment().endOf('month').subtract(1, 'month').format('YYYY-MM-DD')  } 23:59:00`;
+    getAllTotalList(sart, end);
   };
 
   const handleClickDown = (key) => {
@@ -185,18 +219,14 @@ export default function ReportPartnerListPage() {
   };
 
 
-  const getAllTotalList = () => {
+  const getAllTotalList = (srartDate, endDate) => {
     try {
       setIsLoading(true);
       setPage(0);
       const url = allTotalListUrl;
       const headers = {};
-      const startDate = filterStartDate;
-      startDate.setHours(0, 0, 0);
-      const endDate = filterEndDate;
-      endDate.setHours(23, 59, 59);
       const data = {
-        "startDate": startDate,
+        "startDate": srartDate,
         "endDate": endDate,
       }
       apiWithPostData(url, data, headers).then((response) => {
@@ -312,7 +342,7 @@ export default function ReportPartnerListPage() {
   };
   
   useEffect(() => {
-    getAllTotalList();
+    getAllTotalList(filterStartDate, filterEndDate);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openConfirm]);
 
@@ -338,13 +368,14 @@ export default function ReportPartnerListPage() {
             filterEndDate={filterEndDate}
             filterStartDate={filterStartDate}
             onResetFilter={handleResetFilter}
-            onClickSearch={handleClickSearch}
             onFilterStartDate={(newValue) => {
-              setFilterStartDate(newValue);
+              handleClickDate(newValue);
             }}
-            onFilterEndDate={(newValue) => {
-              setFilterEndDate(newValue);
-            }}
+            onClickToday = {handleClickToday}
+            onClickThisWeek = {handleClickThisWeek}
+            onClickLastWeek = {handleClickLastWeek}
+            onClickThisMonth = {handleClickThisMonth}
+            onClickLastMonth = {handleClickLastMonth}
           />
 
           <Typography variant="h6" sx={{ color: 'text.secondary', pt:1, pl:1, }}>
