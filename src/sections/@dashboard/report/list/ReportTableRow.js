@@ -109,15 +109,40 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
             <Typography variant="body2">
               {data?.username}
             </Typography>
+            <Typography variant="body2"
+              sx={{
+                ...(role?.order ===1 && {
+                  color: theme.palette.info.main,
+                }),
+                ...(role?.order ===2 && {
+                  color: theme.palette.warning.main,
+                }),
+                ...(role?.order ===3 && {
+                  color: theme.palette.success.main,
+                }),
+                ...(role?.order ===4 && {
+                  color: theme.palette.common.main,
+                }),
+                ...(role?.order ===5 && {
+                  color: theme.palette.primary.main,
+                }),
+                ...(role?.order ===6 && {
+                  color: theme.palette.secondary.main,
+                }),
+            }}>
+              ({data?.role.name})
+            </Typography>
           </Stack>
           <Stack direction="row"
             alignItems="center">
             <Typography variant="body2">
-              {data?.role.name}
+              총관리
             </Typography>
-            <Typography variant="body2">
-              ({data?.total_user})
-            </Typography>
+            {data?.total_user > 0 && 
+              <Typography variant="body2">
+                ({data?.total_user})
+              </Typography>
+            }
           </Stack>
           <Stack direction="row"
             alignItems="right"
@@ -129,8 +154,8 @@ export default function ReportTableRow({ row, display, selected, onEditRow, onSe
                 height: 38,
               }),
             }}>
-              {data?.expand === false && data?.total_user >0 && <KeyboardDoubleArrowDownIcon onClick={onClickDownArrow} color='success' />}
-              {data?.expand === true && data?.total_user >0 && <KeyboardDoubleArrowUpIcon onClick={onClickUpArrow} color='warning' />}
+              {data?.expand === false && data?.total_user >0 && <KeyboardDoubleArrowDownIcon onClick={onClickDownArrow} color='success' sx={{cursor: 'pointer'}}/>}
+              {data?.expand === true && data?.total_user >0 && <KeyboardDoubleArrowUpIcon onClick={onClickUpArrow} color='warning' sx={{cursor: 'pointer'}}/>}
           </Stack>
         </TableCell>
 
