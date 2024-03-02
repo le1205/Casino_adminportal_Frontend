@@ -93,6 +93,7 @@ export default function ReportPartnerListPage() {
   const { themeStretch } = useSettingsContext();
   const { translate } = useLocales();
   const navigate = useNavigate();
+  const loginUser  = parseJson(localStorage.getItem('user') || "");
 
   const [isLoading, setIsLoading] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
@@ -123,6 +124,7 @@ export default function ReportPartnerListPage() {
     filterName,
     filterRole,
     filterStatus,
+    loginUser,
   });
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
@@ -133,6 +135,10 @@ export default function ReportPartnerListPage() {
     (!dataFiltered.length && !!filterName) ||
     (!dataFiltered.length && !!filterRole) ||
     (!dataFiltered.length && !!filterStatus);
+
+  const handleFilterName = (event) => {
+    setFilterName(event.target.value);
+  };
 
   const handleCloseAlert = () => {
     setOpenAlert(false);
@@ -411,6 +417,7 @@ export default function ReportPartnerListPage() {
             onClickLastWeek = {handleClickLastWeek}
             onClickThisMonth = {handleClickThisMonth}
             onClickLastMonth = {handleClickLastMonth}
+            onFilterName={handleFilterName}
           />
 
           <Typography variant="h6" sx={{ color: 'text.secondary', pt:1, pl:1, }}>
@@ -832,7 +839,7 @@ export default function ReportPartnerListPage() {
                 />
 
                 <TableBody>
-                  {tableData
+                  {dataFiltered
                     // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
                       <ReportTableRow
@@ -894,7 +901,7 @@ export default function ReportPartnerListPage() {
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, comparator, filterName, filterStatus, filterRole }) {
+function applyFilter({ inputData, comparator, filterName, filterStatus, filterRole, loginUser }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -906,8 +913,13 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (filterName) {
+    // inputData = inputData.filter(
+    //   (user) => parseInt(user.role.order, 10) !== (parseInt(loginUser.roleMain.order, 10) + 1) || 
+    //   (parseInt(user.role.order, 10) === (parseInt(loginUser.roleMain.order, 10) + 1) && user.username.toLowerCase().indexOf(filterName.toLowerCase()) !== -1)
+    // );
+    
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+      (user) =>(user.display === false) || (user.display === true && user.username.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ) 
     );
   }
 
@@ -918,6 +930,6 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
   if (filterRole !== 'all') {
     inputData = inputData.filter((user) => user.role === filterRole);
   }
-
+  
   return inputData;
 }
