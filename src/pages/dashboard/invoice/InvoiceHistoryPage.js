@@ -153,7 +153,7 @@ export default function InvoiceHistoryPage() {
       setIsLoading(true);
       const url = balanceHistoryUrl;
       const headers = {};
-      const startDate = `${moment(filterEndDate).format('YYYY-MM-DD')  } 00:00:00`;
+      const startDate = `${moment(filterStartDate).format('YYYY-MM-DD')  } 00:00:00`;
       const endDate = `${moment(filterEndDate).format('YYYY-MM-DD')  } 23:59:00`;
       const data = {
         "page": page + 1,
