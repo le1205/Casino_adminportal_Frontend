@@ -24,15 +24,10 @@ import {
   DialogActions,
 } from '@mui/material';
 import moment from 'moment';
-import { useTheme } from '@mui/material/styles';
-
-import { TreeTable } from 'primereact/treetable';
-import { Column } from 'primereact/column';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // locales
 import { useLocales } from '../../../locales';
-
 // components
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
@@ -52,7 +47,6 @@ import {
 import { ReportTableToolbar, ReportTableRow } from '../../../sections/@dashboard/report/list';
 // utils
 import {parseJson } from '../../../auth/utils';
-import { toNumberTag } from '../../../utils/convert';
 // api
 import { apiWithPostData } from '../../../utils/api';
 // url
@@ -99,7 +93,6 @@ export default function ReportPartnerListPage() {
   const { themeStretch } = useSettingsContext();
   const { translate } = useLocales();
   const navigate = useNavigate();
-  const theme = useTheme();
   const loginUser  = parseJson(localStorage.getItem('user') || "");
 
   const [isLoading, setIsLoading] = useState(false);
@@ -117,13 +110,13 @@ export default function ReportPartnerListPage() {
   const [totalPartnerIncome, setTotalPartnerIncome] = useState(0);
   const [totalAdminIncome, setTotalAdminIncome] = useState(0);
   const [dataActive, setDataActive] = useState({});
+  const [node, setNode] = useState([]);
   const [totalData, setTotalData] = useState({});
   const [totalDepWith, setTotalDepWith] = useState(0);
   const [tableData, setTableData] = useState([]);
-  const [filterEndDate, setFilterEndDate] = useState(new Date());
-  const [filterStartDate, setFilterStartDate] = useState(new Date());
-  
-  const [globalFilter, setGlobalFilter] = useState('');
+  const [count, setCount] = useState(0);
+  const [filterEndDate, setFilterEndDate] = useState(`${moment(new Date()).format('YYYY-MM-DD')  } 23:59:00`);
+  const [filterStartDate, setFilterStartDate] = useState(`${moment(new Date()).format('YYYY-MM-DD')  } 00:00:00`);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -158,9 +151,23 @@ export default function ReportPartnerListPage() {
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
   };
-  
+
+  const handleDeleteRow = (key) => {
+    const deleteRow = node.filter((row) => row.key !== key);
+    setSelected([]);
+
+    if (page > 0) {
+      if (dataInPage.length < 2) {
+        setPage(page - 1);
+      }
+    }
+  };
   const handleResetFilter = () => {
     setFilterRole('all');
+  };
+
+  const handleEditRow = (id) => {
+    navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
   };
 
   const handleClickStartDate = (date) => {
@@ -168,10 +175,11 @@ export default function ReportPartnerListPage() {
     const selectedDate = moment(date).format('YYYY-MM-DD');
     if (moment(selectedDate).isAfter(moment(now))) {
       setOpenAlert(true);
-      setFilterStartDate(new Date());
+      setFilterStartDate(`${moment(new Date()).format('YYYY-MM-DD')  } 00:00:00`);
       return;
     }
-    setFilterStartDate(date);
+    const startDate = `${moment(date).format('YYYY-MM-DD')  } 00:00:00`;
+    setFilterStartDate(startDate);
   };
 
   const handleClickEndDate = (date) => {
@@ -179,22 +187,80 @@ export default function ReportPartnerListPage() {
     const selectedDate = moment(date).format('YYYY-MM-DD');
     if (moment(selectedDate).isAfter(moment(now))) {
       setOpenAlert(true);
-      setFilterStartDate(new Date());
+      setFilterStartDate(`${moment(new Date()).format('YYYY-MM-DD')  } 23:59:00`);
       return;
     }
-    setFilterEndDate(date);
+    const end = `${moment(date).format('YYYY-MM-DD')  } 23:59:00`;
+    setFilterEndDate(end);
   };
 
   const handleClickSearch = () => {
-    const start = moment(filterStartDate).format('YYYY-MM-DD');
-    const end = moment(filterEndDate).format('YYYY-MM-DD');
-    if(moment(start).isAfter(moment(end))) {
-      setAlertContent("시작일과 마감일을 확인하세요.")
-      setOpenAlert(true);
-      return;
-    }
     getAllTotalList();
   };
+
+  const handleClickToday = () => {
+    const sart = `${moment(new Date()).format('YYYY-MM-DD')  } 00:00:00`;
+    const end = `${moment(new Date()).format('YYYY-MM-DD')  } 23:59:00`;
+    getAllTotalList();
+  };
+
+  const handleClickThisWeek = () => {
+    const sart = `${moment().startOf('week').format('YYYY-MM-DD')  } 00:00:00`;
+    const end = `${moment().endOf('week').format('YYYY-MM-DD')  } 23:59:00`;
+    getAllTotalList();
+  };
+
+  const handleClickLastWeek = () => {
+    const sart = `${moment().startOf('week').subtract(7, 'days').format('YYYY-MM-DD')  } 00:00:00`;
+    const end = `${moment().endOf('week').subtract(7, 'days').format('YYYY-MM-DD')  } 23:59:00`;
+    getAllTotalList();
+  };
+
+  const handleClickThisMonth = () => {
+    const sart = `${moment().startOf('month').format('YYYY-MM-DD')  } 00:00:00`;
+    const end = `${moment().endOf('month').format('YYYY-MM-DD')  } 23:59:00`;
+    getAllTotalList();
+  };
+
+  const handleClickLastMonth = () => {
+    const sart = `${moment().startOf('month').subtract(1, 'month').format('YYYY-MM-DD')  } 00:00:00`;
+    const end = `${moment().endOf('month').subtract(1, 'month').format('YYYY-MM-DD')  } 23:59:00`;
+    getAllTotalList();
+  };
+
+  const handleClickDown = (key) => {
+    const tempData = tableData;
+    let number = count;
+    tempData.forEach(element => {
+      if(element._id === key) {
+        element.expand = true;
+      }
+      if(element.parent_key === key) {
+        number += 1;
+        element.display = true;
+      }
+    });
+    setTableData(tempData);
+    setCount(number);
+
+  };
+
+  const handleClickUp = (key) => {
+    const tempData = tableData;
+    let number = count;
+    tempData.forEach(element => {
+      if(element._id === key) {
+        element.expand = false;
+      }
+      if(element.parent_key === key) {
+        number -= 1;
+        element.display = false;
+      }
+    });
+    setTableData(tempData);
+    setCount(number);
+  };
+
 
   const getAllTotalList = () => {
     try {
@@ -203,8 +269,8 @@ export default function ReportPartnerListPage() {
       const url = allTotalListUrl;
       const headers = {};
       const data = {
-        "startDate": `${moment(filterStartDate).format('YYYY-MM-DD')  } 00:00:00`,
-        "endDate": `${moment(filterEndDate).format('YYYY-MM-DD')  } 23:59:00`,
+        "startDate": filterStartDate,
+        "endDate": filterEndDate,
       }
       apiWithPostData(url, data, headers).then((response) => {
         const valueData = {
@@ -220,11 +286,13 @@ export default function ReportPartnerListPage() {
         setDataActive(response.ListTotal);
         // eslint-disable-next-line no-unsafe-optional-chaining
         setTotalDepWith(valueData?.totald - valueData?.totalw);
-        setTableData(treedata);
+        setNode(treedata);
+        const totalArrays = handleTreeData(treedata);
+        console.log("totalArrays>>>", totalArrays);
+        setTableData(totalArrays);
         setIsLoading(false);
       });
     } catch (error) {
-      setIsLoading(false);
       console.log(error);
     }
   };
@@ -291,410 +359,30 @@ export default function ReportPartnerListPage() {
                     }))
         }));
     return treedata;
+};
+
+  const handleTreeData = (arr) => {
+    const arrData = [];
+    const loop = (data, key, display) => {
+      data.forEach((item, index) => {
+        if(item.data) {
+          const itemData = item.data;
+          itemData._id = item.key;
+          itemData.parent_key = key;
+          itemData.display = display;
+          itemData.expand = false;
+          arrData.push(itemData);
+        }
+        if (item.children && item.children.length > 0 ) 
+        {
+            loop(item.children, item.key, false);
+        }
+          
+      });
+    };
+    loop(arr, "", true);
+    return arrData;
   };
-
-  const actionTemplate = (node, column) => (
-        <div
-            style={{
-                flexDirection: 'column',
-                paddingLeft:'20px',
-                fontSize:'12px',
-            }}
-        >
-            <Stack direction="row">
-                {node.data.username} 
-                
-            <Typography variant="body2"
-              sx={{
-                ...(node?.data?.role?.order ===1 && {
-                  color: theme.palette.info.main,
-                }),
-                ...(node?.data?.role?.order ===2 && {
-                  color: theme.palette.warning.main,
-                }),
-                ...(node?.data?.role?.order ===3 && {
-                  color: theme.palette.success.main,
-                }),
-                ...(node?.data?.role?.order ===4 && {
-                  color: theme.palette.common.main,
-                }),
-                ...(node?.data?.role?.order ===5 && {
-                  color: theme.palette.primary.main,
-                }),
-                ...(node?.data?.role?.order ===6 && {
-                  color: theme.palette.secondary.main,
-                }),
-            }}>
-              ({node?.data?.role?.name})
-            </Typography>
-            </Stack>
-            <div>총관리 { `(${  node?.data?.total_user || 0  }명)`}</div>
-        </div>
-    );
-  const actionTemplate1 = (node, column) => (
-        <div
-            style={{
-                display: 'flex',
-                justifyContent: 'space-around',
-                fontSize:'12px',
-            }}
-        >
-            <span>슬롯</span>
-            <div className="">
-                R : {node.data.slotRate} L : {node.data.loseSlotRate}
-            </div>
-        </div>
-    );
-  const actionTemplate2 = (node, column) => (
-        <div
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                padding: '0 12px',
-                fontSize:'12px',
-            }}
-        >
-            <div
-                className=""
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    paddingBottom: '10px',
-                    fontSize:'12px',
-                }}
-            >
-                <span>보유머니</span>
-                <span>{toNumberTag(node.data.balanceMain)}</span>
-            </div>
-            <div
-                className=""
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    paddingBottom: '10px',
-                    fontSize:'12px',
-                }}
-            >
-                <span>보유포인트</span>
-                <span>{toNumberTag(0)}</span>
-            </div>
-        </div>
-    );
-  const actionTemplate3 = (node, column) => (
-        <div
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                padding: '0 12px',
-                fontSize:'12px',
-            }}
-        >
-            <div
-                className=""
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    paddingBottom: '10px'
-                }}
-            >
-                <span>회원입금</span>
-                <span>{toNumberTag(node.data.total_deposit)}</span>
-            </div>
-            <div
-                className=""
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    paddingBottom: '10px'
-                }}
-            >
-                <span>회원출금</span>
-                <span>{toNumberTag(node.data.total_withdraw)}</span>
-            </div>
-            <div
-                className=""
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    paddingBottom: '10px'
-                }}
-            >
-                <span>입금-출금</span>
-                <span>{toNumberTag(node.data.total_deposit - node.data.total_withdraw)}</span>
-            </div>
-        </div>
-    );
-
-  const actionTemplate4 = (node, column) => (
-        <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    padding: '0 12px',
-                    fontSize:'12px',
-                }}
-            >
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span>베팅</span>
-                    <span>{toNumberTag(node.data.bet_live)}</span>
-                </div>
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span
-                        style={{
-                            color: 'blue'
-                        }}
-                    >
-                        당첨
-                    </span>
-                    <span>{toNumberTag(node.data.win_live)}</span>
-                </div>
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span>롤링</span>
-                    <span>{toNumberTag(node.data.bet_money_live)}</span>
-                </div>
-
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span
-                        style={{
-                            color: 'red'
-                        }}
-                    >
-                        루징
-                    </span>
-                    <span>
-                        <span>{toNumberTag(node.data.lose_money_live)}</span>
-                    </span>
-                </div>
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span>정산</span>
-                    <span>
-                        <span>{toNumberTag(node.data.balance_live)}</span>
-                    </span>
-                </div>
-            </div>
-    );
-  const actionTemplate5 = (node, column) => (
-        <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    padding: '0 12px',
-                    fontSize:'12px',
-                }}
-            >
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span>베팅</span>
-                    <span>{toNumberTag(node.data.bet_slot)}</span>
-                </div>
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span
-                        style={{
-                            color: 'blue'
-                        }}
-                    >
-                        당첨
-                    </span>
-                    <span>{toNumberTag(node.data.win_slot)}</span>
-                </div>
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span>롤링</span>
-                    <span>{toNumberTag(node.data.bet_money_slot)}</span>
-                </div>
-
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span
-                        style={{
-                            color: 'red'
-                        }}
-                    >
-                        루징
-                    </span>
-                    <span>
-                        <span>{toNumberTag(node.data.lose_money_slot)}</span>
-                    </span>
-                </div>
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span>정산</span>
-                    <span>
-                        <span>{toNumberTag(node.data.balance_slot)}</span>
-                    </span>
-                </div>
-            </div>
-    );
-  const actionTemplate6 = (node, column) => (
-        <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    padding: '0 12px',
-                    fontSize:'12px',
-                }}
-            >
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span>베팅</span>
-                    <span>{toNumberTag(node.data.bet_live + node.data.bet_slot)}</span>
-                </div>
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span
-                        style={{
-                            color: 'blue'
-                        }}
-                    >
-                        당첨
-                    </span>
-                    <span>{toNumberTag(node.data.win_live + node.data.win_slot)}</span>
-                </div>
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span>롤링</span>
-                    <span>{toNumberTag(node.data.bet_money_live + node.data.bet_money_slot)}</span>
-                </div>
-
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span
-                        style={{
-                            color: 'red'
-                        }}
-                    >
-                        루징
-                    </span>
-                    <span>
-                        <span>{toNumberTag(node.data.lose_money_live + node.data.lose_money_slot)}</span>
-                    </span>
-                </div>
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span>정산</span>
-                    <span>
-                        <span>{toNumberTag(node.data.balance_live +  node.data.balance_slot)}</span>
-                    </span>
-                </div>
-            </div>
-    );
-
   
   useEffect(() => {
     getAllTotalList();
@@ -730,6 +418,11 @@ export default function ReportPartnerListPage() {
               handleClickEndDate(newValue);
             }}
             onClickSearch = {handleClickSearch}
+            onClickToday = {handleClickToday}
+            onClickThisWeek = {handleClickThisWeek}
+            onClickLastWeek = {handleClickLastWeek}
+            onClickThisMonth = {handleClickThisMonth}
+            onClickLastMonth = {handleClickLastMonth}
             onFilterName={handleFilterName}
           />
 
@@ -1118,11 +811,11 @@ export default function ReportPartnerListPage() {
             <TableSelectedAction
               dense={dense}
               numSelected={selected.length}
-              rowCount={tableData.length}
+              rowCount={node.length}
               onSelectAllRows={(checked) =>
                 onSelectAllRows(
                   checked,
-                  tableData.map((row) => row.id)
+                  node.map((row) => row.id)
                 )
               }
               action={
@@ -1134,19 +827,19 @@ export default function ReportPartnerListPage() {
               }
             />
 
-            <Scrollbar sx={{ p: 2 }}>
-              {/* <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+            <Scrollbar>
+              <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
                 <TableHeadCustom
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
+                  rowCount={node.length}
                   numSelected={selected.length}
                   onSort={onSort}
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      tableData.map((row) => row.id)
+                      node.map((row) => row.id)
                     )
                   }
                 />
@@ -1169,67 +862,14 @@ export default function ReportPartnerListPage() {
                       />
                     ))}
 
-
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
+                    emptyRows={emptyRows(page, rowsPerPage, node.length)}
                   />
 
                   <TableNoData isNotFound={isNotFound} />
                 </TableBody>
-              </Table> */}
-              
-                    
-              <TreeTable value={dataFiltered} tableStyle={{ minWidth: '1400px' }} globalFilter={globalFilter}>
-                    <Column
-                        className="body_table_name_userlist"
-                        body={actionTemplate}
-                        header="이름"
-                        tableStyle={{ minWidth: '150px' }}
-                        expander
-                    />
-                    <Column field="username" body={actionTemplate1} header="적용 요율 (%)" />
-                    <Column
-                        field="bet_money_slot"
-                        body={actionTemplate2}
-                        style={{
-                            minWidth: '150px'
-                        }}
-                        header="보유금액"
-                    />
-                    <Column
-                        field="lose_money_slot"
-                        body={actionTemplate3}
-                        style={{
-                            minWidth: '150px'
-                        }}
-                        header="입출금"
-                    />
-                    <Column
-                        body={actionTemplate4}
-                        field="bet_money_live"
-                        style={{
-                            minWidth: '150px'
-                        }}
-                        header="카지노"
-                    />
-                    <Column
-                        body={actionTemplate5}
-                        field="lose_money_live"
-                        style={{
-                            minWidth: '150px'
-                        }}
-                        header="슬롯"
-                    />
-                    <Column
-                        body={actionTemplate6}
-                        field="withdraw_rate"
-                        style={{
-                            minWidth: '150px'
-                        }}
-                        header="총베팅"
-                    />
-                </TreeTable>
+              </Table>
             </Scrollbar>
           </TableContainer>
 
@@ -1279,8 +919,13 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (filterName) {
+    // inputData = inputData.filter(
+    //   (user) => parseInt(user.role.order, 10) !== (parseInt(loginUser.roleMain.order, 10) + 1) || 
+    //   (parseInt(user.role.order, 10) === (parseInt(loginUser.roleMain.order, 10) + 1) && user.username.toLowerCase().indexOf(filterName.toLowerCase()) !== -1)
+    // );
+    
     inputData = inputData.filter(
-      (user) => user?.data?.username?.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+      (user) =>(user.display === false) || (user.display === true && user.username.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ) 
     );
   }
 

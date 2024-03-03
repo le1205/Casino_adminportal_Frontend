@@ -34,6 +34,7 @@ export default function HeaderAnalytic({ title, color, price, handleClick, key }
           textAlign: 'center',
           borderWidth: 6,
           boxShadow: theme.customShadows.z8,
+          textTransform: 'capitalize',
         }}
         style={{cursor:'pointer'} } 
         onClick={handleClick}

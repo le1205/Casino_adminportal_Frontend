@@ -239,7 +239,11 @@ const en = {
   totalBettingAmount:'total betting amount',
   alert:'alert',
   ok:'ok',
-  couldNotSelectFuture:'Could not select future date.'
+  couldNotSelectFuture:'Could not select future date.',
+  depositRequestCount:'deposit request count',
+  withdrawRequestCount:'withdraw request count',
+  memberRequestCount:'member request count',
+  faqRequestCount:'1:1 questions',
 };
 
 export default en;

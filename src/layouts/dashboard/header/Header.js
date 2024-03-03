@@ -125,7 +125,8 @@ export default function Header({ onOpenNav }) {
         setUserPoint(dashboard?.user_point || 0);
         setDeposit(dashboard?.totald || 0);
         setWithdraw(dashboard?.totalw || 0);
-        setProfitLoss(0);
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        setProfitLoss(dashboard?.totald - dashboard?.totalw);
         setCManager(0);
         setPManager(0);
         setBettingCount(dashboard?.betting || 0);
@@ -211,23 +212,23 @@ export default function Header({ onOpenNav }) {
             <StyledBlockContainer variant="outlined">
               <Grid container spacing={1} >
               <HeaderAnalytic
-                  title="totalMembers"
-                  price={totalMember}
+                  title="depositRequestCount"
+                  price={countDeposit}
+                  color={theme.palette.info.main}
+                  handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
+                />
+                <HeaderAnalytic
+                  title="memberRequestCount"
+                  price={countUser}
                   color={theme.palette.info.main}
                   handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
-                <HeaderAnalytic
-                  title="betMembers"
-                  price={betMember}
-                  color={theme.palette.info.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.user.listAccordingPartner)}
-                />
 
                 <HeaderAnalytic
-                  title="totalDeposit"
-                  price={deposit}
+                  title="loggedInMember"
+                  price={loginMember}
                   color={theme.palette.warning.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
+                  handleClick={() => movePage(PATH_DASHBOARD.user.connect)}
                 />
                 <HeaderAnalytic
                   title="userMoney"
@@ -237,15 +238,15 @@ export default function Header({ onOpenNav }) {
                 />
 
                 <HeaderAnalytic
-                  title="bettingCount"
-                  price={bettingCount}
+                  title="totalDeposit"
+                  price={deposit}
                   color={theme.palette.text.secondary}
-                  handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
+                  handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
                 />
                 
                  <HeaderAnalytic
                   title="bettingProfit"
-                  price={bettingProfit}
+                  price={profitLoss}
                   color={theme.palette.text.secondary}
                   handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
                 /> 
@@ -256,23 +257,23 @@ export default function Header({ onOpenNav }) {
                   color={theme.palette.warning.main}
                 /> */}
                 <HeaderAnalytic
-                  title="newMembers"
-                  price={newMember}
+                  title="withdrawRequestCount"
+                  price={countWithdraw}
                   color={theme.palette.info.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.user.accept)}
+                  handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
                 />
                 <HeaderAnalytic
-                  title="loginMembers"
-                  price={loginMember}
+                  title="faqRequestCount"
+                  price={countNofi}
                   color={theme.palette.info.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.user.connect)}
+                  handleClick={() => movePage(PATH_DASHBOARD.customer.faq)}
                 />
                 
                 <HeaderAnalytic
-                  title="totalWithdraw"
-                  price={withdraw}
+                  title="totalMembers"
+                  price={totalMember}
                   color={theme.palette.warning.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
+                  handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
                 <HeaderAnalytic
                   title="userPoint"
@@ -282,17 +283,17 @@ export default function Header({ onOpenNav }) {
                 />
 
                 <HeaderAnalytic
-                  title="totalBet"
-                  price={totalBet}
+                  title="totalWithdraw"
+                  price={withdraw}
                   color={theme.palette.text.secondary}
-                  handleClick={() => movePage(PATH_DASHBOARD.report.partner)}
+                  handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
                 />
 
                 <HeaderAnalytic
-                  title="totalWin"
-                  price={totalWin}
+                  title="bettingCount"
+                  price={bettingCount}
                   color={theme.palette.text.secondary}
-                  handleClick={() => movePage(PATH_DASHBOARD.report.partner)}
+                  handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
                 />
 
                 {/* <HeaderAnalytic

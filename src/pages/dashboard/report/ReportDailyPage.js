@@ -115,8 +115,8 @@ export default function ReportDailyPage() {
   const [tableData, setTableData] = useState([]);
   const [openConfirm, setOpenConfirm] = useState(false);
   const [filterRole, setFilterRole] = useState('all');
-  const [filterEndDate, setFilterEndDate] = useState(`${moment(new Date()).format('YYYY-MM-DD')  } 23:59:00`);
-  const [filterStartDate, setFilterStartDate] = useState(`${moment(new Date()).format('YYYY-MM-DD')  } 00:00:00`);
+  const [filterEndDate, setFilterEndDate] = useState(new Date());
+  const [filterStartDate, setFilterStartDate] = useState(new Date());
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(order, orderBy),
@@ -151,6 +151,15 @@ export default function ReportDailyPage() {
   };
 
   const handleClickSearch = () => {
+    
+    const start = moment(filterStartDate).format('YYYY-MM-DD');
+    const end = moment(filterEndDate).format('YYYY-MM-DD');
+    
+    if(moment(start).isAfter(moment(end))) {
+      setAlertContent("시작일과 마감일을 확인하세요.")
+      setOpenAlert(true);
+      return;
+    }
     dailyReport();
   };
 
@@ -159,11 +168,10 @@ export default function ReportDailyPage() {
     const selectedDate = moment(date).format('YYYY-MM-DD');
     if (moment(selectedDate).isAfter(moment(now))) {
       setOpenAlert(true);
-      setFilterStartDate(`${moment(new Date()).format('YYYY-MM-DD')  } 00:00:00`);
+      setFilterStartDate(new Date());
       return;
     }
-    const startDate = `${moment(date).format('YYYY-MM-DD')  } 00:00:00`;
-    setFilterStartDate(startDate);
+    setFilterStartDate(date);
   };
 
   const handleClickEndDate = (date) => {
@@ -171,11 +179,10 @@ export default function ReportDailyPage() {
     const selectedDate = moment(date).format('YYYY-MM-DD');
     if (moment(selectedDate).isAfter(moment(now))) {
       setOpenAlert(true);
-      setFilterStartDate(`${moment(new Date()).format('YYYY-MM-DD')  } 23:59:00`);
+      setFilterStartDate(new Date());
       return;
     }
-    const end = `${moment(date).format('YYYY-MM-DD')  } 23:59:00`;
-    setFilterEndDate(end);
+    setFilterEndDate(date);
   };
 
   const dailyReport = () => {
@@ -184,8 +191,8 @@ export default function ReportDailyPage() {
       const url = dailyReportUrl;
       const headers = {};
       const data = {
-        "startDate": filterStartDate,
-        "endDate": filterEndDate,
+        "startDate": `${moment(filterEndDate).format('YYYY-MM-DD')  } 00:00:00`,
+        "endDate": `${moment(filterEndDate).format('YYYY-MM-DD')  } 23:59:00`,
       };
       apiWithPostData(url, data, headers).then((response) => {
         const dailyArr = [];

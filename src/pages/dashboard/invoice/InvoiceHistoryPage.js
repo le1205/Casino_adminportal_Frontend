@@ -14,6 +14,7 @@ import {
   TableContainer,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import moment from 'moment';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
@@ -89,6 +90,7 @@ export default function InvoiceHistoryPage() {
   const [totalIncome, setTotalIncome] = useState(0);
   const [adminList, setAdminList] = useState([]);
   const [roleList, setRoleList] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -104,7 +106,6 @@ export default function InvoiceHistoryPage() {
     (!dataFiltered.length && !!filterName) ||( !tableData.length);
 
   const handleFilterName = (event) => {
-    setPage(0);
     setFilterName(event.target.value);
   };
 
@@ -114,9 +115,9 @@ export default function InvoiceHistoryPage() {
   };
 
   const handleClickSearch = () => {
+    setPage(0);
     balanceHistory();
-  };
-  
+  };  
 
   const getRoleList = () => {
     try {
@@ -150,22 +151,20 @@ export default function InvoiceHistoryPage() {
   const balanceHistory = () => {
     try {
       setIsLoading(true);
-      setPage(0);
       const url = balanceHistoryUrl;
       const headers = {};
-      const startDate = filterStartDate;
-      startDate.setHours(0, 0, 0);
-      const endDate = filterEndDate;
-      endDate.setHours(23, 59, 59);
+      const startDate = `${moment(filterEndDate).format('YYYY-MM-DD')  } 00:00:00`;
+      const endDate = `${moment(filterEndDate).format('YYYY-MM-DD')  } 23:59:00`;
       const data = {
-        "page": 1,
-        "pageSize": 100,
+        "page": page + 1,
+        "pageSize": rowsPerPage,
         "column": "createdAt",
         "sort": -1,
         "date": [startDate, endDate],
       };
       apiWithPostData(url, data, headers).then((response) => {
         const {results, count, totald, totalw} = response;
+        setTotalCount(count);
         setTableData(results);
         setLogData(results);
         setIsLoading(false);
@@ -202,6 +201,11 @@ export default function InvoiceHistoryPage() {
     balanceHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    balanceHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, rowsPerPage]);
 
   useEffect(() => {
     if(logData.length === 0 || adminList.length === 0 || roleList.length === 0 ) {
@@ -328,7 +332,7 @@ export default function InvoiceHistoryPage() {
 
                 <TableBody>
                   {dataFiltered
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .slice(0, rowsPerPage)
                     .map((row) => (
                       <InvoiceTableRow
                         key={row._id}
@@ -338,11 +342,6 @@ export default function InvoiceHistoryPage() {
                       />
                     ))}
 
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
-                  />
-
                   <TableNoData isNotFound={isNotFound} />
                 </TableBody>
               </Table>
@@ -350,7 +349,7 @@ export default function InvoiceHistoryPage() {
           </TableContainer>
 
           <TablePaginationCustom
-            count={dataFiltered.length}
+            count={totalCount}
             page={page}
             rowsPerPage={rowsPerPage}
             onPageChange={onChangePage}

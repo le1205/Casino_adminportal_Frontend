@@ -113,6 +113,7 @@ export default function UserListPage() {
   const [filterRole, setFilterRole] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const [balanceAmount, setBalanceAmount] = useState(0);
+  const [totalUserCount, setTotalUserCount] = useState(0);
   const amountRef = useRef('');
   const passwordRef = useRef('');
   const confirmPasswordRef = useRef('');
@@ -145,12 +146,10 @@ export default function UserListPage() {
   };
 
   const handleFilterName = (event) => {
-    setPage(0);
     setFilterName(event.target.value);
   };
 
   const handleFilterRole = (event) => {
-    setPage(0);
     setFilterRole(event.target.value);
   };
 
@@ -378,16 +377,17 @@ export default function UserListPage() {
       const url = adminListUrl;
       const headers = {};
       const data = {
-        page:1,
-        pageSize:300,
+        page: page + 1,
+        pageSize:rowsPerPage,
       };
       apiWithPostData(url, data, headers).then((response) => {
-        const { results } = response;
+        const { results, count } = response;
+        setTotalUserCount(count);
         const users = [];
         results.forEach((item, index) => {
           const user = {
             _id: item._id || '',
-            no: index + 1,
+            no: page * rowsPerPage + index + 1,
             id: item.user_id || '',
             name: item.username || '',
             company: item.company || '',
@@ -472,6 +472,12 @@ export default function UserListPage() {
     usersList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
+  
+  useEffect(() => {
+    usersList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, rowsPerPage]);
 
   return (
     <>
@@ -531,7 +537,7 @@ export default function UserListPage() {
 
                 <TableBody>
                   {dataFiltered
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .slice(0,  rowsPerPage)
                     .map((row, index) => (
                       <UserTableRow
                         key={row.id}
@@ -547,10 +553,10 @@ export default function UserListPage() {
                       />
                     ))}
 
-                  <TableEmptyRows
+                  {/* <TableEmptyRows
                     height={denseHeight}
                     emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
-                  />
+                  /> */}
 
                   <TableNoData isNotFound={isNotFound} />
                 </TableBody>
@@ -559,7 +565,7 @@ export default function UserListPage() {
           </TableContainer>
 
           <TablePaginationCustom
-            count={dataFiltered.length}
+            count={totalUserCount}
             page={page}
             rowsPerPage={rowsPerPage}
             onPageChange={onChangePage}
@@ -766,6 +772,8 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
   if (filterRole !== 'all') {
     inputData = inputData.filter((user) => user.role === filterRole);
   }
+
+  console.log("inputData>>", inputData);
 
   return inputData;
 }

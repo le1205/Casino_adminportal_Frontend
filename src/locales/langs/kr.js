@@ -240,6 +240,10 @@ const kr = {
   alert:'알림',
   ok:'확인',
   couldNotSelectFuture:'금일까지 선택가능합니다.',
+  depositRequestCount:'입금신청',
+  withdrawRequestCount:'출금신청',
+  memberRequestCount:'회원가입신청',
+  faqRequestCount:'1:1 문의',
 };
 
 export default kr;
