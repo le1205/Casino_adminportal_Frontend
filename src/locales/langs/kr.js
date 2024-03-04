@@ -245,6 +245,9 @@ const kr = {
   memberRequestCount:'회원가입신청',
   faqRequestCount:'1:1 문의',
   depWithProfit:'입출 손익',
+  move:'이동',
+  Logout:'로그아웃',
+  settlementAmount:'정산 합계',
 };
 
 export default kr;

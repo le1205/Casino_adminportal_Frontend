@@ -245,6 +245,9 @@ const en = {
   memberRequestCount:'member request count',
   faqRequestCount:'1:1 questions',
   depWithProfit:'Dep/With Profit',
+  move:'move',
+  Logout:'Logout',
+  settlementAmount:'settlement amount',
 };
 
 export default en;

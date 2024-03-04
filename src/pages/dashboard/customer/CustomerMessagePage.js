@@ -6,6 +6,7 @@ import {
   Button,
   Table,
   Divider,
+  Dialog,
   TableBody,
   Container,
   TableContainer,
@@ -36,6 +37,7 @@ import { useSnackbar } from '../../../components/snackbar';
 import { useLocales } from '../../../locales';
 // sections
 import { CustomerMessageTableToolbar, CustomerMessageTableRow } from '../../../sections/@dashboard/customer/list';
+import MessageCreateForm from '../../../sections/@dashboard/customer/MessageCreateForm';
 // api
 import { apiWithPostData } from '../../../utils/api';
 // url
@@ -81,6 +83,7 @@ export default function CustomerMessagePage() {
   const [filterName, setFilterName] = useState('');
   const [selectedRow, setSelectedRow] = useState({});
   const [pendingCount, setPendingCount] = useState(0);
+  const [openCreate, setOpenCreate] = useState(false);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -103,6 +106,19 @@ export default function CustomerMessagePage() {
   const handleResetFilter = () => {
     setFilterName('');
   };
+
+  const handleClickCreate = () => {
+    console.log("click here >>>");
+    setOpenCreate(true);
+  };
+  
+  const handleCloseCreate = () => {
+    setOpenCreate(false);
+  };
+  
+  const handleCreateSuccess = (data) =>{
+    setOpenCreate(false);
+  }
 
   const handleClickAccept = (row) => {
     setSelectedRow(row);
@@ -206,6 +222,7 @@ export default function CustomerMessagePage() {
               variant="contained"
               startIcon={<Iconify icon="eva:plus-fill" />}
               sx={{ mt: 4 }}
+              onClick={handleClickCreate}
             >
               {translate('create')}
             </Button>
@@ -290,6 +307,11 @@ export default function CustomerMessagePage() {
 
       </Container>
       {(isLoading === true) && <LoadingScreen/>} 
+      
+
+      <Dialog open = {openCreate} onClose={handleCloseCreate}>
+        <MessageCreateForm isEdit currentUser={selectedRow} onSelectCancel={handleCloseCreate} onUpdateSuccess={handleCreateSuccess}/>
+      </Dialog>
     </>
   );
 }

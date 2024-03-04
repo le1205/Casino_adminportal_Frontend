@@ -1,14 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // md5
 import {md5} from 'js-md5';
 
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import {
-  Tab,
-  Tabs,
   Card,
   Table,
   Button,
@@ -21,14 +19,13 @@ import {
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
-// _mock_
-import { _partnerList } from '../../../_mock/arrays';
 // components
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
+import LoadingScreen from '../../../components/loading-screen';
 import {
   useTable,
   getComparator,
@@ -41,37 +38,27 @@ import {
 } from '../../../components/table';
 // sections
 import { PartnerTableRow, PartnerTableToolbar } from '../../../sections/@dashboard/partner/list';
-// config
-import { SECRET } from '../../../config-global';
+
+// api
+import { apiWithPostData } from '../../../utils/api';
+// url
+import { partnerListUrl } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['all', 'super head office', 'big head office', 'head office', 'distributor', 'store'];
-
-const ROLE_OPTIONS = [
-  'all',
-  'id',
-  'name',
-];
-
 const TABLE_HEAD = [
-  { id: 'id', label: 'id', align: 'left' },
-  { id: 'name', label: 'name', align: 'left' },
-  { id: 'level', label: 'level', align: 'left' },
-  { id: 'slotRolling', label: 'slotRolling', align: 'left' },
-  { id: 'slotLoosing', label: 'slotLoosing', align: 'left' },
-  { id: 'moneySend', label: 'moneySend', align: 'left' },
+  { id: 'name', label: 'name', align: 'center' },
+  { id: 'level', label: 'level', align: 'center' },
+  { id: 'slotRolling', label: 'slotRolling', align: 'center' },
+  { id: 'slotLoosing', label: 'slotLoosing', align: 'center' },
+  { id: 'moneySend', label: 'moneySend', align: 'center' },
   { id: 'moneyReceive', label: 'moneyReceive', align: 'center' },
-  { id: 'partnerNumber', label: 'partnerNumber', align: 'left' },
-  { id: 'userNumber', label: 'userNumber', align: 'left' },
-  { id: 'moneyAmount', label: 'moneyAmount', align: 'left' },
-  { id: 'points', label: 'points', align: 'left' },
-  { id: 'createPartner', label: 'createPartner', align: 'left' },
-  { id: 'createUser', label: 'createUser', align: 'left' },
-  { id: 'option', label: 'Option', align: 'left' },
-  { id: '' },
+  { id: 'userNumber', label: 'userNumber', align: 'center' },
+  { id: 'moneyAmount', label: 'moneyAmount', align: 'center' },
+  { id: 'points', label: 'points', align: 'center' },
+  { id: 'createUser', label: 'createUser', align: 'center' },
+  // { id: 'option', label: 'Option', align: 'center' },
 ];
-
 
 // ----------------------------------------------------------------------
 
@@ -96,49 +83,26 @@ export default function PartnerListPage() {
   } = useTable();
 
   const { themeStretch } = useSettingsContext();
-
   const navigate = useNavigate();
-
   const [tableData, setTableData] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
-
   const [filterName, setFilterName] = useState('');
-
-  const [filterRole, setFilterRole] = useState('all');
-
-  const [filterStatus, setFilterStatus] = useState('all');
 
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(order, orderBy),
     filterName,
-    filterRole,
-    filterStatus,
   });
-
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
   const denseHeight = dense ? 52 : 72;
-
-  const isFiltered = filterName !== '' || filterRole !== 'all' || filterStatus !== 'all';
+  const isFiltered = filterName !== '';
 
   const isNotFound =
-    (!dataFiltered.length && !!filterName) ||
-    (!dataFiltered.length && !!filterRole) ||
-    (!dataFiltered.length && !!filterStatus);
+    (!dataFiltered.length && !!filterName);
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
-  };
-
-  const handleCloseConfirm = () => {
-    setOpenConfirm(false);
-  };
-
-  const handleFilterStatus = (event, newValue) => {
-    setPage(0);
-    setFilterStatus(newValue);
   };
 
   const handleFilterName = (event) => {
@@ -146,49 +110,55 @@ export default function PartnerListPage() {
     setFilterName(event.target.value);
   };
 
-  const handleFilterRole = (event) => {
-    setPage(0);
-    setFilterRole(event.target.value);
-  };
-
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
-
-    if (page > 0) {
-      if (dataInPage.length < 2) {
-        setPage(page - 1);
-      }
-    }
-  };
-
-  const handleDeleteRows = (selectedRows) => {
-    const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
-    setSelected([]);
-    setTableData(deleteRows);
-
-    if (page > 0) {
-      if (selectedRows.length === dataInPage.length) {
-        setPage(page - 1);
-      } else if (selectedRows.length === dataFiltered.length) {
-        setPage(0);
-      } else if (selectedRows.length > dataInPage.length) {
-        const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
-        setPage(newPage);
-      }
-    }
-  };
-
-  const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
-  };
-
   const handleResetFilter = () => {
     setFilterName('');
-    setFilterRole('all');
-    setFilterStatus('all');
   };
+
+  const handleSelectMove = (row) => {
+    navigate(PATH_DASHBOARD.user.new);
+  };
+
+  const partnerList = () => {
+    try {
+      setIsLoading(true);
+      const url = partnerListUrl;
+      const headers = {};
+      const data = {};
+      apiWithPostData(url, data, headers).then((response) => {
+        const partners = [];
+        response.forEach((item, index) => {
+          const {role, value} = item;
+          const partner = {
+            id: value?._id || '',
+            name: value?.username || '',
+            roleName: role?.name || '',
+            roleOrder: role?.order || 0,
+            slotRolling: value?.balanceMain || 0,
+            slotLoosing: value?.pointSlot || 0,
+            deposit: value?.totald || 0,
+            withdraw: value?.totalw || 0,
+            userCount: value?.total_user || 0,
+            userMoney: value?.user_money || 0,
+            userPoint: value?.user_point || 0,
+            userId: value?.userId || '',
+            totalBet: value?.total_bet || 0,
+            totalWin: value?.total_win || 0,
+          }
+          partners.push(partner);
+        });
+        setIsLoading(false);
+        setTableData(partners);
+      });
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    partnerList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openConfirm]);
 
   return (
     <>
@@ -207,28 +177,12 @@ export default function PartnerListPage() {
         />
 
         <Card>
-          <Tabs
-            value={filterStatus}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2,
-              bgcolor: 'background.neutral',
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab key={tab} label={tab} value={tab} />
-            ))}
-          </Tabs>
-
           <Divider />
 
           <PartnerTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
-            filterRole={filterRole}
-            optionsRole={ROLE_OPTIONS}
             onFilterName={handleFilterName}
-            onFilterRole={handleFilterRole}
             onResetFilter={handleResetFilter}
           />
 
@@ -274,12 +228,11 @@ export default function PartnerListPage() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
                       <PartnerTableRow
-                        key={row.id}
+                        key={row?.id}
                         row={row}
                         selected={selected.includes(row.id)}
                         onSelectRow={() => onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.name)}
+                        onSelectMove={() => handleSelectMove(row)}
                       />
                     ))}
 
@@ -306,36 +259,15 @@ export default function PartnerListPage() {
           />
         </Card>
       </Container>
-
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows(selected);
-              handleCloseConfirm();
-            }}
-          >
-            Delete
-          </Button>
-        }
-      />
+      
+      {(isLoading === true) && <LoadingScreen/>} 
     </>
   );
 }
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, comparator, filterName, filterStatus, filterRole }) {
+function applyFilter({ inputData, comparator, filterName, }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -350,14 +282,6 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
     inputData = inputData.filter(
       (user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
     );
-  }
-
-  if (filterStatus !== 'all') {
-    inputData = inputData.filter((user) => user.level === filterStatus);
-  }
-
-  if (filterRole !== 'all') {
-    inputData = inputData.filter((user) => user.role === filterRole);
   }
 
   return inputData;

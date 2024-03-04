@@ -45,7 +45,7 @@ import { ReportDailyTableToolbar, ReportDailyTableRow } from '../../../sections/
 // api
 import { apiWithPostData } from '../../../utils/api';
 // url
-import { dailyReportUrl } from '../../../utils/urlList';
+import { dailyReportUrl, partnerListUrl } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
@@ -58,19 +58,19 @@ const ROLE_OPTIONS = [
 
 const TABLE_HEAD = [
   { id: 'date', label: 'date', align: 'center',  colSpan: 1 },
-  { id: 'userName', label: 'userName', align: 'center',  colSpan: 1 },
+  // { id: 'userName', label: 'userName', align: 'center',  colSpan: 1 },
   { id: 'deposit', label: 'deposit', align: 'center', colSpan: 1 },
   { id: 'withdraw', label: 'withdraw', align: 'center', colSpan: 1 },
   { id: 'depowith', label: 'depowith', align: 'center', colSpan: 1 },
   { id: 'bettingAmount', label: 'bettingAmount', align: 'center', colSpan: 3 },
   { id: 'winAmount', label: 'winAmount', align: 'center', colSpan: 3 },
   { id: 'rollingAmount', label: 'rollingAmount', align: 'center', colSpan: 3 },
-  { id: 'loosingAmount', label: 'loosingAmount', align: 'center', colSpan: 3 },
+  { id: 'settlementAmount', label: 'settlementAmount', align: 'center', colSpan: 3 },
 ];
 
 const TABLE_SUB_HEAD = [
   { id: 'date', label: '', align: 'center', },
-  { id: 'username', label: '', align: 'center', },
+  // { id: 'username', label: '', align: 'center', },
   { id: 'deposit', label: '', align: 'center', },
   { id: 'withdraw', label: '', align: 'center', },
   { id: 'depowith', label: '', align: 'center', },
@@ -196,10 +196,10 @@ export default function ReportDailyPage() {
       };
       apiWithPostData(url, data, headers).then((response) => {
         const dailyArr = [];
-        // console.log("response>>>", response);
+        // console.log(response);
         response?.forEach(element => {
-          element?.mapData?.forEach(context => {
-            context.date = element.date;
+          element?.value?.forEach(context => {
+            context.date = element.data;
             dailyArr.push(context);
           });
         });

@@ -52,8 +52,6 @@ Header.propTypes = {
   onOpenNav: PropTypes.func,
 };
 
-
-
 const StyledBlockContainer = styled(Paper)(({ theme }) => ({
   marginTop:1,
   padding: theme.spacing(1),
@@ -109,9 +107,12 @@ export default function Header({ onOpenNav }) {
     return () => {
       clearInterval(optimer);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
   const getHeaderDashboard = () => {
+    if(isDesktop === false)
+      return;
     try {
       const url = adminHeaderDashboardUrl;
       const headers = {};
@@ -143,6 +144,8 @@ export default function Header({ onOpenNav }) {
   };
   
   const getHeaderCount = () => {
+    if(isDesktop === false)
+      return;
     try {
       const url = adminHeaderCountUrl;
       const headers = {};
@@ -203,18 +206,19 @@ export default function Header({ onOpenNav }) {
       )}
 
       <Stack
-        flexGrow={3}
         direction="row"
         alignItems="center"
         justifyContent="flex"
         spacing={{ xs: 0.5, sm: 1.5 }}
       >
-        <Card sx={{ mb: 1, pt:1 }}>
-            
+        {isDesktop && 
             <StyledBlockContainer variant="outlined">
-              <Grid container spacing={1} >
-              <HeaderAnalytic
+              <Grid container spacing={1} 
+                direction="row"
+              >
+                <HeaderAnalytic
                   title="depositRequestCount"
+                  isDesktop ={isDesktop}
                   price={countDeposit}
                   color={theme.palette.info.main}
                   handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
@@ -299,18 +303,21 @@ export default function Header({ onOpenNav }) {
                 />
               </Grid>
             </StyledBlockContainer>
-        </Card>
+        }
+            
+
+        {/* </Card> */}
       
-        <Stack
+        {/* <Stack
           flexGrow={1}
           direction="row"
           alignItems="center"
           justifyContent="flex-end"
           spacing={{ xs: 0.5, sm: 1.5 }}
         >
-          {/* <NotificationsPopover /> */}
+          <NotificationsPopover />
         
-          {/* <Badge badgeContent={countDeposit} color="error">
+          <Badge badgeContent={countDeposit} color="error">
             <PaidIcon color='success'  sx={{ cursor: 'pointer'}}  onClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}/>
           </Badge>
 
@@ -324,11 +331,11 @@ export default function Header({ onOpenNav }) {
         
           <Badge badgeContent={countUser} color="error">
             <PersonAddRoundedIcon color='success'  sx={{ cursor: 'pointer'}}  onClick={() => movePage(PATH_DASHBOARD.user.list)}/>
-          </Badge> */}
+          </Badge>
 
-          {/* <LanguagePopover /> */}
-          {/* <AccountPopover /> */}
-        </Stack>
+          <LanguagePopover />
+          <AccountPopover />
+        </Stack> */}
       </Stack>
 
     </>

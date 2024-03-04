@@ -163,8 +163,7 @@ function Description() {
 
       <m.div variants={varFade().in}>
         <Typography variant="body2" sx={{ textAlign: 'center' }}>
-          The starting point for your next project is based on MUI.Easy customization Helps you
-          build apps faster and better.
+          Admin Portal
         </Typography>
       </m.div>
 

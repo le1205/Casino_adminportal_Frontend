@@ -1,12 +1,19 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 // @mui
-import { Box, Stack, Drawer } from '@mui/material';
+import { Box, Stack, Drawer, Tooltip } from '@mui/material';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+// routes
+import { PATH_AUTH } from '../../../routes/paths';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
+// auth
+import { useAuthContext } from '../../../auth/useAuthContext';
 // config
 import { NAV } from '../../../config-global';
+// locales
+import { useLocales } from '../../../locales';
 // components
 import Logo from '../../../components/logo';
 import Scrollbar from '../../../components/scrollbar';
@@ -19,6 +26,7 @@ import NavToggleButton from './NavToggleButton';
 
 import AccountPopover from '../header/AccountPopover';
 import LanguagePopover from '../header/LanguagePopover';
+import NavMobileHeader from './NavMobileHeader';
 
 // ----------------------------------------------------------------------
 
@@ -28,9 +36,17 @@ NavVertical.propTypes = {
 };
 
 export default function NavVertical({ openNav, onCloseNav }) {
+  const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { translate } = useLocales();
+  const { logout } = useAuthContext();
 
   const isDesktop = useResponsive('up', 'lg');
+
+  const handleClickLogout = (row) => {
+    logout();
+    navigate(PATH_AUTH.login, { replace: true });
+  };
 
   useEffect(() => {
     if (openNav) {
@@ -71,10 +87,25 @@ export default function NavVertical({ openNav, onCloseNav }) {
               mr: 12,
             }}/>
           <LanguagePopover />
-          <AccountPopover />
+          
+          <Tooltip title={`${translate('Logout')}`} arrow>
+            <PowerSettingsNewIcon 
+              color="error"
+              onClick={() => {
+                handleClickLogout();
+              }}
+              sx={{
+                ml: 1,
+                mt: 1,
+                cursor: 'pointer',
+              }}/>
+          </Tooltip>
+          {/* <AccountPopover /> */}
         </Stack>
 
         <NavAccount />
+        {!isDesktop && <NavMobileHeader/>}
+        
       </Stack>
 
       <NavSectionVertical data={navConfig} />

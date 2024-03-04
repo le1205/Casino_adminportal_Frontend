@@ -6,23 +6,19 @@ import Iconify from '../../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
+const INPUT_WIDTH = 240;
+
 PartnerTableToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterName: PropTypes.string,
-  filterRole: PropTypes.string,
   onFilterName: PropTypes.func,
-  onFilterRole: PropTypes.func,
   onResetFilter: PropTypes.func,
-  optionsRole: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default function PartnerTableToolbar({
   isFiltered,
   filterName,
-  filterRole,
-  optionsRole,
   onFilterName,
-  onFilterRole,
   onResetFilter,
 }) {
   return (
@@ -35,47 +31,15 @@ export default function PartnerTableToolbar({
       }}
       sx={{ px: 2.5, py: 3 }}
     >
-      <TextField
-        fullWidth
-        select
-        label="Role"
-        value={filterRole}
-        onChange={onFilterRole}
-        SelectProps={{
-          MenuProps: {
-            PaperProps: {
-              sx: {
-                maxHeight: 260,
-              },
-            },
-          },
-        }}
-        sx={{
-          maxWidth: { sm: 240 },
-          textTransform: 'capitalize',
-        }}
-      >
-        {optionsRole.map((option) => (
-          <MenuItem
-            key={option}
-            value={option}
-            sx={{
-              mx: 1,
-              borderRadius: 0.75,
-              typography: 'body2',
-              textTransform: 'capitalize',
-            }}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </TextField>
 
       <TextField
         fullWidth
         value={filterName}
         onChange={onFilterName}
-        placeholder="Search..."
+        placeholder="Search id..."
+        sx={{
+          maxWidth: { md: INPUT_WIDTH },
+        }}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

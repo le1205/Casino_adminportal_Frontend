@@ -11,7 +11,7 @@ import { useTheme, } from '@mui/material/styles';
 import { useLocales } from '../../../locales';
 // ----------------------------------------------------------------------
 
-HeaderAnalytic.propTypes = {
+HeaderMobileAnalytic.propTypes = {
   title: PropTypes.string,
   color: PropTypes.string,
   key: PropTypes.string,
@@ -20,21 +20,22 @@ HeaderAnalytic.propTypes = {
   isDesktop: PropTypes.bool,
 };
 
-export default function HeaderAnalytic({ title, color, price, handleClick, key, isDesktop }) {
+export default function HeaderMobileAnalytic({ title, color, price, handleClick, key, isDesktop }) {
   const theme = useTheme();
   
   const { translate } = useLocales();
   return (
     
-    <Grid key={key} item xs={2} 
-      sx={{flexBasis:`14.28% !important`, minWidth:'140px',}}>
+    <Grid key={key} item xs={6} 
+      // sx={{flexBasis:`14.28% !important`, minWidth:'140px',}}>
+      sx={{flexBasis:'7.14% !important',minWidth:'120px'}}>
       <Box
         borderLeft={2}
         borderColor={color}
         sx={{
-          py: 3,
+          py: 1,
           textAlign: 'center',
-          borderWidth: 6,
+          borderWidth: 4,
           boxShadow: theme.customShadows.z8,
           textTransform: 'capitalize',
         }}
@@ -46,11 +47,11 @@ export default function HeaderAnalytic({ title, color, price, handleClick, key, 
           alignItems="center"
           justifyContent="center"
         >
-            <Typography variant="subtitle1"  align="center">
+            <Typography variant="body2"  align="center">
               {`${translate(title)}`}
             </Typography>
     
-            <Typography variant="subtitle1" align="center" sx={{ color }}>
+            <Typography variant="body2" align="center" sx={{ color }}>
               {price?.toLocaleString()}
             </Typography>
         </Stack>
