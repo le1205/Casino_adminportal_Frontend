@@ -203,7 +203,6 @@ export default function ReportDailyPage() {
             dailyArr.push(context);
           });
         });
-        console.log("dailyArr>>>", dailyArr);
         dailyArr?.forEach((item, index) => {
           if(item.username) {
             item.id = index;

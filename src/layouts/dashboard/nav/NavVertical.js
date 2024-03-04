@@ -17,6 +17,9 @@ import NavDocs from './NavDocs';
 import NavAccount from './NavAccount';
 import NavToggleButton from './NavToggleButton';
 
+import AccountPopover from '../header/AccountPopover';
+import LanguagePopover from '../header/LanguagePopover';
+
 // ----------------------------------------------------------------------
 
 NavVertical.propTypes = {
@@ -57,7 +60,19 @@ export default function NavVertical({ openNav, onCloseNav }) {
           flexShrink: 0,
         }}
       >
-        <Logo />
+        <Stack 
+          sx={{
+            flexDirection: 'row',
+            alignItems:'right',
+            justifyContent:'right',
+          }}>
+          <Logo 
+            sx={{
+              mr: 12,
+            }}/>
+          <LanguagePopover />
+          <AccountPopover />
+        </Stack>
 
         <NavAccount />
       </Stack>

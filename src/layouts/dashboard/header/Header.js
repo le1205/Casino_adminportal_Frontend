@@ -134,7 +134,7 @@ export default function Header({ onOpenNav }) {
         setTotalWin(dashboard?.total_win || 0);
         setRolling(dashboard?.rolling || 0);
         // eslint-disable-next-line no-unsafe-optional-chaining
-        const rate = (dashboard?.rolling) / (dashboard?.login_member)
+        const rate = (dashboard?.total_bet) - (dashboard?.total_win)
         setBettingProfit(rate || 0);
       });
     } catch (error) {
@@ -326,8 +326,8 @@ export default function Header({ onOpenNav }) {
             <PersonAddRoundedIcon color='success'  sx={{ cursor: 'pointer'}}  onClick={() => movePage(PATH_DASHBOARD.user.list)}/>
           </Badge> */}
 
-          <LanguagePopover />
-          <AccountPopover />
+          {/* <LanguagePopover /> */}
+          {/* <AccountPopover /> */}
         </Stack>
       </Stack>
 
