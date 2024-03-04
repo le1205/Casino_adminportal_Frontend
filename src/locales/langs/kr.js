@@ -152,7 +152,7 @@ const kr = {
   userMoney: `회원 보유머니`,
   userPoint: `회원 보유포인트`,
   totalDeposit: `입금 금액`,
-  totalWithdraw:`입출 금액`,
+  totalWithdraw:`출금 금액`,
   profitLoss:`입출 손익`,
   managerCompany:`매니저 (C)`,
   managerPartner:`매니저 (P)`,
@@ -244,6 +244,7 @@ const kr = {
   withdrawRequestCount:'출금신청',
   memberRequestCount:'회원가입신청',
   faqRequestCount:'1:1 문의',
+  depWithProfit:'입출 손익',
 };
 
 export default kr;

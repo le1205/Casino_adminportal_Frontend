@@ -244,6 +244,7 @@ const en = {
   withdrawRequestCount:'withdraw request count',
   memberRequestCount:'member request count',
   faqRequestCount:'1:1 questions',
+  depWithProfit:'Dep/With Profit',
 };
 
 export default en;

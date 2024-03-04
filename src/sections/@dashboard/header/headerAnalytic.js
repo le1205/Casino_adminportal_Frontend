@@ -25,7 +25,7 @@ export default function HeaderAnalytic({ title, color, price, handleClick, key }
   const { translate } = useLocales();
   return (
     
-    <Grid key={key} item xs={2} sx={{minWidth:180}}>
+    <Grid key={key} item xs={2} sx={{flexBasis:`14.28% !important`, minWidth:'140px'}}>
       <Box
         borderLeft={2}
         borderColor={color}

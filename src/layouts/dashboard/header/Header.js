@@ -133,7 +133,9 @@ export default function Header({ onOpenNav }) {
         setTotalBet(dashboard?.total_bet || 0);
         setTotalWin(dashboard?.total_win || 0);
         setRolling(dashboard?.rolling || 0);
-        setBettingProfit(dashboard?.profit || 0);
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        const rate = (dashboard?.rolling) / (dashboard?.login_member)
+        setBettingProfit(rate || 0);
       });
     } catch (error) {
       console.log(error);
@@ -233,22 +235,30 @@ export default function Header({ onOpenNav }) {
                 <HeaderAnalytic
                   title="userMoney"
                   price={userMoney}
-                  color={theme.palette.success.main}
+                  color={theme.palette.text.secondary}
                   handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
 
                 <HeaderAnalytic
                   title="totalDeposit"
                   price={deposit}
-                  color={theme.palette.text.secondary}
+                  color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
                 />
                 
+
+                <HeaderAnalytic
+                  title="totalWithdraw"
+                  price={withdraw}
+                  color={theme.palette.success.main}
+                  handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
+                />
+                
                  <HeaderAnalytic
-                  title="bettingProfit"
+                  title="depWithProfit"
                   price={profitLoss}
-                  color={theme.palette.text.secondary}
-                  handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
+                  color={theme.palette.success.main}
+                  handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
                 /> 
                 
                 {/* <HeaderAnalytic
@@ -278,21 +288,29 @@ export default function Header({ onOpenNav }) {
                 <HeaderAnalytic
                   title="userPoint"
                   price={userPoint}
-                  color={theme.palette.success.main}
+                  color={theme.palette.text.secondary}
                   handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
 
                 <HeaderAnalytic
-                  title="totalWithdraw"
-                  price={withdraw}
-                  color={theme.palette.text.secondary}
-                  handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
+                  title="totalBet"
+                  price={totalBet}
+                  color={theme.palette.success.main}
+                  handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
+                />
+                
+
+                <HeaderAnalytic
+                  title="totalWin"
+                  price={totalWin}
+                  color={theme.palette.success.main}
+                  handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
                 />
 
                 <HeaderAnalytic
-                  title="bettingCount"
-                  price={bettingCount}
-                  color={theme.palette.text.secondary}
+                  title="bettingProfit"
+                  price={bettingProfit}
+                  color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
                 />
 
@@ -314,7 +332,7 @@ export default function Header({ onOpenNav }) {
         >
           {/* <NotificationsPopover /> */}
         
-          <Badge badgeContent={countDeposit} color="error">
+          {/* <Badge badgeContent={countDeposit} color="error">
             <PaidIcon color='success'  sx={{ cursor: 'pointer'}}  onClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}/>
           </Badge>
 
@@ -328,7 +346,7 @@ export default function Header({ onOpenNav }) {
         
           <Badge badgeContent={countUser} color="error">
             <PersonAddRoundedIcon color='success'  sx={{ cursor: 'pointer'}}  onClick={() => movePage(PATH_DASHBOARD.user.list)}/>
-          </Badge>
+          </Badge> */}
 
           <LanguagePopover />
           <AccountPopover />
