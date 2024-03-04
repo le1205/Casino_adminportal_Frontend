@@ -773,7 +773,5 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
     inputData = inputData.filter((user) => user.role === filterRole);
   }
 
-  console.log("inputData>>", inputData);
-
   return inputData;
 }

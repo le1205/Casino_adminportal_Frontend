@@ -16,15 +16,15 @@ ReportDailyTableRow.propTypes = {
 
 export default function ReportDailyTableRow({ row, selected, onEditRow }) {
   // eslint-disable-next-line no-unsafe-optional-chaining
-  const holdingPoint = row?.deposit - row?.withdraw;
+  const holdingPoint = row?.deposit - row?.withdraw || 0;
   // eslint-disable-next-line no-unsafe-optional-chaining
-  const totalBet = row?.bet_slot + row?.bet_live;
+  const totalBet = row?.bet_slot + row?.bet_live || 0;
   // eslint-disable-next-line no-unsafe-optional-chaining
-  const totalWin = row?.win_live + row?.win_slot;
+  const totalWin = row?.win_live + row?.win_slot || 0;
   // eslint-disable-next-line no-unsafe-optional-chaining
-  const totalRolling = row?.rolling_live + row?.rolling_slot;
+  const totalRolling = row?.bet_money_live + row?.bet_money_slot || 0;
   // eslint-disable-next-line no-unsafe-optional-chaining
-  const totalLoosing = row?.loosing_live + row?.loosing_slot;
+  const totalLoosing = row?.lose_money_live + row?.lose_money_slot || 0;
 
   return (
     <TableRow hover selected={selected}>
@@ -96,13 +96,13 @@ export default function ReportDailyTableRow({ row, selected, onEditRow }) {
 
         <TableCell align="center">
           <Typography variant="body2">
-            {row?.rolling_live}
+            {row?.balance_live}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {row?.rolling_slot}
+            {row?.balance_slot}
           </Typography>
         </TableCell>
 
@@ -114,13 +114,13 @@ export default function ReportDailyTableRow({ row, selected, onEditRow }) {
 
         <TableCell align="center">
           <Typography variant="body2">
-            {row?.loosing_live}
+            {row?.lose_money_live}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {row?.loosing_slot}
+            {row?.lose_money_slot}
           </Typography>
         </TableCell>
 

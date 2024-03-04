@@ -196,13 +196,16 @@ export default function ReportDailyPage() {
       };
       apiWithPostData(url, data, headers).then((response) => {
         const dailyArr = [];
+        // console.log("response>>>", response);
         response?.forEach(element => {
-          element?.forEach(context => {
+          element?.mapData?.forEach(context => {
+            context.date = element.date;
             dailyArr.push(context);
           });
         });
+        console.log("dailyArr>>>", dailyArr);
         dailyArr?.forEach((item, index) => {
-          if(item.data) {
+          if(item.username) {
             item.id = index;
           }
         });

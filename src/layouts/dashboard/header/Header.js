@@ -225,7 +225,6 @@ export default function Header({ onOpenNav }) {
                   color={theme.palette.info.main}
                   handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
-
                 <HeaderAnalytic
                   title="loggedInMember"
                   price={loginMember}
@@ -238,34 +237,24 @@ export default function Header({ onOpenNav }) {
                   color={theme.palette.text.secondary}
                   handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
-
                 <HeaderAnalytic
                   title="totalDeposit"
                   price={deposit}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
                 />
-                
-
                 <HeaderAnalytic
                   title="totalWithdraw"
                   price={withdraw}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
                 />
-                
                  <HeaderAnalytic
                   title="depWithProfit"
                   price={profitLoss}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
                 /> 
-                
-                {/* <HeaderAnalytic
-                  title="profitLoss"
-                  price={profitLoss}
-                  color={theme.palette.warning.main}
-                /> */}
                 <HeaderAnalytic
                   title="withdrawRequestCount"
                   price={countWithdraw}
@@ -278,7 +267,6 @@ export default function Header({ onOpenNav }) {
                   color={theme.palette.info.main}
                   handleClick={() => movePage(PATH_DASHBOARD.customer.faq)}
                 />
-                
                 <HeaderAnalytic
                   title="totalMembers"
                   price={totalMember}
@@ -291,34 +279,24 @@ export default function Header({ onOpenNav }) {
                   color={theme.palette.text.secondary}
                   handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
-
                 <HeaderAnalytic
                   title="totalBet"
                   price={totalBet}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
                 />
-                
-
                 <HeaderAnalytic
                   title="totalWin"
                   price={totalWin}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
                 />
-
                 <HeaderAnalytic
                   title="bettingProfit"
                   price={bettingProfit}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
                 />
-
-                {/* <HeaderAnalytic
-                  title="totalRolling"
-                  price={rolling}
-                  color={theme.palette.text.secondary}
-                /> */}
               </Grid>
             </StyledBlockContainer>
         </Card>

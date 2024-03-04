@@ -219,7 +219,6 @@ export default function UserConnectPage() {
   
   const handleClickLogout = (id) => {
     try {
-      console.log(id);
       const url = userDeleteSessionUrl + id;
       const data = {};
       const headers = {};
@@ -270,7 +269,7 @@ export default function UserConnectPage() {
             id: item.userId || '',
             ip: ipAddress,
             username: item.user?.username || '',
-            cash: item.user?.userActive?.balance  || 0,
+            cash: item.user?.balance  || 0,
             lastDate: item.updatedAt,
             isVerified: item.user?.verify || false,
             status: item.user?.isBlock || false,
