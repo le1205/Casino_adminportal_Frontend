@@ -45,7 +45,7 @@ import HeaderAnalytic from '../../../sections/@dashboard/header/headerAnalytic';
 // api
 import { apiWithPostData } from '../../../utils/api';
 // url
-import { adminHeaderDashboardUrl, adminHeaderCountUrl } from '../../../utils/urlList';
+import { adminHeaderDashboardUrl, adminHeaderCountUrl, userSessionUrl } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
@@ -109,11 +109,15 @@ export default function Header({ onOpenNav }) {
   useEffect(() => {
     getHeaderDashboard();
     getHeaderCount();
+    getOnlineCount();
     
     const optimer = setInterval(getHeaderCount, 3000);
+    // const optimer1 = setInterval(getOnlineCount, 10000);
     return () => {
       clearInterval(optimer);
+      // clearInterval(optimer1);
     };
+    
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
@@ -128,7 +132,6 @@ export default function Header({ onOpenNav }) {
         setTotalMember(dashboard?.total_member || 0);
         setBetMember(dashboard?.total_bet || 0);
         setNewMember(0);
-        setLoginMember(dashboard?.login_member || 0);
         setUserMoney(dashboard?.user_money || 0);
         setUserPoint(dashboard?.user_point || 0);
         setDeposit(dashboard?.totald || 0);
@@ -197,6 +200,26 @@ export default function Header({ onOpenNav }) {
       console.log(error);
     }
   };
+  
+  const getOnlineCount = () => {
+    try {
+      const url = userSessionUrl;
+      const data = {
+        page: 1,
+        pageSize: 100,
+        date:[new Date, new Date]
+      }
+      const headers = {};
+      apiWithPostData(url, data, headers).then((response) => {
+        const {count} = response;
+        setLoginMember(count);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+  };
+
 
   const movePage = (path) => {
     navigate(path);

@@ -207,7 +207,6 @@ export default function ReportPartnerListPage() {
         "endDate": `${moment(filterEndDate).format('YYYY-MM-DD')  } 23:59:00`,
       }
       apiWithPostData(url, data, headers).then((response) => {
-        console.log("respnose>>", response);
         const valueData = {
           ...response
         };
@@ -221,6 +220,7 @@ export default function ReportPartnerListPage() {
         setDataActive(response.ListTotal);
         // eslint-disable-next-line no-unsafe-optional-chaining
         setTotalDepWith(valueData?.userInfo?.totald - valueData?.userInfo?.totalw);
+        setTotalHoldingPoint(valueData?.balanceHold);
         setTableData(treedata);
         setIsLoading(false);
       });
@@ -803,7 +803,7 @@ export default function ReportPartnerListPage() {
                             {`${translate('holdingPoint')}`}
                           </Typography>
                           <Typography variant="body2">
-                            {toNumberString(totalData?.user_point)}
+                            {toNumberString(totalHoldingPoint)}
                           </Typography>
                         </Stack>
                       </TableCell>

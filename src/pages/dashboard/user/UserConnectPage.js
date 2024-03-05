@@ -255,7 +255,7 @@ export default function UserConnectPage() {
       const url = userSessionUrl;
       const data = {
         page: 1,
-        pageSize: 50,
+        pageSize: 100,
         date:[filterStartDate, filterEndDate]
       }
       const headers = {};
