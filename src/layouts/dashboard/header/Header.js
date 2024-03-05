@@ -21,6 +21,7 @@ import CreditScoreRoundedIcon from '@mui/icons-material/CreditScoreRounded';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // utils
 import { bgBlur } from '../../../utils/cssStyles';
+import { parseJson } from '../../../auth/utils';
 // hooks
 import useOffSetTop from '../../../hooks/useOffSetTop';
 import useResponsive from '../../../hooks/useResponsive';
@@ -97,6 +98,12 @@ export default function Header({ onOpenNav }) {
   const widthdrawRef = useRef();
   const deposutRef = useRef();
   const customerRef = useRef();
+
+  const loginUser  = parseJson(localStorage.getItem('user') || "");
+  let isAgent = false;
+  if(loginUser?.roleMain?.order === 4 || loginUser?.roleMain?.order === 5) {
+    isAgent = true;
+  }
    
   
   useEffect(() => {
@@ -215,88 +222,109 @@ export default function Header({ onOpenNav }) {
             <StyledBlockContainer variant="outlined">
               <Grid container spacing={1} 
                 direction="row"
-              >
-                <HeaderAnalytic
-                  title="depositRequestCount"
-                  isDesktop ={isDesktop}
-                  price={countDeposit}
-                  color={theme.palette.info.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
-                />
-                <HeaderAnalytic
-                  title="memberRequestCount"
-                  price={countUser}
-                  color={theme.palette.info.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.user.list)}
-                />
+              > 
+                {!isAgent && 
+                  <HeaderAnalytic
+                    title="depositRequestCount"
+                    isAgent ={isAgent}
+                    price={countDeposit}
+                    color={theme.palette.info.main}
+                    handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
+                  />
+                }
+                {!isAgent && 
+                  <HeaderAnalytic
+                    title="memberRequestCount"
+                    isAgent ={isAgent}
+                    price={countUser}
+                    color={theme.palette.info.main}
+                    handleClick={() => movePage(PATH_DASHBOARD.user.list)}
+                  />
+                }
                 <HeaderAnalytic
                   title="loggedInMember"
+                  isAgent ={isAgent}
                   price={loginMember}
                   color={theme.palette.warning.main}
                   handleClick={() => movePage(PATH_DASHBOARD.user.connect)}
                 />
                 <HeaderAnalytic
                   title="userMoney"
+                  isAgent ={isAgent}
                   price={userMoney}
                   color={theme.palette.text.secondary}
                   handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
                 <HeaderAnalytic
                   title="totalDeposit"
+                  isAgent ={isAgent}
                   price={deposit}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
                 />
                 <HeaderAnalytic
                   title="totalWithdraw"
+                  isAgent ={isAgent}
                   price={withdraw}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
                 />
                  <HeaderAnalytic
                   title="depWithProfit"
+                  isAgent ={isAgent}
                   price={profitLoss}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
                 /> 
-                <HeaderAnalytic
-                  title="withdrawRequestCount"
-                  price={countWithdraw}
-                  color={theme.palette.info.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
-                />
-                <HeaderAnalytic
-                  title="faqRequestCount"
-                  price={countNofi}
-                  color={theme.palette.info.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.customer.faq)}
-                />
+                {!isAgent && 
+                  <HeaderAnalytic
+                    title="withdrawRequestCount"
+                    isAgent ={isAgent}
+                    price={countWithdraw}
+                    color={theme.palette.info.main}
+                    handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
+                  />
+                }
+                {!isAgent && 
+                  <HeaderAnalytic
+                    title="faqRequestCount"
+                    isAgent ={isAgent}
+                    price={countNofi}
+                    color={theme.palette.info.main}
+                    handleClick={() => movePage(PATH_DASHBOARD.customer.faq)}
+                  />
+                }
                 <HeaderAnalytic
                   title="totalMembers"
+                  isAgent ={isAgent}
                   price={totalMember}
                   color={theme.palette.warning.main}
                   handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
                 <HeaderAnalytic
                   title="userPoint"
+                  isAgent ={isAgent}
                   price={userPoint}
                   color={theme.palette.text.secondary}
                   handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
                 <HeaderAnalytic
                   title="totalBet"
+                  isAgent ={isAgent}
                   price={totalBet}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
                 />
                 <HeaderAnalytic
                   title="totalWin"
+                  isAgent ={isAgent}
                   price={totalWin}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
                 />
                 <HeaderAnalytic
                   title="bettingProfit"
+                  isAgent ={isAgent}
                   price={bettingProfit}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.bet.common)}

@@ -200,7 +200,6 @@ export default function ReportDailyPage() {
       };
       apiWithPostData(url, data, headers).then((response) => {
         const dailyArr = [];
-        console.log(response);
         response?.forEach(element => {
           element?.value?.forEach(context => {
             context.date = element.data;

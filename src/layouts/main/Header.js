@@ -8,6 +8,7 @@ import useOffSetTop from '../../hooks/useOffSetTop';
 import useResponsive from '../../hooks/useResponsive';
 // utils
 import { bgBlur } from '../../utils/cssStyles';
+import {parseJson } from '../../auth/utils';
 // config
 import { HEADER } from '../../config-global';
 // components

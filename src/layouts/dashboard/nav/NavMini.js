@@ -9,6 +9,7 @@ import Logo from '../../../components/logo';
 import { NavSectionMini } from '../../../components/nav-section';
 //
 import navConfig from './config-navigation';
+import navAgentConfig from './config-agent-navigation';
 import NavToggleButton from './NavToggleButton';
 
 // ----------------------------------------------------------------------

@@ -1,14 +1,11 @@
 import { Link as RouterLink, useNavigate} from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 // @mui
-import { styled, alpha, useTheme } from '@mui/material/styles';
-import { Box, Link, Grid, Stack } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import {  Grid, Stack } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import useResponsive from '../../../hooks/useResponsive';
-// locales
-import { useLocales } from '../../../locales';
-
 // utils
 import { parseJson } from '../../../auth/utils';
 // assets
@@ -21,28 +18,16 @@ import HeaderAnalytic from '../../../sections/@dashboard/header/headerMobileAnal
 // api
 import { apiWithPostData } from '../../../utils/api';
 // url
-import { adminHeaderDashboardUrl, adminHeaderCountUrl, userBalanceUrl } from '../../../utils/urlList';
-
-// ----------------------------------------------------------------------
-
-const StyledRoot = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(2, 2.5),
-  borderRadius: Number(theme.shape.borderRadius) * 1.5,
-  backgroundColor: alpha(theme.palette.grey[500], 0.12),
-}));
+import { adminHeaderDashboardUrl, adminHeaderCountUrl, } from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
 export default function NavMobileHeader() {
   const theme = useTheme();
-  const { translate } = useLocales();
   const navigate = useNavigate();
   const isDesktop = useResponsive('up', 'lg');
-
-  const [balance, setBalance] = useState(0);
-  const [point, setPoint] = useState(0);const [totalMember, setTotalMember] = useState(0);
+  const loginUser  = parseJson(localStorage.getItem('user') || "");
+  const [totalMember, setTotalMember] = useState(0);
   const [betMember, setBetMember] = useState(0);
   const [newMember, setNewMember] = useState(0);
   const [loginMember, setLoginMember] = useState(0);
@@ -66,7 +51,10 @@ export default function NavMobileHeader() {
   const deposutRef = useRef();
   const customerRef = useRef();
 
-  const user = parseJson(localStorage.getItem('user') || '');
+  let isAgent = false;
+  if(loginUser?.roleMain?.order === 4 || loginUser?.roleMain?.order === 5) {
+    isAgent = true;
+  }
 
   useEffect(() => {
     getHeaderDashboard();
@@ -175,31 +163,38 @@ export default function NavMobileHeader() {
       {!isDesktop && 
         <Grid container spacing={1} 
           direction="row"
-        >
-          <HeaderAnalytic
-            title="depositRequestCount"
-            price={countDeposit}
-            color={theme.palette.info.main}
-            handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
-          />
-          <HeaderAnalytic
-            title="withdrawRequestCount"
-            price={countWithdraw}
-            color={theme.palette.info.main}
-            handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
-          />
-          <HeaderAnalytic
-            title="memberRequestCount"
-            price={countUser}
-            color={theme.palette.info.main}
-            handleClick={() => movePage(PATH_DASHBOARD.user.list)}
-          />
-          <HeaderAnalytic
-            title="faqRequestCount"
-            price={countNofi}
-            color={theme.palette.info.main}
-            handleClick={() => movePage(PATH_DASHBOARD.customer.faq)}
-          />
+        > {!isAgent && 
+            <HeaderAnalytic
+              title="depositRequestCount"
+              price={countDeposit}
+              color={theme.palette.info.main}
+              handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
+            />
+          }
+          {!isAgent && 
+            <HeaderAnalytic
+              title="withdrawRequestCount"
+              price={countWithdraw}
+              color={theme.palette.info.main}
+              handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
+            />
+          }
+          {!isAgent && 
+            <HeaderAnalytic
+              title="memberRequestCount"
+              price={countUser}
+              color={theme.palette.info.main}
+              handleClick={() => movePage(PATH_DASHBOARD.user.list)}
+            />
+          }
+          {!isAgent && 
+            <HeaderAnalytic
+              title="faqRequestCount"
+              price={countNofi}
+              color={theme.palette.info.main}
+              handleClick={() => movePage(PATH_DASHBOARD.customer.faq)}
+            />
+          }
           <HeaderAnalytic
             title="loggedInMember"
             price={loginMember}

@@ -41,7 +41,7 @@ export default function NavAccount() {
         const url = userBalanceUrl + user._id;
         const headers = {};
         apiWithGetData(url, {}, headers).then((response) => {
-          setBalance(response?.balance.toLocaleString() || 0);
+          setBalance(response?.balance?.toLocaleString() || 0);
         });
       }
       else {
@@ -61,7 +61,7 @@ export default function NavAccount() {
       const url = getUserPointUrl;
       const headers = {};
       apiWithGetData(url, {}, headers).then((response) => {
-        setPoint(response?.total.toLocaleString() || 0);
+        setPoint(response?.total?.toLocaleString() || 0);
       });
     } catch (error) {
       console.log(error);

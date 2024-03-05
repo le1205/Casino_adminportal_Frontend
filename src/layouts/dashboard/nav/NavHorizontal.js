@@ -7,16 +7,22 @@ import { AppBar, Box, Toolbar } from '@mui/material';
 import { HEADER } from '../../../config-global';
 // utils
 import { bgBlur } from '../../../utils/cssStyles';
+import {parseJson } from '../../../auth/utils';
 // components
 import { NavSectionHorizontal } from '../../../components/nav-section';
 //
 import navConfig from './config-navigation';
+import navAgentConfig from './config-agent-navigation';
 
 // ----------------------------------------------------------------------
 
 function NavHorizontal() {
   const theme = useTheme();
-  const DataNavConfig = navConfig
+  const loginUser  = parseJson(localStorage.getItem('user') || "");
+  let navData = navConfig;
+  if(loginUser?.roleMain?.order === 4 || loginUser?.roleMain?.order === 5) {
+    navData = navAgentConfig;
+  }
   return (
     <AppBar
       component="nav"
@@ -33,7 +39,7 @@ function NavHorizontal() {
           }),
         }}
       >
-        <NavSectionHorizontal data={DataNavConfig} />
+        <NavSectionHorizontal data={navData} />
       </Toolbar>
       <Shadow />
     </AppBar>

@@ -5,7 +5,14 @@ import {
 
 export const toNumberTag = (number, fixed = 5) => {
     if (!number || Number.isNaN(number)) {
-        return '0.00';
+        return '0';
     } 
-        return <Typography variant="inherit">  {number?.toLocaleString()}</Typography>;
+        return <Typography variant="inherit">  {Math.trunc(number)?.toLocaleString()}</Typography>;
+};
+
+export const toNumberString = (number, fixed = 5) => {
+    if (!number || Number.isNaN(number)) {
+        return '0';
+    } 
+        return  Math.trunc(number)?.toLocaleString();
 };
