@@ -48,7 +48,7 @@ export default function NavAccount() {
         const url = getVirutalAmountUrl; 
         const headers = {};
         apiWithGetData(url, {}, headers).then((response) => {
-          console.log(response);
+          setBalance(response?.amount?.toLocaleString() || 0);
         });
       }
      
