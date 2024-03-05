@@ -904,7 +904,7 @@ export default function ReportPartnerListPage() {
                   />
                   <TableBody>
                     <TableRow key="total_search_two_1">
-                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize', borderRight:'solid 1px lightgray', borderLeft:'solid 1px lightgray' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
@@ -916,7 +916,7 @@ export default function ReportPartnerListPage() {
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize', borderRight:'solid 1px lightgray' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
@@ -929,7 +929,7 @@ export default function ReportPartnerListPage() {
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize', }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
@@ -946,7 +946,7 @@ export default function ReportPartnerListPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow key="total_search_two_2">
-                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize', borderRight:'solid 1px lightgray', borderLeft:'solid 1px lightgray' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
@@ -958,7 +958,7 @@ export default function ReportPartnerListPage() {
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize', borderRight:'solid 1px lightgray' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
@@ -970,7 +970,7 @@ export default function ReportPartnerListPage() {
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize', }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
@@ -987,7 +987,7 @@ export default function ReportPartnerListPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow key="total_search_two_3">
-                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize', borderRight:'solid 1px lightgray', borderLeft:'solid 1px lightgray' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
@@ -999,7 +999,7 @@ export default function ReportPartnerListPage() {
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize', borderRight:'solid 1px lightgray' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
@@ -1011,7 +1011,7 @@ export default function ReportPartnerListPage() {
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize', }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
@@ -1028,7 +1028,7 @@ export default function ReportPartnerListPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow key="total_search_two_5">
-                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize', borderRight:'solid 1px lightgray', borderLeft:'solid 1px lightgray' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
@@ -1040,7 +1040,7 @@ export default function ReportPartnerListPage() {
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize', borderRight:'solid 1px lightgray' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
@@ -1052,7 +1052,7 @@ export default function ReportPartnerListPage() {
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize', }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
@@ -1069,7 +1069,7 @@ export default function ReportPartnerListPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow key="total_search_two_4">
-                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize', borderRight:'solid 1px lightgray', borderLeft:'solid 1px lightgray' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
@@ -1081,7 +1081,7 @@ export default function ReportPartnerListPage() {
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize', borderRight:'solid 1px lightgray' }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
@@ -1093,7 +1093,7 @@ export default function ReportPartnerListPage() {
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
+                      <TableCell align='left' sx={{ textTransform: 'capitalize', }}>
                         <Stack direction="row"
                           alignItems="center"
                           justifyContent="space-between">
@@ -1186,19 +1186,19 @@ export default function ReportPartnerListPage() {
                         className="body_table_name_userlist"
                         body={actionTemplate}
                         header="이름"
-                        style={{ minWidth: '150px', borderRight: 'solid 1px lightgray', }}
+                        style={{ minWidth: '150px', borderRight: 'solid 1px lightgray', borderBottom: 'solid 1px lightgray', }}
                         expander
                     />
                     <Column 
                         field="username" 
                         body={actionTemplate1} 
-                        style={{ borderRight: 'solid 1px lightgray', }}
+                        style={{ borderRight: 'solid 1px lightgray',borderBottom: 'solid 1px lightgray', }}
                         header="적용 요율 (%)" />
 
                     <Column
                         field="bet_money_slot"
                         body={actionTemplate2}
-                        style={{ minWidth: '150px', borderRight: 'solid 1px lightgray', }}
+                        style={{ minWidth: '150px', borderRight: 'solid 1px lightgray', borderBottom: 'solid 1px lightgray',}}
                         header="보유금액"
                     />
                     <Column
@@ -1207,6 +1207,7 @@ export default function ReportPartnerListPage() {
                         style={{
                             minWidth: '150px',
                             borderRight: 'solid 1px lightgray',
+                            borderBottom: 'solid 1px lightgray',
                         }}
                         header="입출금"
                     />
@@ -1216,6 +1217,7 @@ export default function ReportPartnerListPage() {
                         style={{
                             minWidth: '150px',
                             borderRight: 'solid 1px lightgray',
+                            borderBottom: 'solid 1px lightgray',
                         }}
                         header="카지노"
                     />
@@ -1225,6 +1227,7 @@ export default function ReportPartnerListPage() {
                         style={{
                             minWidth: '150px',
                             borderRight: 'solid 1px lightgray',
+                            borderBottom: 'solid 1px lightgray',
                         }}
                         header="슬롯"
                     />
@@ -1233,6 +1236,7 @@ export default function ReportPartnerListPage() {
                         field="withdraw_rate"
                         style={{
                             minWidth: '150px',
+                            borderBottom: 'solid 1px lightgray',
                         }}
                         header="총베팅"
                     />
