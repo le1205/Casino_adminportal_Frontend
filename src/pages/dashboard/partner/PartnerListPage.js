@@ -115,7 +115,7 @@ export default function PartnerListPage() {
   };
 
   const handleSelectMove = (row) => {
-    navigate(PATH_DASHBOARD.user.new);
+    navigate(PATH_DASHBOARD.user.new, {state: row});
   };
 
   const partnerList = () => {

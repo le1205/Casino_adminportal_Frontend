@@ -61,8 +61,8 @@ export default function UserTableToolbar({
       >
         {optionsRole.map((option) => (
           <MenuItem
-            key={option?.name}
-            value={option?.name}
+            key={option?.id}
+            value={option?.id}
             sx={{
               mx: 1,
               borderRadius: 0.75,

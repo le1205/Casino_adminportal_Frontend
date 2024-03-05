@@ -482,7 +482,20 @@ export default function ReportPartnerListPage() {
                     <span>롤링</span>
                     <span>{toNumberTag(node.data.bet_money_live)}</span>
                 </div>
-
+                <div
+                    className=""
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        paddingBottom: '10px'
+                    }}
+                >
+                    <span>정산</span>
+                    <span>
+                        <span>{toNumberTag(node.data.balance_live)}</span>
+                    </span>
+                </div>
                 <div
                     className=""
                     style={{
@@ -501,20 +514,6 @@ export default function ReportPartnerListPage() {
                     </span>
                     <span>
                         <span>{toNumberTag(node.data.lose_money_live)}</span>
-                    </span>
-                </div>
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span>정산</span>
-                    <span>
-                        <span>{toNumberTag(node.data.balance_live)}</span>
                     </span>
                 </div>
             </div>
@@ -570,7 +569,20 @@ export default function ReportPartnerListPage() {
                     <span>롤링</span>
                     <span>{toNumberTag(node.data.bet_money_slot)}</span>
                 </div>
-
+                <div
+                    className=""
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        paddingBottom: '10px'
+                    }}
+                >
+                    <span>정산</span>
+                    <span>
+                        <span>{toNumberTag(node.data.balance_slot)}</span>
+                    </span>
+                </div>
                 <div
                     className=""
                     style={{
@@ -589,20 +601,6 @@ export default function ReportPartnerListPage() {
                     </span>
                     <span>
                         <span>{toNumberTag(node.data.lose_money_slot)}</span>
-                    </span>
-                </div>
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span>정산</span>
-                    <span>
-                        <span>{toNumberTag(node.data.balance_slot)}</span>
                     </span>
                 </div>
             </div>
@@ -658,7 +656,20 @@ export default function ReportPartnerListPage() {
                     <span>롤링</span>
                     <span>{toNumberTag(node.data.bet_money_live + node.data.bet_money_slot)}</span>
                 </div>
-
+                <div
+                    className=""
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        paddingBottom: '10px'
+                    }}
+                >
+                    <span>정산</span>
+                    <span>
+                        <span>{toNumberTag(node.data.balance_live +  node.data.balance_slot)}</span>
+                    </span>
+                </div>
                 <div
                     className=""
                     style={{
@@ -677,20 +688,6 @@ export default function ReportPartnerListPage() {
                     </span>
                     <span>
                         <span>{toNumberTag(node.data.lose_money_live + node.data.lose_money_slot)}</span>
-                    </span>
-                </div>
-                <div
-                    className=""
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingBottom: '10px'
-                    }}
-                >
-                    <span>정산</span>
-                    <span>
-                        <span>{toNumberTag(node.data.balance_live +  node.data.balance_slot)}</span>
                     </span>
                 </div>
             </div>

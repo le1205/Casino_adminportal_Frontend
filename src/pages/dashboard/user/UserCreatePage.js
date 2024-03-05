@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { useLocation } from 'react-router-dom';
 // @mui
 import { Container } from '@mui/material';
 // routes
@@ -13,7 +14,8 @@ import UserNewEditForm from '../../../sections/@dashboard/user/UserNewEditForm';
 
 export default function UserCreatePage() {
   const { themeStretch } = useSettingsContext();
-
+  const location = useLocation();
+  
   return (
     <>
       <Helmet>
@@ -35,7 +37,7 @@ export default function UserCreatePage() {
             { name: 'create' },
           ]}
         />
-        <UserNewEditForm />
+        <UserNewEditForm partner={location?.state}/>
       </Container>
     </>
   );

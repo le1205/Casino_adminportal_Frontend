@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
 import { useState, useEffect, useRef } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 // md5
 import {md5} from 'js-md5';
 // @mui
@@ -386,11 +386,26 @@ export default function UserListPage() {
         page: page + 1,
         pageSize:rowsPerPage,
       };
-      if(filterName !== undefined && filterName !== '') {
+      if(filterName !== '') {
         data = {
           page: page + 1,
           pageSize:rowsPerPage,
           username: filterName,
+        };
+      }
+      if(filterRole !== 'all') {
+        data = {
+          page: page + 1,
+          pageSize:rowsPerPage,
+          role: filterRole,
+        };
+      }
+      if(filterName !== '' && filterRole !== 'all') {
+        data = {
+          page: page + 1,
+          pageSize:rowsPerPage,
+          username: filterName,
+          role: filterRole,
         };
       }
       apiWithPostData(url, data, headers).then((response) => {
@@ -398,41 +413,42 @@ export default function UserListPage() {
         setTotalUserCount(count);
         const users = [];
         results.forEach((item, index) => {
-          const user = {
-            _id: item?._id || '',
-            no: page * rowsPerPage + index + 1,
-            id: item?.user_id || '',
-            name: item?.username || '',
-            company: item?.company || '',
-            creator: item?.creator || '',
-            level: item?.level || '',
-            cash: item?.balanceMain || 0,
-            point: item?.pointSlot || 0,
-            inOut: item?.inOut || '',
-            totalLoose: item?.loseSlotRate || 0,
-            lastDate: item?.updatedAt,
-            isVerified: item?.verify || false,
-            status: item?.isBlock || false,
-            role: item?.role?.name || '',
-            roleOrder: item?.role?.order || 0,
-            nickName: item?.Nickname || '',
-            birthday: item?.Birthday || '',
-            phoneNumber: item?.phone || '',
-            bankInfo: item?.bankName || '',
-            bankAccount: item?.bankAccount || '',
-            loginAvailable: item?.verify || true,
-            betAvailable: item?.isBlock || true,
-            depositOwner: item?.bankOwner || '',
-            community: item?.community || '',
-            slotRolling: item?.slotRate || 0,
-            slotLoosing: item?.loseSlotRate || 0,
-            casinoRolling: item?.liveRate || 0,
-            casinoLoosing: item?.loseLiveRate || 0,
-            agent: item?.agent || '',
-            exchangeRate: item?.withdrawRate || '',
-
-          }
-          users.push(user);
+          if(item.username !== process.env.REACT_APP_ADMIN_DEVELOPER) {
+            const user = {
+              _id: item?._id || '',
+              no: page * rowsPerPage + index + 1,
+              id: item?.user_id || '',
+              name: item?.username || '',
+              company: item?.company || '',
+              creator: item?.creator || '',
+              level: item?.level || '',
+              cash: item?.balanceMain || 0,
+              point: item?.pointSlot || 0,
+              inOut: item?.inOut || '',
+              totalLoose: item?.loseSlotRate || 0,
+              lastDate: item?.updatedAt,
+              isVerified: item?.verify || false,
+              status: item?.isBlock || false,
+              role: item?.role?.name || '',
+              roleOrder: item?.role?.order || 0,
+              nickName: item?.Nickname || '',
+              birthday: item?.Birthday || '',
+              phoneNumber: item?.phone || '',
+              bankInfo: item?.bankName || '',
+              bankAccount: item?.bankAccount || '',
+              loginAvailable: item?.verify || true,
+              betAvailable: item?.isBlock || true,
+              depositOwner: item?.bankOwner || '',
+              community: item?.community || '',
+              slotRolling: item?.slotRate || 0,
+              slotLoosing: item?.loseSlotRate || 0,
+              casinoRolling: item?.liveRate || 0,
+              casinoLoosing: item?.loseLiveRate || 0,
+              agent: item?.agent || '',
+              exchangeRate: item?.withdrawRate || '',
+            }
+            users.push(user);
+        }
         });
         setTableData(users);
         setIsLoading(false);
@@ -453,6 +469,7 @@ export default function UserListPage() {
       apiWithPostData(url, data, headers).then((response) => {
         const { results } = response;
         const roles = [{
+          id: 'all',
           name: 'all',
           order: 0,
           title: 'all',
@@ -460,6 +477,7 @@ export default function UserListPage() {
         results.forEach((item, index) => {
           if(parseInt(item?.order, 10) > parseInt(loginUser?.roleMain?.order, 10)) {
             const role = {
+              id: item._id || '',
               name: item.name || '',
               order: item.order || '',
               title: item.title || '',
@@ -783,9 +801,9 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
     inputData = inputData.filter((user) => user.status === filterStatus);
   }
 
-  if (filterRole !== 'all') {
-    inputData = inputData.filter((user) => user.role === filterRole);
-  }
+  // if (filterRole !== 'all') {
+  //   inputData = inputData.filter((user) => user.role === filterRole);
+  // }
 
   return inputData;
 }

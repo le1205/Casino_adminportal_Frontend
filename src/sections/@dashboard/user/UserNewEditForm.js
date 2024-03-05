@@ -28,6 +28,7 @@ import {parseJson } from '../../../auth/utils';
 
 UserNewEditForm.propTypes = {
   isEdit: PropTypes.bool,
+  partner: PropTypes.object,
   currentUser: PropTypes.object,
 };
 
@@ -61,7 +62,7 @@ const banks = [
 ];
 
 
-export default function UserNewEditForm({ isEdit = false, currentUser }) {
+export default function UserNewEditForm({ isEdit = false, currentUser, partner }) {
   const navigate = useNavigate();
   const { translate } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
@@ -95,7 +96,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
       casinoRolling: currentUser?.casinoRolling || 0,
       casinoLoosing: currentUser?.casinoLoosing || 0,
       role: currentUser?.role || '',
-      agent: currentUser?.agent || '',
+      agent: partner?.name || '',
       withdrawRate: currentUser?.withdrawRate || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -123,7 +124,17 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
         const { results } = response;
         const roles = [];
         results.forEach((item) => {
-          if(parseInt(item?.order, 10) > parseInt(loginUser?.roleMain?.order, 10)) {
+          if(partner?.roleOrder) {
+            if(parseInt(item?.order, 10) > parseInt(loginUser?.roleMain?.order, 10)  && parseInt(item?.order, 10) > parseInt(partner?.roleOrder, 10)) {
+              const role = {
+                name: item.name || '',
+                order: item.order || '',
+                title: item.title || '',
+              }
+              roles.push(role);
+            }
+          }
+          else if(parseInt(item?.order, 10) > parseInt(loginUser?.roleMain?.order, 10)) {
             const role = {
               name: item.name || '',
               order: item.order || '',
