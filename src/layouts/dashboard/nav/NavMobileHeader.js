@@ -55,6 +55,10 @@ export default function NavMobileHeader() {
   if(loginUser?.roleMain?.order === 4 || loginUser?.roleMain?.order === 5) {
     isAgent = true;
   }
+  let isAdmin = false;
+  if(loginUser?.roleMain?.order === 1){
+    isAdmin = true;
+  }
 
   useEffect(() => {
     getHeaderDashboard();
@@ -244,12 +248,24 @@ export default function NavMobileHeader() {
             color={theme.palette.success.main}
             handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
           />
-          <HeaderAnalytic
-            title="totalBet"
-            price={totalBet}
-            color={theme.palette.success.main}
-            handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
-          />
+          {isAdmin && 
+            <HeaderAnalytic
+              title="totalBet"
+              isAgent ={isAgent}
+              price={totalBet}
+              color={theme.palette.success.main}
+              handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
+            />
+          }
+          {!isAdmin && 
+            <HeaderAnalytic
+              title="rollingAmount"
+              isAgent ={isAgent}
+              price={rolling}
+              color={theme.palette.success.main}
+              handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
+            />
+          }
           <HeaderAnalytic
             title="totalWithdraw"
             price={withdraw}

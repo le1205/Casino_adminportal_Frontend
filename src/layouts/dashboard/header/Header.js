@@ -104,7 +104,10 @@ export default function Header({ onOpenNav }) {
   if(loginUser?.roleMain?.order === 4 || loginUser?.roleMain?.order === 5) {
     isAgent = true;
   }
-   
+  let isAdmin = false;
+  if(loginUser?.roleMain?.order === 1){
+    isAdmin = true;
+  }
   
   useEffect(() => {
     getHeaderDashboard();
@@ -129,6 +132,7 @@ export default function Header({ onOpenNav }) {
       const headers = {};
       apiWithPostData(url, {}, headers).then((response) => {
         const { dashboard } = response;
+        console.log("response >>", response);
         setTotalMember(dashboard?.total_member || 0);
         setBetMember(dashboard?.total_bet || 0);
         setNewMember(0);
@@ -331,13 +335,24 @@ export default function Header({ onOpenNav }) {
                   color={theme.palette.text.secondary}
                   handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
-                <HeaderAnalytic
-                  title="totalBet"
-                  isAgent ={isAgent}
-                  price={totalBet}
-                  color={theme.palette.success.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
-                />
+                {isAdmin && 
+                  <HeaderAnalytic
+                    title="totalBet"
+                    isAgent ={isAgent}
+                    price={totalBet}
+                    color={theme.palette.success.main}
+                    handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
+                  />
+                }
+                {!isAdmin && 
+                  <HeaderAnalytic
+                    title="rollingAmount"
+                    isAgent ={isAgent}
+                    price={rolling}
+                    color={theme.palette.success.main}
+                    handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
+                  />
+                }
                 <HeaderAnalytic
                   title="totalWin"
                   isAgent ={isAgent}
