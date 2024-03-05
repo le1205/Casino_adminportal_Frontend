@@ -59,13 +59,14 @@ const ROLE_OPTIONS = [
 const TABLE_HEAD = [
   { id: 'date', label: 'date', align: 'center',  colSpan: 1 },
   // { id: 'userName', label: 'userName', align: 'center',  colSpan: 1 },
-  { id: 'deposit', label: 'deposit', align: 'center', colSpan: 1 },
-  { id: 'withdraw', label: 'withdraw', align: 'center', colSpan: 1 },
+  { id: 'deposit', label: 'totalDeposit', align: 'center', colSpan: 1 },
+  { id: 'withdraw', label: 'totalWithdraw', align: 'center', colSpan: 1 },
   { id: 'depowith', label: 'depowith', align: 'center', colSpan: 1 },
   { id: 'bettingAmount', label: 'bettingAmount', align: 'center', colSpan: 3 },
   { id: 'winAmount', label: 'winAmount', align: 'center', colSpan: 3 },
   { id: 'rollingAmount', label: 'rollingAmount', align: 'center', colSpan: 3 },
   { id: 'settlementAmount', label: 'settlementAmount', align: 'center', colSpan: 3 },
+  { id: 'loosingAmount', label: 'loosingAmount', align: 'center', colSpan: 3 },
 ];
 
 const TABLE_SUB_HEAD = [
@@ -83,6 +84,9 @@ const TABLE_SUB_HEAD = [
   { id: 'rollingCasino', label: 'casino', align: 'center', },
   { id: 'rollingSlot', label: 'slot', align: 'center', },
   { id: 'rollingTotal', label: 'total', align: 'center', },
+  { id: 'settlementCasino', label: 'casino', align: 'center', },
+  { id: 'settlementSlot', label: 'slot', align: 'center', },
+  { id: 'settlementTotal', label: 'total', align: 'center', },
   { id: 'loosingCasino', label: 'casino', align: 'center', },
   { id: 'loosingSlot', label: 'slot', align: 'center', },
   { id: 'loosingTotal', label: 'total', align: 'center', },
@@ -191,12 +195,12 @@ export default function ReportDailyPage() {
       const url = dailyReportUrl;
       const headers = {};
       const data = {
-        "startDate": `${moment(filterEndDate).format('YYYY-MM-DD')  } 00:00:00`,
+        "startDate": `${moment(filterStartDate).format('YYYY-MM-DD')  } 00:00:00`,
         "endDate": `${moment(filterEndDate).format('YYYY-MM-DD')  } 23:59:00`,
       };
       apiWithPostData(url, data, headers).then((response) => {
         const dailyArr = [];
-        // console.log(response);
+        console.log(response);
         response?.forEach(element => {
           element?.value?.forEach(context => {
             context.date = element.data;
@@ -208,6 +212,7 @@ export default function ReportDailyPage() {
             item.id = index;
           }
         });
+        dailyArr.sort((a, b) => (a.date < b.date) ? 1 : -1);
         setTableData(dailyArr);
         setIsLoading(false);
       });

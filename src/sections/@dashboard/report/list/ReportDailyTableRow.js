@@ -32,7 +32,7 @@ export default function ReportDailyTableRow({ row, selected, onEditRow }) {
   const settlementSlot = row?.bet_slot - row?.win_slot - row?.balance_slot || 0;
   const settlementTotal = totalBet - totalWin - totalRolling;
   
-  const data = moment(row?.date).format('MM/DD/YYYY') || '';
+  const data = moment(row?.date).format('YYYY-MM-DD') || '';
 
   return (
     <TableRow hover selected={selected}>
@@ -135,6 +135,24 @@ export default function ReportDailyTableRow({ row, selected, onEditRow }) {
         <TableCell align="center">
           <Typography variant="body2">
             {settlementTotal?.toLocaleString()}
+          </Typography>
+        </TableCell>
+
+        <TableCell align="center">
+          <Typography variant="body2">
+            {row?.lose_money_live?.toLocaleString()}
+          </Typography>
+        </TableCell>
+
+        <TableCell align="center">
+          <Typography variant="body2">
+            {row?.lose_money_slot?.toLocaleString()}
+          </Typography>
+        </TableCell>
+
+        <TableCell align="center">
+          <Typography variant="body2">
+            {totalLoosing?.toLocaleString()}
           </Typography>
         </TableCell>
         
