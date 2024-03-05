@@ -6,6 +6,8 @@ import Iconify from '../../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
+const INPUT_WIDTH = 300;
+
 UserTableToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterName: PropTypes.string,
@@ -13,6 +15,7 @@ UserTableToolbar.propTypes = {
   onFilterName: PropTypes.func,
   onFilterRole: PropTypes.func,
   onResetFilter: PropTypes.func,
+  onClickSearch: PropTypes.func,
   optionsRole: PropTypes.arrayOf(PropTypes.object),
 };
 
@@ -24,6 +27,7 @@ export default function UserTableToolbar({
   onFilterName,
   onFilterRole,
   onResetFilter,
+  onClickSearch,
 }) {
   return (
     <Stack
@@ -76,6 +80,9 @@ export default function UserTableToolbar({
         value={filterName}
         onChange={onFilterName}
         placeholder="Search..."
+        sx={{
+          maxWidth: { sm: 280 },
+        }}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -84,6 +91,14 @@ export default function UserTableToolbar({
           ),
         }}
       />
+      
+      <Button
+        variant="contained"
+        onClick={onClickSearch}
+        startIcon={<Iconify icon="eva:search-fill"/>}
+      >
+        Search
+      </Button>
 
       {isFiltered && (
         <Button

@@ -128,23 +128,25 @@ export default function PartnerListPage() {
         const partners = [];
         response.forEach((item, index) => {
           const {role, value} = item;
-          const partner = {
-            id: value?._id || '',
-            name: value?.username || '',
-            roleName: role?.name || '',
-            roleOrder: role?.order || 0,
-            slotRolling: value?.balanceMain || 0,
-            slotLoosing: value?.pointSlot || 0,
-            deposit: value?.totald || 0,
-            withdraw: value?.totalw || 0,
-            userCount: value?.total_user || 0,
-            userMoney: value?.user_money || 0,
-            userPoint: value?.user_point || 0,
-            userId: value?.userId || '',
-            totalBet: value?.total_bet || 0,
-            totalWin: value?.total_win || 0,
+          if(value.username !== process.env.REACT_APP_ADMIN_DEVELOPER) {
+            const partner = {
+              id: value?._id || '',
+              name: value?.username || '',
+              roleName: role?.name || '',
+              roleOrder: role?.order || 0,
+              slotRolling: value?.balanceMain || 0,
+              slotLoosing: value?.pointSlot || 0,
+              deposit: value?.totald || 0,
+              withdraw: value?.totalw || 0,
+              userCount: value?.total_user || 0,
+              userMoney: value?.user_money || 0,
+              userPoint: value?.user_point || 0,
+              userId: value?.userId || '',
+              totalBet: value?.total_bet || 0,
+              totalWin: value?.total_win || 0,
+            }
+            partners.push(partner);
           }
-          partners.push(partner);
         });
         setIsLoading(false);
         setTableData(partners);

@@ -153,6 +153,12 @@ export default function UserListPage() {
     setFilterRole(event.target.value);
   };
 
+  const handleClickSearch = () => {
+    // console.log("clicked");
+    setPage(0);
+    usersList();
+  };
+
   const handleEditRow = (id) => {
     navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
   };
@@ -376,10 +382,17 @@ export default function UserListPage() {
       setIsLoading(true);
       const url = adminListUrl;
       const headers = {};
-      const data = {
+      let data = {
         page: page + 1,
         pageSize:rowsPerPage,
       };
+      if(filterName !== undefined && filterName !== '') {
+        data = {
+          page: page + 1,
+          pageSize:rowsPerPage,
+          username: filterName,
+        };
+      }
       apiWithPostData(url, data, headers).then((response) => {
         const { results, count } = response;
         setTotalUserCount(count);
@@ -515,6 +528,7 @@ export default function UserListPage() {
             onFilterName={handleFilterName}
             onFilterRole={handleFilterRole}
             onResetFilter={handleResetFilter}
+            onClickSearch={handleClickSearch}
           />
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
@@ -759,11 +773,11 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
 
   // inputData = stabilizedThis.map((el) => el[0]);
 
-  if (filterName) {
-    inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
-    );
-  }
+  // if (filterName) {
+  //   inputData = inputData.filter(
+  //     (user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+  //   );
+  // }
 
   if (filterStatus !== 'all') {
     inputData = inputData.filter((user) => user.status === filterStatus);

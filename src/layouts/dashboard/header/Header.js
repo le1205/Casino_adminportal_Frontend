@@ -112,10 +112,10 @@ export default function Header({ onOpenNav }) {
     getOnlineCount();
     
     const optimer = setInterval(getHeaderCount, 3000);
-    // const optimer1 = setInterval(getOnlineCount, 10000);
+    const optimer1 = setInterval(getOnlineCount, 10000);
     return () => {
       clearInterval(optimer);
-      // clearInterval(optimer1);
+      clearInterval(optimer1);
     };
     
   // eslint-disable-next-line react-hooks/exhaustive-deps
