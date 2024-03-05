@@ -7,6 +7,7 @@ import {
   TableCell,
   Typography,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import PersonIcon from '@mui/icons-material/Person';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
@@ -32,8 +33,9 @@ UserTableRow.propTypes = {
 };
 
 export default function UserTableRow({ row, selected, index,  onSelectMoney, onSelectRemove, onSelectChangePassword, onSelectChangeStatus, page }) {
-  const { name, id, no, creator, role, cash,  inOut, totalLoose, lastDate, point } = row;
+  const { name, id, no, creator, role, cash,  roleOrder, totalLoose, lastDate, point } = row;
   const { translate } = useLocales();
+  const theme = useTheme();
   const dateString = fKoreanDate(lastDate) ;
   
   return (
@@ -50,7 +52,28 @@ export default function UserTableRow({ row, selected, index,  onSelectMoney, onS
 
         <TableCell align="left">{creator}</TableCell>
 
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+        <TableCell align="left"
+        
+        sx={{
+          textTransform: 'capitalize',
+          ...(roleOrder ===1 && {
+            color: theme.palette.info.main,
+          }),
+          ...(roleOrder ===2 && {
+            color: theme.palette.warning.main,
+          }),
+          ...(roleOrder ===3 && {
+            color: theme.palette.success.main,
+          }),
+          ...(roleOrder ===4 && {
+            color: theme.palette.common.main,
+          }),
+          ...(roleOrder ===5 && {
+            color: theme.palette.primary.main,
+          }),
+          ...(roleOrder ===6 && {
+            color: theme.palette.secondary.main,
+          }), }}>
           {role}
         </TableCell>
 

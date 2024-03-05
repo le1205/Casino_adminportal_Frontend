@@ -207,7 +207,7 @@ export default function ReportPartnerListPage() {
         "endDate": `${moment(filterEndDate).format('YYYY-MM-DD')  } 23:59:00`,
       }
       apiWithPostData(url, data, headers).then((response) => {
-        // console.log("respnose>>", response);
+        console.log("respnose>>", response);
         const valueData = {
           ...response
         };
@@ -217,10 +217,10 @@ export default function ReportPartnerListPage() {
         const listDataUser = valueMain.filter((item) => item.creatorId === userData._id);
         
         const treedata = handleCountData(listDataUser, valueMain);
-        setTotalData(valueData);
+        setTotalData(valueData?.userInfo);
         setDataActive(response.ListTotal);
         // eslint-disable-next-line no-unsafe-optional-chaining
-        setTotalDepWith(valueData?.totald - valueData?.totalw);
+        setTotalDepWith(valueData?.userInfo?.totald - valueData?.userInfo?.totalw);
         setTableData(treedata);
         setIsLoading(false);
       });
@@ -753,7 +753,7 @@ export default function ReportPartnerListPage() {
                             {`${translate('holdingMoney')}`}
                           </Typography>
                           <Typography variant="body2">
-                          {toNumberString(totalData?.totalMoney)}
+                          {toNumberString(totalData?.user_money)}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -803,7 +803,7 @@ export default function ReportPartnerListPage() {
                             {`${translate('holdingPoint')}`}
                           </Typography>
                           <Typography variant="body2">
-                            {toNumberString(totalHoldingPoint)}
+                            {toNumberString(totalData?.user_point)}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -853,7 +853,7 @@ export default function ReportPartnerListPage() {
                             {`${translate('userAmount')}`}
                           </Typography>
                           <Typography variant="body2">
-                            {totalData?.mapData?.length}
+                            {totalData?.total_user}
                           </Typography>
                         </Stack>
                       </TableCell>

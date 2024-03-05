@@ -386,37 +386,37 @@ export default function UserListPage() {
         const users = [];
         results.forEach((item, index) => {
           const user = {
-            _id: item._id || '',
+            _id: item?._id || '',
             no: page * rowsPerPage + index + 1,
-            id: item.user_id || '',
-            name: item.username || '',
-            company: item.company || '',
-            creator: item.creator || '',
-            level: item.level || '',
-            cash: item.balanceMain || 0,
-            point: item.pointSlot || 0,
-            inOut: item.inOut || '',
-            totalLoose: item.loseSlotRate || 0,
-            lastDate: item.updatedAt,
-            isVerified: item.verify || false,
-            status: item.isBlock || false,
-            role: item.role.name || '',
-            
-            nickName: item.Nickname || '',
-            birthday: item.Birthday || '',
-            phoneNumber: item.phone || '',
-            bankInfo: item.bankName || '',
-            bankAccount: item.bankAccount || '',
-            loginAvailable: item.verify || true,
-            betAvailable: item.isBlock || true,
-            depositOwner: item.bankOwner || '',
-            community: item.community || '',
-            slotRolling: item.slotRate || 0,
-            slotLoosing: item.loseSlotRate || 0,
-            casinoRolling: item.liveRate || 0,
-            casinoLoosing: item.loseLiveRate || 0,
-            agent: item.agent || '',
-            exchangeRate: item.withdrawRate || '',
+            id: item?.user_id || '',
+            name: item?.username || '',
+            company: item?.company || '',
+            creator: item?.creator || '',
+            level: item?.level || '',
+            cash: item?.balanceMain || 0,
+            point: item?.pointSlot || 0,
+            inOut: item?.inOut || '',
+            totalLoose: item?.loseSlotRate || 0,
+            lastDate: item?.updatedAt,
+            isVerified: item?.verify || false,
+            status: item?.isBlock || false,
+            role: item?.role?.name || '',
+            roleOrder: item?.role?.order || 0,
+            nickName: item?.Nickname || '',
+            birthday: item?.Birthday || '',
+            phoneNumber: item?.phone || '',
+            bankInfo: item?.bankName || '',
+            bankAccount: item?.bankAccount || '',
+            loginAvailable: item?.verify || true,
+            betAvailable: item?.isBlock || true,
+            depositOwner: item?.bankOwner || '',
+            community: item?.community || '',
+            slotRolling: item?.slotRate || 0,
+            slotLoosing: item?.loseSlotRate || 0,
+            casinoRolling: item?.liveRate || 0,
+            casinoLoosing: item?.loseLiveRate || 0,
+            agent: item?.agent || '',
+            exchangeRate: item?.withdrawRate || '',
 
           }
           users.push(user);
@@ -540,7 +540,7 @@ export default function UserListPage() {
                     .slice(0,  rowsPerPage)
                     .map((row, index) => (
                       <UserTableRow
-                        key={row.id}
+                        key={row._id}
                         row={row}
                         index={index}
                         selected={selected.includes(row.id)}
