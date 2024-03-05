@@ -248,6 +248,7 @@ const kr = {
   move:'이동',
   Logout:'로그아웃',
   settlementAmount:'정산 합계',
+  totalRate:'총합 요율',
 };
 
 export default kr;

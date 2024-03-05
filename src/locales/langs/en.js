@@ -248,6 +248,7 @@ const en = {
   move:'move',
   Logout:'Logout',
   settlementAmount:'settlement amount',
+  totalRate:'total rate',
 };
 
 export default en;

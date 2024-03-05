@@ -237,7 +237,7 @@ export default function NavMobileHeader() {
             handleClick={() => movePage(PATH_DASHBOARD.user.list)}
           />
           <HeaderAnalytic
-            title="userPoint"
+            title="totalRate"
             price={userPoint}
             color={theme.palette.text.secondary}
             handleClick={() => movePage(PATH_DASHBOARD.user.list)}
