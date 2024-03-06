@@ -67,6 +67,19 @@ const navAgentConfig = [
         ],
       },
 
+      // INVOICE
+      {
+        title: 'depositWithdraw',
+        path: PATH_DASHBOARD.invoice.root,
+        icon: ICONS.invoice,
+        children: [
+          { title: 'depositList', path: PATH_DASHBOARD.invoice.inReport },
+          { title: 'withdrawList', path: PATH_DASHBOARD.invoice.outReport },
+          { title: 'amountList', path: PATH_DASHBOARD.invoice.amount },
+          { title: 'cashHistory', path: PATH_DASHBOARD.invoice.history },
+        ],
+      },
+
       // REPORT
       {
         title: 'calculate',
