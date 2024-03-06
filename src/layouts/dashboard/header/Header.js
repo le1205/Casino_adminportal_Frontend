@@ -329,7 +329,7 @@ export default function Header({ onOpenNav }) {
                   handleClick={() => movePage(PATH_DASHBOARD.user.list)}
                 />
                 <HeaderAnalytic
-                  title="userPoint"
+                  title="totalRate"
                   isAgent ={isAgent}
                   price={userPoint}
                   color={theme.palette.text.secondary}
