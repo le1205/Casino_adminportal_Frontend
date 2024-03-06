@@ -86,6 +86,7 @@ export default function PartnerListPage() {
   const navigate = useNavigate();
   const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFirst, setIsFirst] = useState(true);
   const [openConfirm, setOpenConfirm] = useState(false);
   const [filterName, setFilterName] = useState('');
 
@@ -160,7 +161,7 @@ export default function PartnerListPage() {
   useEffect(() => {
     partnerList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openConfirm]);
+  }, [isFirst]);
 
   return (
     <>

@@ -114,6 +114,7 @@ export default function ReportDailyPage() {
   const { themeStretch } = useSettingsContext();
   const { translate } = useLocales();
   const [isLoading, setIsLoading] = useState(false);
+  const [isFirst, setIsFirst] = useState(true);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertContent, setAlertContent] = useState(`${translate('couldNotSelectFuture')}`);
   const [tableData, setTableData] = useState([]);
@@ -213,6 +214,7 @@ export default function ReportDailyPage() {
         });
         dailyArr.sort((a, b) => (a.date < b.date) ? 1 : -1);
         setTableData(dailyArr);
+        console.log("report>>", dailyArr);
         setIsLoading(false);
       });
     } catch (error) {
@@ -225,7 +227,7 @@ export default function ReportDailyPage() {
   useEffect(() => {
     dailyReport();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openConfirm]);
+  }, [isFirst]);
 
   return (
     <>

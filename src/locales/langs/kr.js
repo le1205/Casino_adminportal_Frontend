@@ -249,6 +249,14 @@ const kr = {
   Logout:'로그아웃',
   settlementAmount:'정산 합계',
   totalRate:'총합 요율',
+  receiveDate:'접수 일시',
+  sender:'보낸이',
+  answerComplete:'답변완료',
+  received:'접수',
+  strDeposit:'입금',
+  strWithdraw:'출금',
+  waitingDeposit:'입금 대기',
+  waitingWithdraw:'출금 대기',
 };
 
 export default kr;

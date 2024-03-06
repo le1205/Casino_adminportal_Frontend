@@ -31,10 +31,6 @@ import { HEADER, NAV } from '../../../config-global';
 import Logo from '../../../components/logo';
 import Iconify from '../../../components/iconify';
 import { useSettingsContext } from '../../../components/settings';
-import Scrollbar from '../../../components/scrollbar';
-//
-import AccountPopover from './AccountPopover';
-import LanguagePopover from './LanguagePopover';
 // assets
 import audioWithdraw from '../../../assets/mp3/withdraw.mp3';
 import audioDeposit from '../../../assets/mp3/deposit.mp3';
@@ -42,6 +38,7 @@ import audioAddUser from '../../../assets/mp3/add-users.mp3';
 import audioCustomer from '../../../assets/mp3/requre account.mp3';
 
 import HeaderAnalytic from '../../../sections/@dashboard/header/headerAnalytic';
+import HeaderSplitAnalytic from '../../../sections/@dashboard/header/headerSplitAnalytic';
 // api
 import { apiWithPostData } from '../../../utils/api';
 // url
@@ -95,6 +92,8 @@ export default function Header({ onOpenNav }) {
   const [countWithdraw, setCountWithdraw] = useState(0);
   const [countNofi, setCountNofi] = useState(0);
   const [countUser, setCountUser] = useState(0);
+  const [depositRequest, setDepositRequest] = useState(0);
+  const [withdrawRequest, setWithdrawRequest] = useState(0);
   const widthdrawRef = useRef();
   const deposutRef = useRef();
   const customerRef = useRef();
@@ -132,7 +131,8 @@ export default function Header({ onOpenNav }) {
       const headers = {};
       apiWithPostData(url, {}, headers).then((response) => {
         const { dashboard } = response;
-        console.log("response >>", response);
+        setDepositRequest(response?.countDeposit || 0);
+        setWithdrawRequest(response?.countWithdraw || 0);
         setTotalMember(dashboard?.total_member || 0);
         setBetMember(dashboard?.total_bet || 0);
         setNewMember(0);
@@ -251,10 +251,12 @@ export default function Header({ onOpenNav }) {
                 direction="row"
               > 
                 {!isAgent && 
-                  <HeaderAnalytic
+                  <HeaderSplitAnalytic
                     title="depositRequestCount"
+                    belowTitle="waitingDeposit"
                     isAgent ={isAgent}
                     price={countDeposit}
+                    belowPrice={depositRequest}
                     color={theme.palette.info.main}
                     handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
                   />
@@ -304,10 +306,12 @@ export default function Header({ onOpenNav }) {
                   handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
                 /> 
                 {!isAgent && 
-                  <HeaderAnalytic
+                  <HeaderSplitAnalytic
                     title="withdrawRequestCount"
+                    belowTitle="waitingWithdraw"
                     isAgent ={isAgent}
                     price={countWithdraw}
+                    belowPrice={withdrawRequest}
                     color={theme.palette.info.main}
                     handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
                   />

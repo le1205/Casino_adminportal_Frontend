@@ -19,15 +19,15 @@ import { fKoreanDate } from '../../../../utils/formatTime';
 
 // ----------------------------------------------------------------------
 
-CustomerMessageTableRow.propTypes = {
+CustomerFaqTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   onSelectEdit: PropTypes.func,
   onSelectRemove: PropTypes.func,
 };
 
-export default function CustomerMessageTableRow({ row, selected, onSelectEdit, onSelectRemove}) {
-  const {_id,  status, title, userId, createdAt } = row;
+export default function CustomerFaqTableRow({ row, selected, onSelectEdit, onSelectRemove}) {
+  const {_id,  status, title, userId, createdAt, replyDes } = row;
   const { translate } = useLocales();
   const loginUser = parseJson(localStorage.getItem('user') || "");
   return (
@@ -37,7 +37,7 @@ export default function CustomerMessageTableRow({ row, selected, onSelectEdit, o
         </TableCell>
 
         <TableCell align="center" >
-          {userId?.username === loginUser.username ? '내 하위업체들의 모든회원' : userId?.username}
+          {userId?.username}
         </TableCell>
 
         <TableCell align="center">
@@ -47,9 +47,9 @@ export default function CustomerMessageTableRow({ row, selected, onSelectEdit, o
         <TableCell align="center">
           <Label
             variant="soft"
-            color={(status === 'reading' && 'error') ||  'success'}
+            color={(replyDes) ? 'success' : 'warning'}
           >
-            {`${translate(status?.toLowerCase())}`}
+            {replyDes ? `${translate('answerComplete')}` : `${translate('received')}`}
           </Label>
         </TableCell>
 

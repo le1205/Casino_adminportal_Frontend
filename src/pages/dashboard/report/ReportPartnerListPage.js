@@ -103,6 +103,7 @@ export default function ReportPartnerListPage() {
   const loginUser  = parseJson(localStorage.getItem('user') || "");
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isFirst, setIsFirst] = useState(true);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertContent, setAlertContent] = useState(`${translate('couldNotSelectFuture')}`);
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -697,7 +698,7 @@ export default function ReportPartnerListPage() {
   useEffect(() => {
     getAllTotalList();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openConfirm]);
+  }, [isFirst]);
 
 
   return (

@@ -249,6 +249,15 @@ const en = {
   Logout:'Logout',
   settlementAmount:'settlement amount',
   totalRate:'total rate',
+  receiveDate:'received date',
+  sender:'sender',
+  answerComplete:'answer complete',
+  received:'received',
+  strDeposit:'deposit',
+  strWithdraw:'withdraw',
+  waitingDeposit:'waiting deposit',
+  waitingWithdraw:'waiting withdraw',
+
 };
 
 export default en;

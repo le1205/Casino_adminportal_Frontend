@@ -39,9 +39,9 @@ import { useLocales } from '../../../locales';
 import { CustomerMessageTableToolbar, CustomerMessageTableRow } from '../../../sections/@dashboard/customer/list';
 import MessageCreateForm from '../../../sections/@dashboard/customer/MessageCreateForm';
 // api
-import { apiWithPostData } from '../../../utils/api';
+import { apiWithPostData, apiWithDeleteData } from '../../../utils/api';
 // url
-import {  messageListUrl, subAcceptUrl, subCancelUrl } from '../../../utils/urlList';
+import {  messageListUrl, noticeNofiUrl } from '../../../utils/urlList';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -79,11 +79,13 @@ export default function CustomerMessagePage() {
   const { themeStretch } = useSettingsContext();
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState(false);
+  const [isFirst, setIsFirst] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [selectedRow, setSelectedRow] = useState({});
   const [pendingCount, setPendingCount] = useState(0);
   const [openCreate, setOpenCreate] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -108,7 +110,7 @@ export default function CustomerMessagePage() {
   };
 
   const handleClickCreate = () => {
-    console.log("click here >>>");
+    setIsEdit(false);
     setOpenCreate(true);
   };
   
@@ -116,67 +118,38 @@ export default function CustomerMessagePage() {
     setOpenCreate(false);
   };
   
-  const handleCreateSuccess = (data) =>{
+  const handleCreateSuccess = () =>{
+    setOpenCreate(false);
+  }
+  
+  const handleUpdateSuccess = () =>{
     setOpenCreate(false);
   }
 
-  const handleClickAccept = (row) => {
+  const handleClickEdit = (row) =>{
     setSelectedRow(row);
-    setIsLoading(true);
+    setIsEdit(true)
+    setOpenCreate(true);
+  }
+
+  const handleClickRemove = (id) =>{
+    console.log(id);
     try {
-      const url = subAcceptUrl;
+      setIsLoading(true);
+      setPage(0);
+      const url = noticeNofiUrl + id;
       const headers = {};
-      const data = {
-        requestId: row._id,
-        type: "deposit"
-      };
-      apiWithPostData(url, data, headers).then((response) => {
+      const data = {};
+      apiWithDeleteData(url, data, headers).then((response) => {
+        console.log("here>>>", response)
+        setTableData((val) => val.filter((item) => item._id !== id));
         setIsLoading(false);
-        if(response === true) {
-          updateUser(row._id, "Accept");
-          enqueueSnackbar(translate('updateSuccess'));
-        }
       });
     } catch (error) {
-      setIsLoading(false);
       console.log(error);
-    }
-  };
-
-  const handleClickCancel = (row) => {
-    setSelectedRow(row);
-    setIsLoading(true);
-    try {
-      const url = subCancelUrl;
-      const headers = {};
-      const data = {
-        requestId: row._id,
-        type: "deposit"
-      };
-      apiWithPostData(url, data, headers).then((response) => {
-        setIsLoading(false);
-        if(response === true) {
-          updateUser(row._id, "Cancel");
-          enqueueSnackbar(translate('updateSuccess'));
-        }
-      });
-    } catch (error) {
       setIsLoading(false);
-      console.log(error);
     }
-  };
-
-  const updateUser = (id, status) => {
-    let count = pendingCount;
-    tableData.forEach(element => {
-      if(id=== element._id) {
-        element.status = status;
-        count -= 1;
-      }
-    });
-    setPendingCount(count);
-  };
-  
+  }
 
   const messageList = () => {
     try {
@@ -195,12 +168,35 @@ export default function CustomerMessagePage() {
       console.log(error);
       setIsLoading(false);
     }
+  };
 
+  const messageUnreadList = () => {
+    try {
+      const url = messageListUrl;
+      const headers = {};
+      const data = {
+        type: 1,
+      };
+      apiWithPostData(url, data, headers).then((response) => {
+        setTableData(response);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     messageList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFirst]);
+
+  
+
+  useEffect(() => {
+    setInterval(() => {
+      messageUnreadList();
+    }, 5000);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
   return (
@@ -277,8 +273,8 @@ export default function CustomerMessagePage() {
                         pendingCount = {pendingCount}
                         selected={selected.includes(row._id)}
                         onSelectRow={() => onSelectRow(row._id)}
-                        onSelectAccept={() => handleClickAccept(row)}
-                        onSelectCancel={() => handleClickCancel(row)}
+                        onSelectEdit={() => handleClickEdit(row)}
+                        onSelectRemove={() => handleClickRemove(row._id)}
                       />
                     ))}
 
@@ -310,7 +306,7 @@ export default function CustomerMessagePage() {
       
 
       <Dialog open = {openCreate} onClose={handleCloseCreate}>
-        <MessageCreateForm isEdit currentUser={selectedRow} onSelectCancel={handleCloseCreate} onUpdateSuccess={handleCreateSuccess}/>
+        <MessageCreateForm isEdit={isEdit} currentMessage={selectedRow} onSelectCancel={handleCloseCreate} onCreateSuccess={handleCreateSuccess} onUpdateSuccess={handleUpdateSuccess}/>
       </Dialog>
     </>
   );

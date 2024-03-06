@@ -89,6 +89,7 @@ export default function BetCasinoPage() {
 
   const { themeStretch } = useSettingsContext();
   const [isLoading, setIsLoading] = useState(false);
+  const [isFirst, setIsFirst] = useState(true);
   const [openAlert, setOpenAlert] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [filterName, setFilterName] = useState('');
@@ -362,7 +363,7 @@ export default function BetCasinoPage() {
     getListRole();
     gameLog(gameType);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isFirst]);
 
   useEffect(() => {
     let valAmount = 0;

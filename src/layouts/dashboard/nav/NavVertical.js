@@ -1,8 +1,14 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 // @mui
-import { Box, Stack, Drawer, Tooltip } from '@mui/material';
+import { 
+  Box, 
+  Stack, 
+  Drawer, 
+  Tooltip, 
+  Button,
+} from '@mui/material';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 // routes
 import { PATH_AUTH } from '../../../routes/paths';
@@ -26,8 +32,8 @@ import navAgentConfig from './config-agent-navigation';
 import NavDocs from './NavDocs';
 import NavAccount from './NavAccount';
 import NavToggleButton from './NavToggleButton';
+import NavBalance from './NavBalance';
 
-import AccountPopover from '../header/AccountPopover';
 import LanguagePopover from '../header/LanguagePopover';
 import NavMobileHeader from './NavMobileHeader';
 
@@ -51,7 +57,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
   const isDesktop = useResponsive('up', 'lg');
 
-  const handleClickLogout = (row) => {
+  const handleClickLogout = () => {
     logout();
     navigate(PATH_AUTH.login, { replace: true });
   };
@@ -112,6 +118,9 @@ export default function NavVertical({ openNav, onCloseNav }) {
         </Stack>
 
         <NavAccount />
+        {loginUser?.role !== 'subadmin' && loginUser?.role !=='admin' &&
+        <NavBalance userInfo={loginUser}/>
+        }
         {!isDesktop && <NavMobileHeader/>}
         
       </Stack>

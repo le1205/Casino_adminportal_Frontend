@@ -88,6 +88,7 @@ export default function UserConnectPage() {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isFirst, setIsFirst] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [filterRole, setFilterRole] = useState('all');
@@ -293,7 +294,7 @@ export default function UserConnectPage() {
   useEffect(() => {
     sessionList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isFirst]);
 
   return (
     <>

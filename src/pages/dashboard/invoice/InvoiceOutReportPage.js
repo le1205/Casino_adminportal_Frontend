@@ -75,6 +75,7 @@ export default function InvoiceOutReportPage() {
   const { themeStretch } = useSettingsContext();
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState(false);
+  const [isFirst, setIsFirst] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [selectedRow, setSelectedRow] = useState({});
@@ -190,7 +191,7 @@ export default function InvoiceOutReportPage() {
   useEffect(() => {
     withdrawList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isFirst]);
 
   return (
     <>

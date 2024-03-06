@@ -6,6 +6,7 @@ import {
   Typography,
 } from '@mui/material';
 import moment from 'moment';
+import { toNumberTag, toNumberString } from '../../../../utils/convert';
 
 // ----------------------------------------------------------------------
 
@@ -27,10 +28,10 @@ export default function ReportDailyTableRow({ row, selected, onEditRow }) {
   // eslint-disable-next-line no-unsafe-optional-chaining
   const totalLoosing = row?.lose_money_live + row?.lose_money_slot || 0;
   // eslint-disable-next-line no-unsafe-optional-chaining
-  const settlementLive = row?.bet_live - row?.win_live - row?.balance_live || 0;
+  const settlementLive = row?.balance_live || 0;
   // eslint-disable-next-line no-unsafe-optional-chaining
-  const settlementSlot = row?.bet_slot - row?.win_slot - row?.balance_slot || 0;
-  const settlementTotal = totalBet - totalWin - totalRolling;
+  const settlementSlot = row?.balance_slot || 0;
+  const settlementTotal = settlementLive + settlementSlot;
   
   const data = moment(row?.date).format('YYYY-MM-DD') || '';
 
@@ -50,109 +51,109 @@ export default function ReportDailyTableRow({ row, selected, onEditRow }) {
 
         <TableCell align="center">
           <Typography variant="body2">
-            {row?.deposit?.toLocaleString()}
+            {toNumberString(row?.deposit)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-          {row?.withdraw?.toLocaleString()}
+            {toNumberString(row?.withdraw)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {holdingPoint?.toLocaleString()}
+            {toNumberString(holdingPoint)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {row?.bet_live?.toLocaleString()}
+            {toNumberString(row?.bet_live)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {row?.bet_slot?.toLocaleString()}
+            {toNumberString(row?.bet_slot)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {totalBet?.toLocaleString()}
+            {toNumberString(totalBet)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {row?.win_live?.toLocaleString()}
+            {toNumberString(row?.win_live)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {row?.win_slot?.toLocaleString()}
+            {toNumberString(row?.win_slot)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {totalWin?.toLocaleString()}
+            {toNumberString(totalWin)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {row?.balance_live?.toLocaleString()}
+            {toNumberString(row?.balance_live)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {row?.balance_slot?.toLocaleString()}
+            {toNumberString(row?.balance_slot)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {totalRolling?.toLocaleString()}
+            {toNumberString(totalRolling)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {settlementLive?.toLocaleString()}
+            {toNumberString(settlementLive)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {settlementSlot?.toLocaleString()}
+            {toNumberString(settlementSlot)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {settlementTotal?.toLocaleString()}
+            {toNumberString(settlementTotal)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {row?.lose_money_live?.toLocaleString()}
+            {toNumberString(row?.lose_money_live)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {row?.lose_money_slot?.toLocaleString()}
+            {toNumberString(row?.lose_money_slot)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {totalLoosing?.toLocaleString()}
+            {toNumberString(totalLoosing)}
           </Typography>
         </TableCell>
         

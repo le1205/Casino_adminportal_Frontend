@@ -11,16 +11,18 @@ import { useTheme, } from '@mui/material/styles';
 import { useLocales } from '../../../locales';
 // ----------------------------------------------------------------------
 
-HeaderAnalytic.propTypes = {
+HeaderSplitAnalytic.propTypes = {
   title: PropTypes.string,
+  belowTitle: PropTypes.string,
   color: PropTypes.string,
   key: PropTypes.string,
   price: PropTypes.number,
+  belowPrice: PropTypes.number,
   handleClick: PropTypes.func,
   isAgent: PropTypes.bool,
 };
 
-export default function HeaderAnalytic({ title, color, price, handleClick, key, isAgent  }) {
+export default function HeaderSplitAnalytic({ title, color, price, handleClick, key, isAgent, belowPrice, belowTitle }) {
   const theme = useTheme();
   
   const { translate } = useLocales();
@@ -53,6 +55,22 @@ export default function HeaderAnalytic({ title, color, price, handleClick, key, 
     
             <Typography variant="subtitle1" align="center" sx={{ color }}>
               {price?.toLocaleString()}
+            </Typography>
+        </Stack>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          sx={{
+            backgroundColor:'lightgray',
+          }}
+        >
+            <Typography variant="subtitle1"  align="center" color='error' sx={{ pr:2}}>
+              {`${translate(belowTitle)}`}
+            </Typography>
+    
+            <Typography variant="subtitle1" align="center" >
+              {belowPrice?.toLocaleString()}
             </Typography>
         </Stack>
         

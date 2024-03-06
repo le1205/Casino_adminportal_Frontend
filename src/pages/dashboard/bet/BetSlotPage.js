@@ -83,6 +83,7 @@ export default function BetSlotPage() {
 
   const { themeStretch } = useSettingsContext();
   const [isLoading, setIsLoading] = useState(false);
+  const [isFirst, setIsFirst] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [gameType, setGameType] = useState('slot');
@@ -340,7 +341,7 @@ export default function BetSlotPage() {
     getListRole();
     gameLog(gameType);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isFirst]);
 
   useEffect(() => {
     let valAmount = 0;

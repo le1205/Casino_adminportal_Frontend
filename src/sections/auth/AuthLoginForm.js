@@ -30,12 +30,7 @@ export default function AuthLoginForm() {
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
   });
-
-  // const defaultValues = {
-  //   email: 'adminhq',
-  //   password: 'dkagh@adminhq',
-  // };
-
+  
   const defaultValues = {
     email: '',
     password: '',

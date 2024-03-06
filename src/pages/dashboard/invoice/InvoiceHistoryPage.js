@@ -80,6 +80,7 @@ export default function InvoiceHistoryPage() {
 
   const { themeStretch } = useSettingsContext();
   const [isLoading, setIsLoading] = useState(false);
+  const [isFirst, setIsFirst] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [logData, setLogData] = useState([]);
   const [filterName, setFilterName] = useState('');
@@ -200,7 +201,7 @@ export default function InvoiceHistoryPage() {
     getAdminList();
     balanceHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isFirst]);
 
   useEffect(() => {
     balanceHistory();

@@ -142,9 +142,9 @@ export default function InvoiceAmountPage() {
   const handleDepositBalance = () => {
     setIsDeposit(true);
     const amount = amountRef.current.value;
-    if(amount === '' || amount === 0)
+    if(amount === '0' || amount === 0)
     {
-      const content = "Please input amount to deposit.";
+      const content = "입금할 금액을 입력해주세요.";
       setAlertContent(content);
       handleOpenAlert();
     }
@@ -156,14 +156,14 @@ export default function InvoiceAmountPage() {
   const handleWithdrawBalance = () => {
     setIsDeposit(false);
     const amount = amountRef.current.value;
-    if(amount === '' || amount === 0)
+    if(amount === '0' || amount === 0)
     {
-      const content = "Please input amount to withdraw.";
+      const content = "출금할 금액을 입력해주세요.";
       setAlertContent(content);
       handleOpenAlert();
     }
     else if (amount > selectedRow.cash){
-      const content = "Please input amount less than cash amount.";
+      const content = "캐시금액보다 적은 금액을 입력해 주세요.";
       setAlertContent(content);
       handleOpenAlert();
     }
@@ -401,7 +401,7 @@ export default function InvoiceAmountPage() {
         title="Confirm"
         content={
           <>
-            Are you sure want to {isDeposit? 'deposit' : 'withdraw'} <strong> {amountRef.current? amountRef.current.value : 0} </strong> ?
+          정말  <strong> {amountRef.current? amountRef.current.value : 0} </strong> 금액을 {isDeposit? '입금' : '출금'} 하시겠습니까?
           </>
         }
         action={
@@ -428,7 +428,7 @@ export default function InvoiceAmountPage() {
 
         <DialogActions>
           <Button onClick={handleCloseAlert} autoFocus>
-            Ok
+            확인
           </Button>
         </DialogActions>
       </Dialog>
