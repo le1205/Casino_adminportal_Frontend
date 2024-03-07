@@ -36,7 +36,7 @@ import { useSnackbar } from '../../../components/snackbar';
 // locales
 import { useLocales } from '../../../locales';
 // sections
-import { CustomerMessageTableToolbar, CustomerFaqTableRow } from '../../../sections/@dashboard/customer/list';
+import { CustomerMessageTableToolbar, CustomerNoticeTableRow } from '../../../sections/@dashboard/customer/list';
 import MessageCreateForm from '../../../sections/@dashboard/customer/MessageCreateForm';
 // api
 import { apiWithPostData } from '../../../utils/api';
@@ -213,7 +213,7 @@ export default function CustomerNoticePage() {
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
-                      <CustomerFaqTableRow
+                      <CustomerNoticeTableRow
                         key={row._id}
                         row={row}
                         pendingCount = {pendingCount}
