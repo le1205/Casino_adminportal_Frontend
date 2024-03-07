@@ -226,6 +226,9 @@ export default function Header({ onOpenNav }) {
 
 
   const movePage = (path) => {
+    clearInterval(widthdrawRef.current)
+    clearInterval(deposutRef.current)
+    clearInterval(customerRef.current)
     navigate(path);
   };
 
@@ -255,8 +258,8 @@ export default function Header({ onOpenNav }) {
                     title="depositRequestCount"
                     belowTitle="waitingDeposit"
                     isAgent ={isAgent}
-                    price={countDeposit}
-                    belowPrice={depositRequest}
+                    price={depositRequest}
+                    belowPrice={countDeposit}
                     color={theme.palette.info.main}
                     handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
                   />
@@ -310,8 +313,8 @@ export default function Header({ onOpenNav }) {
                     title="withdrawRequestCount"
                     belowTitle="waitingWithdraw"
                     isAgent ={isAgent}
-                    price={countWithdraw}
-                    belowPrice={withdrawRequest}
+                    price={withdrawRequest}
+                    belowPrice={countWithdraw}
                     color={theme.palette.info.main}
                     handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
                   />
