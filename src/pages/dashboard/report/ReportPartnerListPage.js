@@ -403,7 +403,7 @@ export default function ReportPartnerListPage() {
                 }}
             >
                 <span>회원입금</span>
-                <span>{toNumberTag(node.data.total_deposit)}</span>
+                <span>{toNumberTag(node.data.deposit)}</span>
             </div>
             <div
                 className=""
@@ -415,7 +415,7 @@ export default function ReportPartnerListPage() {
                 }}
             >
                 <span>회원출금</span>
-                <span>{toNumberTag(node.data.total_withdraw)}</span>
+                <span>{toNumberTag(node.data.withdraw)}</span>
             </div>
             <div
                 className=""
@@ -427,7 +427,7 @@ export default function ReportPartnerListPage() {
                 }}
             >
                 <span>입금-출금</span>
-                <span>{toNumberTag(node.data.total_deposit - node.data.total_withdraw)}</span>
+                <span>{toNumberTag(node.data.deposit - node.data.withdraw)}</span>
             </div>
         </div>
     );
