@@ -27,7 +27,7 @@ import { fKoreanDate } from '../../../../utils/formatTime';
 UserConnectingTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
-  count: PropTypes.bool,
+  count: PropTypes.number,
   onDeleteRow: PropTypes.func,
   onSelectLogout: PropTypes.func,
   onSelectMoney: PropTypes.func,
