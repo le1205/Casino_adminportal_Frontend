@@ -226,6 +226,9 @@ export default function Header({ onOpenNav }) {
 
 
   const movePage = (path) => {
+    clearInterval(widthdrawRef.current)
+    clearInterval(deposutRef.current)
+    clearInterval(customerRef.current)
     navigate(path);
   };
 
