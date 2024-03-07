@@ -24,7 +24,7 @@ export default function ReportDailyTableRow({ row, selected, onEditRow }) {
   // eslint-disable-next-line no-unsafe-optional-chaining
   const totalWin = row?.win_live + row?.win_slot || 0;
   // eslint-disable-next-line no-unsafe-optional-chaining
-  const totalRolling = row?.balance_live + row?.balance_slot || 0;
+  const totalRolling = row?.bet_money_live + row?.bet_money_slot || 0;
   // eslint-disable-next-line no-unsafe-optional-chaining
   const totalLoosing = row?.lose_money_live + row?.lose_money_slot || 0;
   // eslint-disable-next-line no-unsafe-optional-chaining
@@ -105,13 +105,13 @@ export default function ReportDailyTableRow({ row, selected, onEditRow }) {
 
         <TableCell align="center">
           <Typography variant="body2">
-            {toNumberString(row?.balance_live)}
+            {toNumberString(row?.bet_money_live)}
           </Typography>
         </TableCell>
 
         <TableCell align="center">
           <Typography variant="body2">
-            {toNumberString(row?.balance_slot)}
+            {toNumberString(row?.bet_money_slot)}
           </Typography>
         </TableCell>
 
