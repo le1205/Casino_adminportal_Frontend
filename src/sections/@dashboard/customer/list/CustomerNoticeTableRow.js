@@ -24,36 +24,37 @@ CustomerNoticeTableRow.propTypes = {
   selected: PropTypes.bool,
   onSelectEdit: PropTypes.func,
   onSelectRemove: PropTypes.func,
+  onSelectStatus: PropTypes.func,
 };
 
-export default function CustomerNoticeTableRow({ row, selected, onSelectEdit, onSelectRemove}) {
-  const {_id,  status, title, userId, createdAt, replyDes } = row;
+export default function CustomerNoticeTableRow({ row, selected, onSelectEdit, onSelectRemove, onSelectStatus}) {
+  const { id,  status, title, userId, createdAt } = row;
   const { translate } = useLocales();
   const loginUser = parseJson(localStorage.getItem('user') || "");
   return (
     <TableRow hover selected={selected}>
-        <TableCell align="center" >
+        <TableCell align="center" width="20%">
           {fKoreanDate(createdAt)}
         </TableCell>
 
-        <TableCell align="center" >
-          {userId?.username}
-        </TableCell>
-
-        <TableCell align="center">
+        <TableCell align="center" width="60%">
           {title}
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell align="center" width="10%">
           <Label
             variant="soft"
-            color={(replyDes) ? 'success' : 'warning'}
+            sx={{ width: "50px", cursor:"pointer" }} 
+            onClick={() => {
+              onSelectStatus();
+            }}
+            color={(status === 'reading') ? 'success' : 'warning'}
           >
-            {replyDes ? `${translate('answerComplete')}` : `${translate('received')}`}
+            {(status === 'reading') ? `${translate('waiting')}` : `${translate('posted')}`}
           </Label>
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell align="center" width="10%">
           
           <Tooltip title={`${translate('edit')}`}>
             <EditNoteIcon color="success"  

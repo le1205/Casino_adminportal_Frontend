@@ -19,30 +19,29 @@ import FormProvider, {
 // api
 import { apiWithPostData, apiWithPutData } from '../../../utils/api';
 // url
-import { adminListUrl, createUserNofiUrl, noticeNofiUrl } from '../../../utils/urlList';
+import { noticeNofiUrl } from '../../../utils/urlList';
 // utils
 import {parseJson } from '../../../auth/utils';
 
 // ----------------------------------------------------------------------
 
 FaqCreateForm.propTypes = {
-  isEdit: PropTypes.bool,
   currentMessage: PropTypes.object,
+  onSelectSend:PropTypes.func,
   onSelectCancel:PropTypes.func,
   onUpdateSuccess:PropTypes.func,
-  onCreateSuccess:PropTypes.func,
+  onSendSuccess:PropTypes.func,
 };
 
 const loginUser = parseJson(localStorage.getItem('user') || "");
 
-export default function FaqCreateForm({isEdit, currentMessage, onSelectCancel, onUpdateSuccess, onCreateSuccess }) {
+export default function FaqCreateForm({currentMessage, onSelectCancel, onUpdateSuccess, onSendSuccess, onSelectSend }) {
   const { translate } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
-  const [userOptions, setUserOptions] = useState([]);
+  const [isChange, setIsChange] = useState(false);
 
   const NewMessageSchema = Yup.object().shape({
-    title: Yup.string().required('Title is required'),
-    content: Yup.string().required('Content is required'),
+    replyDes: Yup.string().required('Reply is required'),
   });
 
   const defaultValues = useMemo(
@@ -50,6 +49,7 @@ export default function FaqCreateForm({isEdit, currentMessage, onSelectCancel, o
       title: currentMessage?.title || '',
       user: currentMessage?.user || '',
       content: currentMessage?.des || '',
+      replyDes: currentMessage?.replyDes || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentMessage]
@@ -66,39 +66,9 @@ export default function FaqCreateForm({isEdit, currentMessage, onSelectCancel, o
     formState: { isSubmitting },
   } = methods;
   
-  const usersList = () => {
-    try {
-      const url = adminListUrl;
-      const headers = {};
-      const data = {};
-      apiWithPostData(url, data, headers).then((response) => {
-        const { results } = response;
-        const userData = results
-          .filter((val) => val.role.title === 'user')
-          .map((item) => ({
-            label: item.username,
-            value: item._id,
-            icon: ''
-          }));
-        setUserOptions([
-          {
-            label: '내 하위업체들의 모든 회원',
-            value: loginUser._id,
-            icon: ''
-          },
-          ...userData
-        ]);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
-    if(!isEdit) {
-      usersList();
-    }
-    if (isEdit && currentMessage) {
+    if (currentMessage) {
       reset(defaultValues);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,14 +77,13 @@ export default function FaqCreateForm({isEdit, currentMessage, onSelectCancel, o
 
   const onSubmit = async (data) => {
     try {
-      if(isEdit) {
+      if(isChange) {
         // eslint-disable-next-line no-unsafe-optional-chaining
         const url = noticeNofiUrl + currentMessage?._id;
-        console.log(currentMessage?._id);
         const headers = {};
         const body = {
-          replyTitle: data?.title || "",
-          replyDes: data?.content || "",
+          replyTitle: 'reply',
+          replyDes: data?.replyDes || "",
         };
         apiWithPutData(url, body, headers).then((response) => {
           enqueueSnackbar('수정 성공!');
@@ -122,22 +91,29 @@ export default function FaqCreateForm({isEdit, currentMessage, onSelectCancel, o
         });
       }
       else {
-        const url = createUserNofiUrl;
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        const url = noticeNofiUrl + currentMessage?._id;
         const headers = {};
         const body = {
-          title: data?.title || "",
-          userId: data?.user || loginUser._id,
-          des: data?.content || "",
+          replyTitle: 'reply',
+          replyDes: data?.replyDes || "",
         };
-        apiWithPostData(url, body, headers).then((response) => {
-          reset();
+        apiWithPutData(url, body, headers).then((response) => {
           enqueueSnackbar('보내기 성공!');
-          onCreateSuccess(response);
+          onSendSuccess(response);
         });
       }
     } catch (error) {
       console.log(error);
     }
+  };
+  
+  const onSelectChange = () => {
+    setIsChange(true);
+  };
+  
+  const onSelectReply = () => {
+    setIsChange(false);
   };
 
   return (
@@ -145,9 +121,9 @@ export default function FaqCreateForm({isEdit, currentMessage, onSelectCancel, o
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
           <Card sx={{ p: 3 }}>
-            <Typography variant="h6" sx={{ color: 'text.secondary', pb:2}}>
+            {/* <Typography variant="h6" sx={{ color: 'text.secondary', pb:2}}>
               쪽지 보내기
-            </Typography>
+            </Typography> */}
             <Box
               rowGap={3}
               columnGap={1}
@@ -159,29 +135,28 @@ export default function FaqCreateForm({isEdit, currentMessage, onSelectCancel, o
             >
               <RHFTextField name="title" 
                 inputProps={
-                    { readOnly: false }
+                    { readOnly: true }
                 } label={`${translate('title')}`} />
-              {isEdit === false && 
-                <RHFSelect native name="user" label={`${translate('user')}`} placeholder={`${translate('user')}`}  >
-                  {userOptions.map((element) => (
-                    <option key={element.value} value={element.value}  >
-                      {element.label}
-                    </option>
-                  ))}
-                </RHFSelect>
-              }
+              <Stack spacing={1}>
+                <RHFEditor simple readOnly name="content" />
+              </Stack>
               <Stack spacing={1}>
                 <Typography variant="subtitle2" sx={{ color: 'text.secondary', pt:1 }}>
-                  내용
+                  답변
                 </Typography>
-                <RHFEditor simple name="content" />
+                <RHFEditor simple name="replyDes" />
               </Stack>
             </Box>
             <Stack direction="row" justifyContent='flex-end' spacing={2}  sx={{ mt: 3, textAlign: 'right'}}>
-              <Button type='submit' variant="contained" color="success">
-                {isEdit ? `${translate('change')}` : `${translate('send')}`}
+              <Button variant="contained" color="success" onClick={onSelectSend}>
+                쪽지보내기
               </Button>
-              
+              <Button type='submit' variant="contained" color="success" onClick={onSelectReply}>
+                답변
+              </Button>
+              <Button type='submit' variant="contained" color="success" onClick={onSelectChange}>
+                수정
+              </Button>
               <Button onClick={onSelectCancel} variant="contained" color="warning">
                 {`${translate('cancel')}`}
               </Button>

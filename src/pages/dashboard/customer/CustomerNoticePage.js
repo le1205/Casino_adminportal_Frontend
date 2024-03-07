@@ -37,16 +37,15 @@ import { useSnackbar } from '../../../components/snackbar';
 import { useLocales } from '../../../locales';
 // sections
 import { CustomerMessageTableToolbar, CustomerNoticeTableRow } from '../../../sections/@dashboard/customer/list';
-import MessageCreateForm from '../../../sections/@dashboard/customer/MessageCreateForm';
+import NoticeCreateForm from '../../../sections/@dashboard/customer/NoticeCreateForm';
 // api
-import { apiWithPostData } from '../../../utils/api';
+import { apiWithPostData, apiWithDeleteData, apiWithPutData } from '../../../utils/api';
 // url
-import { messageListUrl,} from '../../../utils/urlList';
+import { messageListUrl, userNofiUrl} from '../../../utils/urlList';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'receiveDate', label: 'receiveDate', align: 'center' },
-  { id: 'sender', label: 'sender', align: 'center' },
   { id: 'title', label: 'title', align: 'center' },
   { id: 'status', label: 'status', align: 'center' },
   { id: 'action', label: 'action', align: 'center' },
@@ -74,10 +73,8 @@ export default function CustomerNoticePage() {
     onChangeRowsPerPage,
   } = useTable();
   const { translate } = useLocales();
-  const loginUser  = parseJson(localStorage.getItem('user') || "");
 
   const { themeStretch } = useSettingsContext();
-  const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState(false);
   const [isFirst, setIsFirst] = useState(true);
   const [tableData, setTableData] = useState([]);
@@ -85,6 +82,7 @@ export default function CustomerNoticePage() {
   const [selectedRow, setSelectedRow] = useState({});
   const [pendingCount, setPendingCount] = useState(0);
   const [openCreate, setOpenCreate] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -109,6 +107,8 @@ export default function CustomerNoticePage() {
   };
 
   const handleClickCreate = () => {
+    setIsEdit(false);
+    setSelectedRow({});
     setOpenCreate(true);
   };
   
@@ -116,8 +116,60 @@ export default function CustomerNoticePage() {
     setOpenCreate(false);
   };
   
-  const handleCreateSuccess = (data) =>{
+  const handleCreateSuccess = () =>{
     setOpenCreate(false);
+  }
+  
+  const handleUpdateSuccess = () =>{
+    setOpenCreate(false);
+  }
+  const handleClickEdit = (row) =>{
+    setSelectedRow(row);
+    setIsEdit(true)
+    setOpenCreate(true);
+  }
+
+  const handleUpdateStatus = (row) =>{
+    try {
+      setIsLoading(true);
+      // eslint-disable-next-line no-unsafe-optional-chaining
+      const url = userNofiUrl + row?._id;
+      const newStatus = row.status === 'reading' ? 'posted' : 'reading';
+      const headers = {};
+      const body = {
+        status: newStatus
+      };
+      apiWithPutData(url, body, headers).then((response) => {
+        
+        const Newlist = tableData;
+        const index = Newlist.findIndex((item) => item._id === row?._id);
+        Newlist[index] = {
+            ...Newlist[index],
+            status:newStatus,
+        };
+        setTableData([...Newlist]);
+        setIsLoading(false);
+      });
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  }
+
+  const handleClickRemove = (id) =>{
+    try {
+      setIsLoading(true);
+      const url = userNofiUrl + id;
+      const headers = {};
+      const data = {};
+      apiWithDeleteData(url, data, headers).then((response) => {
+        setTableData((val) => val.filter((item) => item._id !== id));
+        setIsLoading(false);
+      });
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
   }
 
   const noticeList = () => {
@@ -139,10 +191,32 @@ export default function CustomerNoticePage() {
     }
   };
 
+  const noticeUnreadList = () => {
+    try {
+      const url = messageListUrl;
+      const headers = {};
+      const data = {
+        type: 2,
+      };
+      apiWithPostData(url, data, headers).then((response) => {
+        setTableData(response);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     noticeList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFirst]);
+
+  useEffect(() => {
+    setInterval(() => {
+      noticeUnreadList();
+    }, 5000);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
 
   return (
@@ -166,7 +240,7 @@ export default function CustomerNoticePage() {
               sx={{ mt: 4 }}
               onClick={handleClickCreate}
             >
-              {translate('create')}
+              {translate('createNew')}
             </Button>
           }
         />
@@ -219,6 +293,9 @@ export default function CustomerNoticePage() {
                         pendingCount = {pendingCount}
                         selected={selected.includes(row._id)}
                         onSelectRow={() => onSelectRow(row._id)}
+                        onSelectEdit={() => handleClickEdit(row)}
+                        onSelectRemove={() => handleClickRemove(row._id)}
+                        onSelectStatus={() => handleUpdateStatus(row)}
                       />
                     ))}
 
@@ -250,7 +327,7 @@ export default function CustomerNoticePage() {
       
 
       <Dialog open = {openCreate} onClose={handleCloseCreate}>
-        <MessageCreateForm isEdit currentUser={selectedRow} onSelectCancel={handleCloseCreate} onUpdateSuccess={handleCreateSuccess}/>
+        <NoticeCreateForm isEdit={isEdit} currentMessage={selectedRow} onSelectCancel={handleCloseCreate} onCreateSuccess={handleCreateSuccess}  onUpdateSuccess={handleUpdateSuccess}/>
       </Dialog>
     </>
   );

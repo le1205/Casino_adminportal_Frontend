@@ -6,7 +6,6 @@ import {
   TableRow,
   TableCell,
 } from '@mui/material';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 // components
@@ -32,19 +31,19 @@ export default function CustomerMessageTableRow({ row, selected, onSelectEdit, o
   const loginUser = parseJson(localStorage.getItem('user') || "");
   return (
     <TableRow hover selected={selected}>
-        <TableCell align="center" >
+        <TableCell align="center" width="20%">
           {fKoreanDate(createdAt)}
         </TableCell>
 
-        <TableCell align="center" >
+        <TableCell align="center" width="20%">
           {userId?.username === loginUser.username ? '내 하위업체들의 모든회원' : userId?.username}
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell align="center" width="40%">
           {title}
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell align="center" width="10%">
           <Label
             variant="soft"
             color={(status === 'reading' && 'error') ||  'success'}
@@ -53,7 +52,7 @@ export default function CustomerMessageTableRow({ row, selected, onSelectEdit, o
           </Label>
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell align="center" width="10%">
           
           <Tooltip title={`${translate('edit')}`}>
             <EditNoteIcon color="success"  

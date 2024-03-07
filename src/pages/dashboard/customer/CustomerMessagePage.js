@@ -31,8 +31,6 @@ import {
 } from '../../../components/table';
 // components
 import Scrollbar from '../../../components/scrollbar';
-import Iconify from '../../../components/iconify';
-import { useSnackbar } from '../../../components/snackbar';
 // locales
 import { useLocales } from '../../../locales';
 // sections
@@ -41,7 +39,7 @@ import MessageCreateForm from '../../../sections/@dashboard/customer/MessageCrea
 // api
 import { apiWithPostData, apiWithDeleteData } from '../../../utils/api';
 // url
-import {  messageListUrl, noticeNofiUrl } from '../../../utils/urlList';
+import {  messageListUrl, userNofiUrl } from '../../../utils/urlList';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -74,10 +72,8 @@ export default function CustomerMessagePage() {
     onChangeRowsPerPage,
   } = useTable();
   const { translate } = useLocales();
-  const loginUser  = parseJson(localStorage.getItem('user') || "");
 
   const { themeStretch } = useSettingsContext();
-  const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState(false);
   const [isFirst, setIsFirst] = useState(true);
   const [tableData, setTableData] = useState([]);
@@ -111,6 +107,7 @@ export default function CustomerMessagePage() {
 
   const handleClickCreate = () => {
     setIsEdit(false);
+    setSelectedRow({});
     setOpenCreate(true);
   };
   
@@ -133,15 +130,12 @@ export default function CustomerMessagePage() {
   }
 
   const handleClickRemove = (id) =>{
-    console.log(id);
     try {
       setIsLoading(true);
-      setPage(0);
-      const url = noticeNofiUrl + id;
+      const url = userNofiUrl + id;
       const headers = {};
       const data = {};
       apiWithDeleteData(url, data, headers).then((response) => {
-        console.log("here>>>", response)
         setTableData((val) => val.filter((item) => item._id !== id));
         setIsLoading(false);
       });
@@ -190,8 +184,6 @@ export default function CustomerMessagePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFirst]);
 
-  
-
   useEffect(() => {
     setInterval(() => {
       messageUnreadList();
@@ -216,11 +208,10 @@ export default function CustomerMessagePage() {
           action={
             <Button
               variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
               sx={{ mt: 4 }}
               onClick={handleClickCreate}
             >
-              {translate('create')}
+              {translate('sendMessage')}
             </Button>
           }
         />
@@ -304,7 +295,6 @@ export default function CustomerMessagePage() {
       </Container>
       {(isLoading === true) && <LoadingScreen/>} 
       
-
       <Dialog open = {openCreate} onClose={handleCloseCreate}>
         <MessageCreateForm isEdit={isEdit} currentMessage={selectedRow} onSelectCancel={handleCloseCreate} onCreateSuccess={handleCreateSuccess} onUpdateSuccess={handleUpdateSuccess}/>
       </Dialog>

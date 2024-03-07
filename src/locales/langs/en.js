@@ -257,6 +257,14 @@ const en = {
   strWithdraw:'withdraw',
   waitingDeposit:'waiting deposit',
   waitingWithdraw:'waiting withdraw',
+  sendMessage:'send message',
+  createNew:'create',
+  waiting:'waiting',
+  posted:'posted',
+  image:'iamge',
+  maker:'maker',
+  show:'show',
+  hide:'hide',
 
 };
 

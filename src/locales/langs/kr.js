@@ -257,6 +257,14 @@ const kr = {
   strWithdraw:'출금',
   waitingDeposit:'입금 대기',
   waitingWithdraw:'출금 대기',
+  sendMessage:'쪽지 보내기',
+  createNew:'새로 추가',
+  waiting:'대기',
+  posted:'게시',
+  image:'이미지',
+  maker:'작성자',
+  show:'게시',
+  hide:'대기',
 };
 
 export default kr;

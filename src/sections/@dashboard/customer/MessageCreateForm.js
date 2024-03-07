@@ -19,7 +19,7 @@ import FormProvider, {
 // api
 import { apiWithPostData, apiWithPutData } from '../../../utils/api';
 // url
-import { adminListUrl, createUserNofiUrl, noticeNofiUrl } from '../../../utils/urlList';
+import { adminListUrl, createUserNofiUrl, userNofiUrl } from '../../../utils/urlList';
 // utils
 import {parseJson } from '../../../auth/utils';
 
@@ -39,6 +39,7 @@ export default function MessageCreateForm({isEdit, currentMessage, onSelectCance
   const { translate } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
   const [userOptions, setUserOptions] = useState([]);
+  const [isComplete, setIsComplete] = useState(false);
 
   const NewMessageSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
@@ -108,18 +109,22 @@ export default function MessageCreateForm({isEdit, currentMessage, onSelectCance
   const onSubmit = async (data) => {
     try {
       if(isEdit) {
-        // eslint-disable-next-line no-unsafe-optional-chaining
-        const url = noticeNofiUrl + currentMessage?._id;
-        console.log(currentMessage?._id);
-        const headers = {};
-        const body = {
-          replyTitle: data?.title || "",
-          replyDes: data?.content || "",
-        };
-        apiWithPutData(url, body, headers).then((response) => {
-          enqueueSnackbar('수정 성공!');
-          onUpdateSuccess(response);
-        });
+        if(isComplete) {
+          // eslint-disable-next-line no-unsafe-optional-chaining
+          const url = userNofiUrl + currentMessage?._id;
+          const headers = {};
+          const body = {
+            title: data?.title || "",
+            des: data?.content || "",
+          };
+          apiWithPutData(url, body, headers).then((response) => {
+            enqueueSnackbar('수정 성공!');
+            onUpdateSuccess(response);
+          });
+        }
+        else {
+          setIsComplete(true);
+        }
       }
       else {
         const url = createUserNofiUrl;
@@ -127,10 +132,13 @@ export default function MessageCreateForm({isEdit, currentMessage, onSelectCance
         const body = {
           title: data?.title || "",
           userId: data?.user || loginUser._id,
+          status: "reading",
           des: data?.content || "",
+          type: 1,
         };
         apiWithPostData(url, body, headers).then((response) => {
           reset();
+          setIsComplete(false);
           enqueueSnackbar('보내기 성공!');
           onCreateSuccess(response);
         });
@@ -178,9 +186,16 @@ export default function MessageCreateForm({isEdit, currentMessage, onSelectCance
               </Stack>
             </Box>
             <Stack direction="row" justifyContent='flex-end' spacing={2}  sx={{ mt: 3, textAlign: 'right'}}>
+              {isEdit && 
+                <Button type='submit' variant="contained" color="success">
+                  {isComplete ? `${translate('send')}` :  `${translate('change')}`}
+                </Button>
+              }
+              {!isEdit && 
               <Button type='submit' variant="contained" color="success">
-                {isEdit ? `${translate('change')}` : `${translate('send')}`}
+                {`${translate('send')}`}
               </Button>
+              }
               
               <Button onClick={onSelectCancel} variant="contained" color="warning">
                 {`${translate('cancel')}`}

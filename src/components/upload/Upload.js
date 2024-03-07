@@ -189,10 +189,10 @@ function Placeholder({ sx, ...other }) {
 
       <div>
         <Typography gutterBottom variant="h5">
-          Drop or Select file
+          파일 끌기 또는 선택
         </Typography>
 
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+        {/* <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           Drop files here or click
           <Typography
             variant="body2"
@@ -206,7 +206,7 @@ function Placeholder({ sx, ...other }) {
             browse
           </Typography>
           thorough your machine
-        </Typography>
+        </Typography> */}
       </div>
     </Stack>
   );

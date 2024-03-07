@@ -31,17 +31,16 @@ import {
 } from '../../../components/table';
 // components
 import Scrollbar from '../../../components/scrollbar';
-import Iconify from '../../../components/iconify';
-import { useSnackbar } from '../../../components/snackbar';
 // locales
 import { useLocales } from '../../../locales';
 // sections
 import { CustomerMessageTableToolbar, CustomerFaqTableRow } from '../../../sections/@dashboard/customer/list';
-import MessageCreateForm from '../../../sections/@dashboard/customer/MessageCreateForm';
+import FaqCreateForm from '../../../sections/@dashboard/customer/FaqCreateForm';
+import FaqMessageSendForm from '../../../sections/@dashboard/customer/FaqMessageSendForm';
 // api
-import { apiWithPostData } from '../../../utils/api';
+import { apiWithPostData, apiWithDeleteData} from '../../../utils/api';
 // url
-import { noticeNofiListUrl,} from '../../../utils/urlList';
+import { noticeNofiListUrl, noticeNofiUrl, adminListUrl} from '../../../utils/urlList';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -77,7 +76,6 @@ export default function CustomerFaqPage() {
   const loginUser  = parseJson(localStorage.getItem('user') || "");
 
   const { themeStretch } = useSettingsContext();
-  const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState(false);
   const [isFirst, setIsFirst] = useState(true);
   const [tableData, setTableData] = useState([]);
@@ -85,6 +83,8 @@ export default function CustomerFaqPage() {
   const [selectedRow, setSelectedRow] = useState({});
   const [pendingCount, setPendingCount] = useState(0);
   const [openCreate, setOpenCreate] = useState(false);
+  const [openSendMessae, setOpenSendMessage] = useState(false);
+  const [userOptions, setUserOptions] = useState([]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -107,17 +107,54 @@ export default function CustomerFaqPage() {
   const handleResetFilter = () => {
     setFilterName('');
   };
-
-  const handleClickCreate = () => {
-    setOpenCreate(true);
-  };
   
   const handleCloseCreate = () => {
     setOpenCreate(false);
   };
   
-  const handleCreateSuccess = (data) =>{
+  const handleCloseSendMessage = () => {
+    setOpenSendMessage(false);
+  };
+  
+  const handleSendSuccess = () =>{
     setOpenCreate(false);
+  }
+  
+  const handleSendMessageSuccess = () =>{
+    setOpenSendMessage(false);
+  }
+  
+  const handleUpdateSuccess = () =>{
+    setOpenCreate(false);
+  }
+  
+  const handleSelectSendMessage = () => {
+    setOpenCreate(false);
+    const timeout = setTimeout(() => {
+      setOpenSendMessage(true);
+    }, 500)
+    return () => clearTimeout(timeout)
+  };
+
+  const handleClickEdit = (row) =>{
+    setSelectedRow(row);
+    setOpenCreate(true);
+  }
+
+  const handleClickRemove = (id) =>{
+    try {
+      setIsLoading(true);
+      const url = noticeNofiUrl + id;
+      const headers = {};
+      const data = {};
+      apiWithDeleteData(url, data, headers).then((response) => {
+        setTableData((val) => val.filter((item) => item._id !== id));
+        setIsLoading(false);
+      });
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
   }
 
   const notificationList = () => {
@@ -135,11 +172,39 @@ export default function CustomerFaqPage() {
       console.log(error);
       setIsLoading(false);
     }
-
+  };
+  
+  const usersList = () => {
+    try {
+      const url = adminListUrl;
+      const headers = {};
+      const data = {};
+      apiWithPostData(url, data, headers).then((response) => {
+        const { results } = response;
+        const userData = results
+          .filter((val) => val.role.title === 'user')
+          .map((item) => ({
+            label: item.username,
+            value: item._id,
+            icon: ''
+          }));
+        setUserOptions([
+          {
+            label: '내 하위업체들의 모든 회원',
+            value: loginUser._id,
+            icon: ''
+          },
+          ...userData
+        ]);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     notificationList();
+    usersList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFirst]);
 
@@ -157,16 +222,6 @@ export default function CustomerFaqPage() {
             { name: 'customerCenter', href: PATH_DASHBOARD.customer.root },
             { name: 'Faq' },
           ]} 
-          action={
-            <Button
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-              sx={{ mt: 4 }}
-              onClick={handleClickCreate}
-            >
-              {translate('create')}
-            </Button>
-          }
         />
         <Card>
           <Divider />
@@ -217,6 +272,8 @@ export default function CustomerFaqPage() {
                         pendingCount = {pendingCount}
                         selected={selected.includes(row._id)}
                         onSelectRow={() => onSelectRow(row._id)}
+                        onSelectEdit={() => handleClickEdit(row)}
+                        onSelectRemove={() => handleClickRemove(row._id)}
                       />
                     ))}
 
@@ -246,9 +303,13 @@ export default function CustomerFaqPage() {
       </Container>
       {(isLoading === true) && <LoadingScreen/>} 
       
-
       <Dialog open = {openCreate} onClose={handleCloseCreate}>
-        <MessageCreateForm isEdit currentUser={selectedRow} onSelectCancel={handleCloseCreate} onUpdateSuccess={handleCreateSuccess}/>
+        <FaqCreateForm currentMessage={selectedRow} onSelectCancel={handleCloseCreate} 
+        onSendSuccess={handleSendSuccess}  onUpdateSuccess={handleUpdateSuccess} onSelectSend={handleSelectSendMessage}/>
+      </Dialog>
+      
+      <Dialog open = {openSendMessae} onClose={handleCloseSendMessage}>
+        <FaqMessageSendForm userOptions={userOptions} currentUser={selectedRow?.userId} onSelectCancel={handleCloseSendMessage} onCreateSuccess={handleSendMessageSuccess} />
       </Dialog>
     </>
   );

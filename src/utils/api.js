@@ -33,6 +33,34 @@ export const apiWithPostData = async (url, params, headers) => {
         return error;
     }
 }
+export const apiWithUploadData = async (url, params, headers) => {
+    const config = {
+        method: 'post',
+        url: HOST_API_SERVER + url,
+        headers: {
+            'Content-Type': 'multipart/form-data', 
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': 'true',
+            'authorization':localStorage.getItem('accessToken') || "",
+            'token':SECRET.secretToken,
+            'admin':'true',
+            ...headers,
+        },
+        data: params,
+    };
+    
+    try {
+        const response = await axios(config);
+        return response.data;
+      } catch (error) {
+        console.log(error);
+        if (error?.response && error?.response?.status === 401) {
+            localStorage.clear();
+            window.location.href = PATH_AUTH.login;
+        }
+        return error;
+    }
+}
 
 export const apiWithGetData = async (url, data, headers) => {
     const config = {
