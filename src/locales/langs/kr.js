@@ -265,6 +265,7 @@ const kr = {
   maker:'작성자',
   show:'게시',
   hide:'대기',
+  send:'보내기',
 };
 
 export default kr;

@@ -265,6 +265,7 @@ const en = {
   maker:'maker',
   show:'show',
   hide:'hide',
+  send:'send',
 
 };
 
