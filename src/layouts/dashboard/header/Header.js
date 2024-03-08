@@ -35,7 +35,7 @@ import { useSettingsContext } from '../../../components/settings';
 import audioWithdraw from '../../../assets/mp3/withdraw.mp3';
 import audioDeposit from '../../../assets/mp3/deposit.mp3';
 import audioAddUser from '../../../assets/mp3/add-users.mp3';
-import audioCustomer from '../../../assets/mp3/requre account.mp3';
+import audioCustomer from '../../../assets/mp3/question.mp3';
 
 import HeaderAnalytic from '../../../sections/@dashboard/header/headerAnalytic';
 import HeaderSplitAnalytic from '../../../sections/@dashboard/header/headerSplitAnalytic';

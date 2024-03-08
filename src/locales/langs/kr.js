@@ -266,6 +266,7 @@ const kr = {
   show:'게시',
   hide:'대기',
   send:'보내기',
+  add:'추가',
 };
 
 export default kr;

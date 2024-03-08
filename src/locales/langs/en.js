@@ -266,6 +266,7 @@ const en = {
   show:'show',
   hide:'hide',
   send:'send',
+  add:'add',
 
 };
 

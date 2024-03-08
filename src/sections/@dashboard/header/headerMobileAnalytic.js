@@ -2,13 +2,14 @@ import PropTypes from 'prop-types';
 import { Stack, 
   Typography, 
   Grid, 
-  Paper,
   Box,
 } from '@mui/material';
 import { useTheme, } from '@mui/material/styles';
 
 // locales
 import { useLocales } from '../../../locales';
+// utils
+import {toNumberString } from '../../../utils/convert';
 // ----------------------------------------------------------------------
 
 HeaderMobileAnalytic.propTypes = {
@@ -52,7 +53,7 @@ export default function HeaderMobileAnalytic({ title, color, price, handleClick,
             </Typography>
     
             <Typography variant="body2" align="center" sx={{ color }}>
-              {price?.toLocaleString()}
+              {toNumberString(price)}
             </Typography>
         </Stack>
         

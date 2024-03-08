@@ -1,5 +1,4 @@
 import { Helmet } from 'react-helmet-async';
-import { paramCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
@@ -42,9 +41,6 @@ import LoadingScreen from '../../../components/loading-screen';
 import {
   useTable,
   getComparator,
-  emptyRows,
-  TableNoData,
-  TableEmptyRows,
   TableHeadCustom,
   TableSelectedAction,
 } from '../../../components/table';

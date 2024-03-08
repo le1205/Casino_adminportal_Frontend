@@ -9,6 +9,8 @@ import { useTheme, } from '@mui/material/styles';
 
 // locales
 import { useLocales } from '../../../locales';
+// utils
+import {toNumberString } from '../../../utils/convert';
 // ----------------------------------------------------------------------
 
 HeaderSplitAnalytic.propTypes = {
@@ -54,7 +56,7 @@ export default function HeaderSplitAnalytic({ title, color, price, handleClick, 
             </Typography>
     
             <Typography variant="subtitle1" align="center" sx={{ color }}>
-              {price?.toLocaleString()}
+              {toNumberString(price)}
             </Typography>
         </Stack>
         <Stack
@@ -70,7 +72,7 @@ export default function HeaderSplitAnalytic({ title, color, price, handleClick, 
             </Typography>
     
             <Typography variant="subtitle1" align="center" >
-              {belowPrice?.toLocaleString()}
+              {toNumberString(belowPrice)}
             </Typography>
         </Stack>
         

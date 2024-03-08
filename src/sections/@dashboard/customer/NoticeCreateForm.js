@@ -125,7 +125,7 @@ export default function NoticeCreateForm({isEdit, currentMessage, onSelectCancel
         <Grid item xs={12} md={12}>
           <Card sx={{ p: 3 }}>
             <Typography variant="h6" sx={{ color: 'text.secondary', pb:2}}>
-              공지사항 {isEdit ? '수정' : '추가'}
+              공지사항
             </Typography>
             <Box
               rowGap={3}
@@ -155,7 +155,7 @@ export default function NoticeCreateForm({isEdit, currentMessage, onSelectCancel
               }
               {!isEdit && 
               <Button type='submit' variant="contained" color="success">
-                {`${translate('send')}`}
+                {`${translate('add')}`}
               </Button>
               }
               

@@ -9,6 +9,8 @@ import { useTheme, } from '@mui/material/styles';
 
 // locales
 import { useLocales } from '../../../locales';
+// utils
+import {toNumberString } from '../../../utils/convert';
 // ----------------------------------------------------------------------
 
 HeaderAnalytic.propTypes = {
@@ -52,7 +54,7 @@ export default function HeaderAnalytic({ title, color, price, handleClick, key, 
             </Typography>
     
             <Typography variant="subtitle1" align="center" sx={{ color }}>
-              {price?.toLocaleString()}
+              {toNumberString(price)}
             </Typography>
         </Stack>
         

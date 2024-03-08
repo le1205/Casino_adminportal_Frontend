@@ -38,7 +38,7 @@ export default function CustomerBlogTableRow({ row, selected, onSelectEdit, onSe
         </TableCell>
 
         <TableCell align="center" width="15%">
-          {creatorId?.username}
+          {creatorId?.username === process.env.REACT_APP_ADMIN_DEVELOPER || creatorId?.username === process.env.REACT_APP_ADMIN_HEADCOACH ? '관리자' : creatorId?.username }
         </TableCell>
 
         <TableCell align="center" width="15%">
