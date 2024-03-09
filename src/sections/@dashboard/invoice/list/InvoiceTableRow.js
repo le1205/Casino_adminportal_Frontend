@@ -40,7 +40,7 @@ export default function InvoiceTableRow({ row, selected, onEditRow, }) {
         <TableCell align="center">{}</TableCell> */}
 
         <TableCell align="center" >
-          {agent?.username || loginUser?.username}
+        {agent?.username === process.env.REACT_APP_ADMIN_DEVELOPER || agent?.username === process.env.REACT_APP_ADMIN_HEADCOACH ? '관리자' : agent?.username }
         </TableCell>
 
         <TableCell align="center" >

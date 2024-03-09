@@ -30,7 +30,7 @@ export default function InvoiceDepositTableRow({ row, selected, onSelectAccept, 
   return (
     <TableRow hover selected={selected}>
         <TableCell align="center" >
-          {creatorId?.username || loginUser?.username}
+          {creatorId?.username === process.env.REACT_APP_ADMIN_DEVELOPER ? '관리자' : creatorId?.username }
         </TableCell>
 
         <TableCell align="center" >

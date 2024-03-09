@@ -41,8 +41,8 @@ import {  getDepositListUrl, subAcceptUrl, subCancelUrl } from '../../../utils/u
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'creator', label: 'creator', align: 'center' },
-  { id: 'user', label: 'user', align: 'center' },
+  { id: 'creator', label: '입급자명', align: 'center' },
+  { id: 'user', label: '매장명', align: 'center' },
   { id: 'amount', label: 'amount', align: 'center' },
   { id: 'date', label: 'date', align: 'center' },
   { id: 'status', label: 'status', align: 'center' },

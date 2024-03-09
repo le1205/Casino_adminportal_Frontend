@@ -58,11 +58,9 @@ const STATUS_OPTIONS = [
 const TABLE_HEAD = [
   { id: 'creator', label: 'creator', align: 'center' },
   { id: 'id', label: 'id', align: 'center' },
-  { id: 'index', label: 'bettingNo', align: 'center' },
   { id: 'provider', label: 'provider', align: 'center' },
   { id: 'gameType', label: 'gameType', align: 'center' },
   { id: 'gameName', label: 'gameName', align: 'center' },
-  { id: 'bettingId', label: 'bettingId', align: 'center' },
   { id: 'bettingDate', label: 'bettingDate', align: 'center' },
   // { id: 'before', label: 'Before', align: 'center' },
   { id: 'betMoney', label: 'betMoney', align: 'center' },

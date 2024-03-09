@@ -54,8 +54,6 @@ export default function BetTotalTableRow({ row, selected, onEditRow, onSelectRow
 
         <TableCell align="center">{username}</TableCell>
 
-        <TableCell align="center">{id}</TableCell>
-
         <TableCell>
           {provider_name}
         </TableCell>
@@ -64,10 +62,6 @@ export default function BetTotalTableRow({ row, selected, onEditRow, onSelectRow
 
         <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
           {game_title}
-        </TableCell>
-
-        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {round_id}
         </TableCell>
 
         <TableCell align="center">

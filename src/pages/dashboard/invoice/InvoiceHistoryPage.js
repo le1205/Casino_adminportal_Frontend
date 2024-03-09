@@ -46,7 +46,7 @@ const TABLE_HEAD = [
   // { id: 'subadmin', label: 'subadmin', align: 'center' },
   // { id: 'company', label: 'company', align: 'center' },
   // { id: 'distributor', label: 'distributor', align: 'center' },
-  { id: 'agent', label: 'agent', align: 'center' },
+  { id: 'agent', label: '매장', align: 'center' },
   { id: 'user', label: 'user', align: 'center' },
   { id: 'permission', label: 'permission', align: 'center' },
   { id: 'amount', label: 'amount', align: 'center' },

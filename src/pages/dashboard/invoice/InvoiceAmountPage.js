@@ -47,8 +47,8 @@ import { balanceListUrl, balanceUpdateUrl } from '../../../utils/urlList';
 
 const TABLE_HEAD = [
   // { id: 'distributor', label: 'distributor', align: 'center' },
-  { id: 'creator', label: 'creator', align: 'center' },
-  { id: 'user', label: 'user', align: 'center' },
+  { id: 'creator', label: '입급자명', align: 'center' },
+  { id: 'user', label: '매장명', align: 'center' },
   { id: 'amount', label: 'amount', align: 'center' },
   { id: 'action', label: 'action', align: 'center' },
 ];
