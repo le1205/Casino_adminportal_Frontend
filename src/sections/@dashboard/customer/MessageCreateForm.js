@@ -28,6 +28,7 @@ import {parseJson } from '../../../auth/utils';
 MessageCreateForm.propTypes = {
   isEdit: PropTypes.bool,
   currentMessage: PropTypes.object,
+  userOptions: PropTypes.array,
   onSelectCancel:PropTypes.func,
   onUpdateSuccess:PropTypes.func,
   onCreateSuccess:PropTypes.func,
@@ -35,10 +36,9 @@ MessageCreateForm.propTypes = {
 
 const loginUser = parseJson(localStorage.getItem('user') || "");
 
-export default function MessageCreateForm({isEdit, currentMessage, onSelectCancel, onUpdateSuccess, onCreateSuccess }) {
+export default function MessageCreateForm({isEdit, currentMessage, onSelectCancel, onUpdateSuccess, onCreateSuccess, userOptions }) {
   const { translate } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
-  const [userOptions, setUserOptions] = useState([]);
   const [isComplete, setIsComplete] = useState(false);
 
   const NewMessageSchema = Yup.object().shape({
@@ -66,39 +66,8 @@ export default function MessageCreateForm({isEdit, currentMessage, onSelectCance
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-  
-  const usersList = () => {
-    try {
-      const url = adminListUrl;
-      const headers = {};
-      const data = {};
-      apiWithPostData(url, data, headers).then((response) => {
-        const { results } = response;
-        const userData = results
-          .filter((val) => val.role.title === 'user')
-          .map((item) => ({
-            label: item.username,
-            value: item._id,
-            icon: ''
-          }));
-        setUserOptions([
-          {
-            label: '내 하위업체들의 모든 회원',
-            value: loginUser._id,
-            icon: ''
-          },
-          ...userData
-        ]);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
-    if(!isEdit) {
-      usersList();
-    }
     if (isEdit && currentMessage) {
       reset(defaultValues);
     }

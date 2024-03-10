@@ -39,7 +39,7 @@ import MessageCreateForm from '../../../sections/@dashboard/customer/MessageCrea
 // api
 import { apiWithPostData, apiWithDeleteData } from '../../../utils/api';
 // url
-import {  messageListUrl, userNofiUrl } from '../../../utils/urlList';
+import {  messageListUrl, userNofiUrl, adminListUrl } from '../../../utils/urlList';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -81,8 +81,11 @@ export default function CustomerMessagePage() {
   const [selectedRow, setSelectedRow] = useState({});
   const [pendingCount, setPendingCount] = useState(0);
   const [openCreate, setOpenCreate] = useState(false);
+  const [userOptions, setUserOptions] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   const intervalRef = useRef(null);
+  
+  const loginUser = parseJson(localStorage.getItem('user') || "");
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -179,9 +182,38 @@ export default function CustomerMessagePage() {
       console.log(error);
     }
   };
+  
+  const usersList = () => {
+    try {
+      const url = adminListUrl;
+      const headers = {};
+      const data = {};
+      apiWithPostData(url, data, headers).then((response) => {
+        const { results } = response;
+        const userData = results
+          .filter((val) => val.role.title === 'user')
+          .map((item) => ({
+            label: item.username,
+            value: item._id,
+            icon: ''
+          }));
+        setUserOptions([
+          {
+            label: '내 하위업체들의 모든 회원',
+            value: loginUser._id,
+            icon: ''
+          },
+          ...userData
+        ]);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     messageList();
+    usersList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFirst]);
 
@@ -302,7 +334,7 @@ export default function CustomerMessagePage() {
       {(isLoading === true) && <LoadingScreen/>} 
       
       <Dialog open = {openCreate} onClose={handleCloseCreate}>
-        <MessageCreateForm isEdit={isEdit} currentMessage={selectedRow} onSelectCancel={handleCloseCreate} onCreateSuccess={handleCreateSuccess} onUpdateSuccess={handleUpdateSuccess}/>
+        <MessageCreateForm isEdit={isEdit} currentMessage={selectedRow} onSelectCancel={handleCloseCreate} onCreateSuccess={handleCreateSuccess} onUpdateSuccess={handleUpdateSuccess} userOptions={userOptions}/>
       </Dialog>
     </>
   );
