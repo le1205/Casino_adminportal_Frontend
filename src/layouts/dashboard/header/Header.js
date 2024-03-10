@@ -3,16 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
 import { useTheme, styled } from '@mui/material/styles';
-import { 
-  Stack, 
-  AppBar, 
-  Toolbar, 
-  IconButton, 
-  Card, 
-  Badge,
-  Grid,
-  Paper, 
-} from '@mui/material';
+import { Stack, AppBar, Toolbar, IconButton, Card, Badge, Grid, Paper } from '@mui/material';
 import PaidIcon from '@mui/icons-material/Paid';
 import PersonAddRoundedIcon from '@mui/icons-material/PersonAddRounded';
 import NotificationsNoneRoundedIcon from '@mui/icons-material/NotificationsNoneRounded';
@@ -42,7 +33,11 @@ import HeaderSplitAnalytic from '../../../sections/@dashboard/header/headerSplit
 // api
 import { apiWithPostData } from '../../../utils/api';
 // url
-import { adminHeaderDashboardUrl, adminHeaderCountUrl, userSessionUrl } from '../../../utils/urlList';
+import {
+  adminHeaderDashboardUrl,
+  adminHeaderCountUrl,
+  userSessionUrl,
+} from '../../../utils/urlList';
 
 // ----------------------------------------------------------------------
 
@@ -51,7 +46,7 @@ Header.propTypes = {
 };
 
 const StyledBlockContainer = styled(Paper)(({ theme }) => ({
-  marginTop:1,
+  marginTop: 1,
   padding: theme.spacing(1),
   border: `solid 1px ${theme.palette.divider}`,
   borderRadius: Number(theme.shape.borderRadius) * 1.5,
@@ -98,34 +93,33 @@ export default function Header({ onOpenNav }) {
   const deposutRef = useRef();
   const customerRef = useRef();
 
-  const loginUser  = parseJson(localStorage.getItem('user') || "");
+  const loginUser = parseJson(localStorage.getItem('user') || '');
   let isAgent = false;
-  if(loginUser?.roleMain?.order === 4 || loginUser?.roleMain?.order === 5) {
+  if (loginUser?.roleMain?.order === 4 || loginUser?.roleMain?.order === 5) {
     isAgent = true;
   }
   let isAdmin = false;
-  if(loginUser?.roleMain?.order === 1){
+  if (loginUser?.roleMain?.order === 1) {
     isAdmin = true;
   }
-  
+
   useEffect(() => {
     getHeaderDashboard();
     getHeaderCount();
     getOnlineCount();
-    
+
     const optimer = setInterval(getHeaderCount, 3000);
     const optimer1 = setInterval(getOnlineCount, 10000);
     return () => {
       clearInterval(optimer);
       clearInterval(optimer1);
     };
-    
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   const getHeaderDashboard = () => {
-    if(isDesktop === false)
-      return;
+    if (isDesktop === false) return;
     try {
       const url = adminHeaderDashboardUrl;
       const headers = {};
@@ -149,53 +143,52 @@ export default function Header({ onOpenNav }) {
         setTotalWin(dashboard?.total_win || 0);
         setRolling(dashboard?.rolling || 0);
         // eslint-disable-next-line no-unsafe-optional-chaining
-        const rate = (dashboard?.total_bet) - (dashboard?.total_win)
+        const rate = dashboard?.total_bet - dashboard?.total_win;
         setBettingProfit(rate || 0);
       });
     } catch (error) {
       console.log(error);
     }
   };
-  
+
   const getHeaderCount = () => {
-    if(isDesktop === false)
-      return;
+    if (isDesktop === false) return;
     try {
       const url = adminHeaderCountUrl;
       const headers = {};
       apiWithPostData(url, {}, headers).then((response) => {
         const { nofi } = response;
-        setCountDeposit (response?.countDeposit || 0);
-        setCountWithdraw (response?.countWithdraw || 0);
-        setCountNofi (response?.countNofi || 0);
-        setCountUser (response?.countUser || 0);
+        setCountDeposit(response?.countDeposit || 0);
+        setCountWithdraw(response?.countWithdraw || 0);
+        setCountNofi(response?.countNofi || 0);
+        setCountUser(response?.countUser || 0);
 
-        if(nofi?.countDeposit === true) {
+        if (nofi?.countDeposit === true) {
           new Audio(audioDeposit).play();
           deposutRef.current = setInterval(() => {
-              new Audio(audioDeposit).play();
+            new Audio(audioDeposit).play();
           }, 1000);
           return;
         }
         new Audio(audioDeposit).pause();
-        
-        if(nofi?.countWithdraw === true) {
+
+        if (nofi?.countWithdraw === true) {
           new Audio(audioWithdraw).play();
           widthdrawRef.current = setInterval(() => {
-              new Audio(audioWithdraw).play();
+            new Audio(audioWithdraw).play();
           }, 1000);
           return;
         }
         new Audio(audioWithdraw).pause();
         if (nofi?.countNofi === true) {
+          new Audio(audioCustomer).play();
+          customerRef.current = setInterval(() => {
             new Audio(audioCustomer).play();
-            customerRef.current = setInterval(() => {
-                new Audio(audioCustomer).play();
-            }, 3000);
-            return;
+          }, 3000);
+          return;
         }
         new Audio(audioCustomer).pause();
-        if(nofi?.countUser === true) {
+        if (nofi?.countUser === true) {
           new Audio(audioAddUser).play();
         }
         new Audio(audioAddUser).pause();
@@ -204,33 +197,37 @@ export default function Header({ onOpenNav }) {
       console.log(error);
     }
   };
-  
+
   const getOnlineCount = () => {
     try {
       const url = userSessionUrl;
       const data = {
         page: 1,
         pageSize: 100,
-        date:[new Date, new Date]
-      }
+        date: [new Date(), new Date()],
+      };
       const headers = {};
       apiWithPostData(url, data, headers).then((response) => {
-        const {count} = response;
+        const { count } = response;
         setLoginMember(count);
       });
     } catch (error) {
       console.log(error);
     }
-
   };
-
 
   const movePage = (path) => {
-    clearInterval(widthdrawRef.current)
-    clearInterval(deposutRef.current)
-    clearInterval(customerRef.current)
+    clearInterval(widthdrawRef.current);
+    clearInterval(deposutRef.current);
+    clearInterval(customerRef.current);
     navigate(path);
   };
+ 
+  useEffect(() => () => {
+      clearInterval(widthdrawRef.current);
+      clearInterval(deposutRef.current);
+      clearInterval(customerRef.current);
+    }, []);
 
   const renderContent = (
     <>
@@ -248,139 +245,136 @@ export default function Header({ onOpenNav }) {
         justifyContent="flex"
         spacing={{ xs: 0.5, sm: 1.5 }}
       >
-        {isDesktop && 
-            <StyledBlockContainer variant="outlined">
-              <Grid container spacing={1} 
-                direction="row"
-              > 
-                {!isAgent && 
-                  <HeaderSplitAnalytic
-                    title="depositRequestCount"
-                    belowTitle="waitingDeposit"
-                    isAgent ={isAgent}
-                    price={depositRequest}
-                    belowPrice={countDeposit}
-                    color={theme.palette.info.main}
-                    handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
-                  />
-                }
-                {!isAgent && 
-                  <HeaderAnalytic
-                    title="memberRequestCount"
-                    isAgent ={isAgent}
-                    price={countUser}
-                    color={theme.palette.info.main}
-                    handleClick={() => movePage(PATH_DASHBOARD.user.list)}
-                  />
-                }
-                <HeaderAnalytic
-                  title="loggedInMember"
-                  isAgent ={isAgent}
-                  price={loginMember}
-                  color={theme.palette.warning.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.user.connect)}
-                />
-                <HeaderAnalytic
-                  title="userMoney"
-                  isAgent ={isAgent}
-                  price={userMoney}
-                  color={theme.palette.text.secondary}
-                  handleClick={() => movePage(PATH_DASHBOARD.user.list)}
-                />
-                <HeaderAnalytic
-                  title="totalDeposit"
-                  isAgent ={isAgent}
-                  price={deposit}
-                  color={theme.palette.success.main}
+        {isDesktop && (
+          <StyledBlockContainer variant="outlined">
+            <Grid container spacing={1} direction="row">
+              {!isAgent && (
+                <HeaderSplitAnalytic
+                  title="depositRequestCount"
+                  belowTitle="waitingDeposit"
+                  isAgent={isAgent}
+                  price={depositRequest}
+                  belowPrice={countDeposit}
+                  color={theme.palette.info.main}
                   handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
                 />
+              )}
+              {!isAgent && (
                 <HeaderAnalytic
-                  title="totalWithdraw"
-                  isAgent ={isAgent}
-                  price={withdraw}
-                  color={theme.palette.success.main}
+                  title="memberRequestCount"
+                  isAgent={isAgent}
+                  price={countUser}
+                  color={theme.palette.info.main}
+                  handleClick={() => movePage(PATH_DASHBOARD.user.list)}
+                />
+              )}
+              <HeaderAnalytic
+                title="loggedInMember"
+                isAgent={isAgent}
+                price={loginMember}
+                color={theme.palette.warning.main}
+                handleClick={() => movePage(PATH_DASHBOARD.user.connect)}
+              />
+              <HeaderAnalytic
+                title="userMoney"
+                isAgent={isAgent}
+                price={userMoney}
+                color={theme.palette.text.secondary}
+                handleClick={() => movePage(PATH_DASHBOARD.user.list)}
+              />
+              <HeaderAnalytic
+                title="totalDeposit"
+                isAgent={isAgent}
+                price={deposit}
+                color={theme.palette.success.main}
+                handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
+              />
+              <HeaderAnalytic
+                title="totalWithdraw"
+                isAgent={isAgent}
+                price={withdraw}
+                color={theme.palette.success.main}
+                handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
+              />
+              <HeaderAnalytic
+                title="depWithProfit"
+                isAgent={isAgent}
+                price={profitLoss}
+                color={theme.palette.success.main}
+                handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
+              />
+              {!isAgent && (
+                <HeaderSplitAnalytic
+                  title="withdrawRequestCount"
+                  belowTitle="waitingWithdraw"
+                  isAgent={isAgent}
+                  price={withdrawRequest}
+                  belowPrice={countWithdraw}
+                  color={theme.palette.info.main}
                   handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
                 />
-                 <HeaderAnalytic
-                  title="depWithProfit"
-                  isAgent ={isAgent}
-                  price={profitLoss}
-                  color={theme.palette.success.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
-                /> 
-                {!isAgent && 
-                  <HeaderSplitAnalytic
-                    title="withdrawRequestCount"
-                    belowTitle="waitingWithdraw"
-                    isAgent ={isAgent}
-                    price={withdrawRequest}
-                    belowPrice={countWithdraw}
-                    color={theme.palette.info.main}
-                    handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
-                  />
-                }
-                {!isAgent && 
-                  <HeaderAnalytic
-                    title="faqRequestCount"
-                    isAgent ={isAgent}
-                    price={countNofi}
-                    color={theme.palette.info.main}
-                    handleClick={() => movePage(PATH_DASHBOARD.customer.faq)}
-                  />
-                }
+              )}
+              {!isAgent && (
                 <HeaderAnalytic
-                  title="totalMembers"
-                  isAgent ={isAgent}
-                  price={totalMember}
-                  color={theme.palette.warning.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.user.list)}
+                  title="faqRequestCount"
+                  isAgent={isAgent}
+                  price={countNofi}
+                  color={theme.palette.info.main}
+                  handleClick={() => movePage(PATH_DASHBOARD.customer.faq)}
                 />
+              )}
+              <HeaderAnalytic
+                title="totalMembers"
+                isAgent={isAgent}
+                price={totalMember}
+                color={theme.palette.warning.main}
+                handleClick={() => movePage(PATH_DASHBOARD.user.list)}
+              />
+              <HeaderAnalytic
+                title="totalRate"
+                isAgent={isAgent}
+                price={userPoint}
+                color={theme.palette.text.secondary}
+                handleClick={() => movePage(PATH_DASHBOARD.user.list)}
+              />
+              {isAdmin && (
                 <HeaderAnalytic
-                  title="totalRate"
-                  isAgent ={isAgent}
-                  price={userPoint}
-                  color={theme.palette.text.secondary}
-                  handleClick={() => movePage(PATH_DASHBOARD.user.list)}
-                />
-                {isAdmin && 
-                  <HeaderAnalytic
-                    title="totalBet"
-                    isAgent ={isAgent}
-                    price={totalBet}
-                    color={theme.palette.success.main}
-                    handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
-                  />
-                }
-                {!isAdmin && 
-                  <HeaderAnalytic
-                    title="rollingAmount"
-                    isAgent ={isAgent}
-                    price={rolling}
-                    color={theme.palette.success.main}
-                    handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
-                  />
-                }
-                <HeaderAnalytic
-                  title="totalWin"
-                  isAgent ={isAgent}
-                  price={totalWin}
+                  title="totalBet"
+                  isAgent={isAgent}
+                  price={totalBet}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
                 />
+              )}
+              {!isAdmin && (
                 <HeaderAnalytic
-                  title="bettingProfit"
-                  isAgent ={isAgent}
-                  price={bettingProfit}
+                  title="rollingAmount"
+                  isAgent={isAgent}
+                  price={rolling}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
                 />
-              </Grid>
-            </StyledBlockContainer>
-        }
-            
+              )}
+              <HeaderAnalytic
+                title="totalWin"
+                isAgent={isAgent}
+                price={totalWin}
+                color={theme.palette.success.main}
+                handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
+              />
+              <HeaderAnalytic
+                title="bettingProfit"
+                isAgent={isAgent}
+                price={bettingProfit}
+                color={theme.palette.success.main}
+                handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
+              />
+            </Grid>
+          </StyledBlockContainer>
+        )}
 
         {/* </Card> */}
-      
+
         {/* <Stack
           flexGrow={1}
           direction="row"
@@ -410,7 +404,6 @@ export default function Header({ onOpenNav }) {
           <AccountPopover />
         </Stack> */}
       </Stack>
-
     </>
   );
 
