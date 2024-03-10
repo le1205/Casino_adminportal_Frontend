@@ -141,12 +141,14 @@ export default function BetSlotPage() {
           name: "all",
         }];
         results.forEach((item, index) => {
-          const user = {
-            _id: item._id || '',
-            id: item.user_id || '',
-            name: item.username || '',
+          if(item?.role?.title === 'user') {
+            const user = {
+              _id: item._id || '',
+              id: item.user_id || '',
+              name: item.username || '',
+            }
+            users.push(user);
           }
-          users.push(user);
         });
         setTotalRole(users);
         setTotalUsers(results);

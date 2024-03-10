@@ -189,6 +189,30 @@ export default function InvoiceInReportPage() {
     }
 
   };
+  
+
+  const realTimeDepositList = () => {
+    try {
+      const url = getDepositListUrl + loginUser._id;
+      const headers = {};
+      const data = {};
+      apiWithPostData(url, data, headers).then((response) => {
+        setTableData(response);
+        if(response?.length > 0) {
+          let valCount = 0;
+          response.forEach(element => {
+            if(element?.status === "Pending") {
+              valCount += 1;
+            }
+          });
+          setPendingCount(valCount);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+  };
 
   useEffect(() => {
     depositList();

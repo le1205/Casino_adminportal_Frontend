@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 // @mui
 import {
   Card,
@@ -82,6 +82,7 @@ export default function CustomerMessagePage() {
   const [pendingCount, setPendingCount] = useState(0);
   const [openCreate, setOpenCreate] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const intervalRef = useRef(null);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -185,11 +186,16 @@ export default function CustomerMessagePage() {
   }, [isFirst]);
 
   useEffect(() => {
-    setInterval(() => {
+    intervalRef.current = setInterval(() => {
       messageUnreadList();
     }, 5000);
+    return () => {
+     clearInterval(intervalRef.current);
+    };
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   
   return (
     <>

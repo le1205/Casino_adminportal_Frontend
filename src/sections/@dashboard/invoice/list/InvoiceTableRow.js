@@ -69,7 +69,7 @@ export default function InvoiceTableRow({ row, selected, onEditRow, }) {
             variant="soft"
             color={(type === 'deposit' && 'success') || 'error'}
           >
-            {type}
+            {(type === 'deposit' && '입금') || '출금'}
           </Label>
         </TableCell>
 

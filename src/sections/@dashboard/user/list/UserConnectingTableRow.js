@@ -90,9 +90,9 @@ export default function UserConnectingTableRow({ row, selected, onDeleteRow, onS
           {lastGame}
         </TableCell>
 
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+        {/* <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
           <Switch  checked={isVerified} />
-        </TableCell>
+        </TableCell> */}
 
         {/* <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
             <Switch  checked={status} />

@@ -86,7 +86,8 @@ export default function NavAccount() {
         <Box sx={{ ml: 1, minWidth: 0 }}>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Typography variant="subtitle2" noWrap sx={{ color: 'text.secondary' }}>
-              {`${translate(user?.role)}`}
+              {/* {`${translate(user?.role)}`} */}
+              {`${translate('id')}`}
             </Typography>
             <Typography variant="subtitle1" noWrap sx={{ pl: 6 }}>
               {user?.username}

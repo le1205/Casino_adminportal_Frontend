@@ -26,3 +26,5 @@ yarn-error.log*
 .eslintcache
 .env
 .env
+package-lock.json
+yarn.lock

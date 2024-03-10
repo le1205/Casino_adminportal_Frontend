@@ -57,7 +57,7 @@ const TABLE_HEAD = [
   { id: 'ip', label: 'ip', align: 'left' },
   // { id: 'depowith', label: 'depowith', align: 'left' },
   { id: 'lastGame', label: 'lastGame', align: 'left' },
-  { id: 'loginPossible', label: 'loginPossible', align:'left' },
+  // { id: 'loginPossible', label: 'loginPossible', align:'left' },
   // { id: 'betPossible', label: 'betPossible', align:'left' },
   { id: 'action', label: 'action', align: 'left' },
   // { id: 'confirm', label: 'confirm', align:'left' },
@@ -84,7 +84,6 @@ export default function UserConnectPage() {
   } = useTable();
 
   const { themeStretch } = useSettingsContext();
-
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -104,6 +103,7 @@ export default function UserConnectPage() {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const [balanceAmount, setBalanceAmount] = useState(0);
+  const intervalRef = useRef(null);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -289,12 +289,57 @@ export default function UserConnectPage() {
     }
 
   };
+  
+  const sessionRealTimeList = () => {
+    try {
+      const url = userSessionUrl;
+      const data = {
+        page: 1,
+        pageSize: 100,
+        date:[filterStartDate, filterEndDate]
+      }
+      const headers = {};
+      apiWithPostData(url, data, headers).then((response) => {
+        const {count, results} = response;
+        const users = [];
+        results.forEach(item => {
+          const ipAddress = validateIPaddress(item.ip) ? item.ip : '159.35.21.216';
+          const user = {
+            _id: item._id || '',
+            id: item.userId || '',
+            ip: ipAddress,
+            username: item.user?.username || '',
+            cash: item.user?.balance  || 0,
+            lastDate: item.updatedAt,
+            isVerified: item.user?.verify || false,
+            status: item.user?.isBlock || false,
+            lastGame: item.user?.userActive?.game_title || '',
+            company: item.user?.userActive?.provider_name || '',
+          }
+          users.push(user);
+        });
+        setTableData(users);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   
   useEffect(() => {
     sessionList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFirst]);
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      sessionRealTimeList();
+    }, 5000);
+    return () => {
+     clearInterval(intervalRef.current);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

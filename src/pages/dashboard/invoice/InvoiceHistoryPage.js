@@ -165,9 +165,14 @@ export default function InvoiceHistoryPage() {
       };
       apiWithPostData(url, data, headers).then((response) => {
         const {results, count, totald, totalw} = response;
+        
+        const dataArr = results.filter(
+          (item) => item?.user?.[0].username !== process.env.REACT_APP_ADMIN_HEADCOACH
+        );
+
         setTotalCount(count);
-        setTableData(results);
-        setLogData(results);
+        setTableData(dataArr);
+        setLogData(dataArr);
         setIsLoading(false);
         // setTotalDeposit(totald);
         // setTotalWithdraw(totalw);

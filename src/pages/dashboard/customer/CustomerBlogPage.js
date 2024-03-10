@@ -157,7 +157,7 @@ export default function CustomerBlogPage() {
     }
   }
 
-  const messageList = () => {
+  const blogList = () => {
     try {
       setIsLoading(true);
       setPage(0);
@@ -167,7 +167,6 @@ export default function CustomerBlogPage() {
       apiWithPostData(url, data, headers).then((response) => {
         setIsLoading(false);
         setTableData(response);
-        console.log(response);
       });
     } catch (error) {
       console.log(error);
@@ -189,16 +188,9 @@ export default function CustomerBlogPage() {
   };
 
   useEffect(() => {
-    messageList();
+    blogList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFirst]);
-
-  useEffect(() => {
-    // setInterval(() => {
-    //   messageUnreadList();
-    // }, 5000);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <>
