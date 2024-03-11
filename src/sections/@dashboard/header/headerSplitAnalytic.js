@@ -31,7 +31,7 @@ export default function HeaderSplitAnalytic({ title, color, price, handleClick, 
   return (
     
     <Grid key={key} item xs={2} 
-      sx={{flexBasis: isAgent ? `20% !important` : `14.28% !important`, minWidth:'140px', maxWidth: isAgent? `20% !important` : '16.7%'}}>
+      sx={{flexBasis: isAgent ? `20% !important` : `16% !important`, minWidth:'140px', maxWidth: isAgent? `20% !important` : '16%'}}>
       <Box
         borderLeft={2}
         borderColor={color}

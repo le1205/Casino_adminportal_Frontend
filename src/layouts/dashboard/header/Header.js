@@ -272,15 +272,9 @@ export default function Header({ onOpenNav }) {
                 title="loggedInMember"
                 isAgent={isAgent}
                 price={loginMember}
+                isMargin
                 color={theme.palette.warning.main}
                 handleClick={() => movePage(PATH_DASHBOARD.user.connect)}
-              />
-              <HeaderAnalytic
-                title="userMoney"
-                isAgent={isAgent}
-                price={userMoney}
-                color={theme.palette.text.secondary}
-                handleClick={() => movePage(PATH_DASHBOARD.user.list)}
               />
               <HeaderAnalytic
                 title="totalDeposit"
@@ -324,24 +318,34 @@ export default function Header({ onOpenNav }) {
                 />
               )}
               <HeaderAnalytic
+                title="userMoney"
+                isAgent={isAgent}
+                price={userMoney}
+                isMargin
+                color={theme.palette.warning.main}
+                handleClick={() => movePage(PATH_DASHBOARD.user.list)}
+              />
+              {/* <HeaderAnalytic
                 title="totalMembers"
                 isAgent={isAgent}
                 price={totalMember}
                 color={theme.palette.warning.main}
                 handleClick={() => movePage(PATH_DASHBOARD.user.list)}
-              />
-              <HeaderAnalytic
+              /> */}
+              {/* <HeaderAnalytic
                 title="totalRate"
                 isAgent={isAgent}
                 price={userPoint}
                 color={theme.palette.text.secondary}
                 handleClick={() => movePage(PATH_DASHBOARD.user.list)}
-              />
+              /> */}
               {isAdmin && (
-                <HeaderAnalytic
+                <HeaderSplitAnalytic
                   title="totalBet"
+                  belowTitle="rollingAmount"
                   isAgent={isAgent}
                   price={totalBet}
+                  belowPrice={rolling}
                   color={theme.palette.success.main}
                   handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
                 />

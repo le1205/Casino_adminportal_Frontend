@@ -20,16 +20,17 @@ HeaderAnalytic.propTypes = {
   price: PropTypes.number,
   handleClick: PropTypes.func,
   isAgent: PropTypes.bool,
+  isMargin: PropTypes.bool,
 };
 
-export default function HeaderAnalytic({ title, color, price, handleClick, key, isAgent  }) {
+export default function HeaderAnalytic({ title, color, price, handleClick, key, isAgent, isMargin  }) {
   const theme = useTheme();
   
   const { translate } = useLocales();
   return (
     
     <Grid key={key} item xs={2} 
-      sx={{flexBasis: isAgent ? `20% !important` : `14.28% !important`, minWidth:'140px', maxWidth: isAgent? `20% !important` : '16.7%'}}>
+      sx={{flexBasis: isAgent ? `20% !important` : `16% !important`, minWidth:'140px', maxWidth: isAgent? `20% !important` : '16%', marginLeft:isMargin? '20px' : '0px', marginRight:isMargin? '20px' : '0px'}}>
       <Box
         borderLeft={2}
         borderColor={color}
