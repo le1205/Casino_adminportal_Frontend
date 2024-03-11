@@ -98,14 +98,15 @@ export default function BetSlotPage() {
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [totalRole, setTotalRole] = useState([{
-    _id: 0,
-    id: 0,
+    _id: '0',
+    id: '0',
     name: "all",
   }]);
   const [totalUsers, setTotalUsers] = useState([]);
   const [filterRole, setFilterRole] = useState('all');
   const [adminList, setAdminList] = useState([]);
   const [list, setList] = useState([]);
+  let initialList = [];
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -147,14 +148,6 @@ export default function BetSlotPage() {
   const handleClickSearch = () => {
     setPage(0)
     setFilterRole('all');
-    const now = moment(new Date()).format('YYYY-MM-DD');
-    const selectedDate = moment(filterStartDate).format('YYYY-MM-DD');
-    if (moment(selectedDate).isBefore(moment(now))) {
-      getGameData(gameType);
-    }
-    else {
-      getGameFirstData(gameType);
-    }
     gameLog(gameType);
   };
   
@@ -166,16 +159,16 @@ export default function BetSlotPage() {
       apiWithPostData(url, data, headers).then((response) => {
         const { results } = response;
         const users = [{
-          _id: 0,
-          id: 0,
+          _id: '0',
+          id: '0',
           name: "all",
         }];
         results.forEach((item, index) => {
           if(item?.role?.title === 'user') {
             const user = {
-              _id: item._id || '',
-              id: item.user_id || '',
-              name: item.username || '',
+              _id: `${item._id  }` || '',
+              id: `${item.user_id  }` || '',
+              name: `${item.username  }` || '',
             }
             users.push(user);
           }
@@ -203,11 +196,11 @@ export default function BetSlotPage() {
 
   const gameLog = async (game) => {
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
+      setList([]);
+      initialList = [];
       
       const NewDate = moment(filterStartDate).format('YYYY-MM-DD');
-      const url = gameLogUrl;
-      const headers = {};
       const data = {
         "start": `${NewDate} 00:00:00`,
         "end": `${NewDate} 01:59:59`,
@@ -280,77 +273,30 @@ export default function BetSlotPage() {
         "game_type": game,
         "perPage": 100,
       };
-      
-      await Promise.all([
-        apiWithPostData(url, data, headers),
-        apiWithPostData(url, data1, headers),
-        apiWithPostData(url, data2, headers),
-        apiWithPostData(url, data3, headers),
-        apiWithPostData(url, data4, headers),
-        apiWithPostData(url, data5, headers),
-        apiWithPostData(url, data6, headers),
-        apiWithPostData(url, data7, headers),
-        apiWithPostData(url, data8, headers),
-        apiWithPostData(url, data9, headers),
-        apiWithPostData(url, data10, headers),
-        apiWithPostData(url, data11, headers),
-      ]).then((dataArray) => {
-        let value = [];
-        // eslint-disable-next-line array-callback-return
-        dataArray.slice(0, 12).map((item) => {
-            value = [...value, item];
-        });
-        setList(value.flat(1));
+      const dataArr = [data11, data10, data9, data8, data7, data6, data5, data4, data3, data2, data1, data];
+      dataArr.forEach(element => {
+        getGameData(element);
       });
+      
+      const timeout = setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
 
     } catch (error) {
       console.log(error);
     }
   };
   
-  const getGameData = (game) => {
+  const getGameData = (data) => {
     try {
-      setIsLoading(true);
-      setPage(0);
-      const NewDate = moment(filterStartDate).format('YYYY-MM-DD');
       const url = gameLogUrl;
       const headers = {};
-      const data = {
-        "start": `${NewDate} 22:00:00`,
-        "end": `${NewDate} 23:59:59`,
-        "game_type": game,
-        "perPage": 100,
-      };
       apiWithPostData(url, data, headers).then((response) => {
-        setList(response);
-        setIsLoading(false);
-      });
-    } catch (error) {
-      console.log(error);
-      setIsLoading(false);
-    }
-  };
-  
-  const getGameFirstData = (game) => {
-    try {
-      setIsLoading(true);
-      setPage(0);
-      const date = new Date()
-      const timestamp = date.getTime() - 1 * 3600 * 1000
-      const newDate = new Date(timestamp)
-      const startDate = moment(date).format('YYYY-MM-DD HH:MM:SS');
-      const endDate = moment(newDate).format('YYYY-MM-DD HH:MM:SS');
-      const url = gameLogUrl;
-      const headers = {};
-      const data = {
-        "start": `${startDate} `,
-        "end": `${endDate} `,
-        "game_type": game,
-        "perPage": 100,
-      };
-      apiWithPostData(url, data, headers).then((response) => {
-        setList(response);
-        setIsLoading(false);
+        if(response && response.length > 0) {
+          setIsLoading(false);
+          initialList = initialList.concat(response);
+          setList(initialList);
+        }
       });
     } catch (error) {
       console.log(error);
@@ -415,7 +361,6 @@ export default function BetSlotPage() {
   useEffect(() => {
     usersList();
     getListRole();
-    getGameFirstData(gameType);
     gameLog(gameType);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFirst]);

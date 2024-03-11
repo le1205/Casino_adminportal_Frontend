@@ -55,7 +55,7 @@ const kr = {
   depositList: `입금내역조회`,
   withdraw: `출금신청내역`,
   withdrawList: `출금내역조회`,
-  operatorTransaction: `관리자 지급/회수`,
+  operatorTransaction: `포인트 이동 내역`,
   cashHistory: `충환전 내역`,
   calculate: `정산 관리`,
   partnerCalculate: `파트너정산내역`,
