@@ -280,7 +280,7 @@ export default function BetSlotPage() {
       
       const timeout = setTimeout(() => {
         setIsLoading(false);
-      }, 3000);
+      }, 4000);
 
     } catch (error) {
       console.log(error);

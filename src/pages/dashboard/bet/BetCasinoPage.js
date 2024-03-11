@@ -97,8 +97,8 @@ export default function BetCasinoPage() {
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [totalRole, setTotalRole] = useState([{
-    _id: 0,
-    id: 0,
+    _id: '0',
+    id: '0',
     name: "all",
   }]);
   const [totalUsers, setTotalUsers] = useState([]);
@@ -106,6 +106,7 @@ export default function BetCasinoPage() {
   const [adminList, setAdminList] = useState([]);
   const [list, setList] = useState([]);
   const [alertContent, setAlertContent] = useState(`${translate('couldNotSelectFuture')}`);
+  let initialList = [];
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -158,16 +159,16 @@ export default function BetCasinoPage() {
       apiWithPostData(url, data, headers).then((response) => {
         const { results } = response;
         const users = [{
-          _id: 0,
-          id: 0,
+          _id: '0',
+          id: '0',
           name: "all",
         }];
         results.forEach((item, index) => {
           if(item?.role?.title === 'user') {
             const user = {
-              _id: item._id || '',
-              id: item.user_id || '',
-              name: item.username || '',
+              _id: `${item._id  }` || '',
+              id: `${item.user_id  }` || '',
+              name: `${item.username  }` || '',
             }
             users.push(user);
           }
@@ -193,14 +194,14 @@ export default function BetCasinoPage() {
     }
   };
 
+
   const gameLog = async (game) => {
     try {
       setIsLoading(true);
-      setPage(0);
+      setList([]);
+      initialList = [];
       
       const NewDate = moment(filterStartDate).format('YYYY-MM-DD');
-      const url = gameLogUrl;
-      const headers = {};
       const data = {
         "start": `${NewDate} 00:00:00`,
         "end": `${NewDate} 01:59:59`,
@@ -273,35 +274,35 @@ export default function BetCasinoPage() {
         "game_type": game,
         "perPage": 100,
       };
-      
-      await Promise.all([
-        apiWithPostData(url, data, headers),
-        apiWithPostData(url, data1, headers),
-        apiWithPostData(url, data2, headers),
-        apiWithPostData(url, data3, headers),
-        apiWithPostData(url, data4, headers),
-        apiWithPostData(url, data5, headers),
-        apiWithPostData(url, data6, headers),
-        apiWithPostData(url, data7, headers),
-        apiWithPostData(url, data8, headers),
-        apiWithPostData(url, data9, headers),
-        apiWithPostData(url, data10, headers),
-        apiWithPostData(url, data11, headers),
-      ]).then((dataArray) => {
-        let value = [];
-        // eslint-disable-next-line array-callback-return
-        dataArray.slice(0, 12).map((item) => {
-            value = [...value, item];
-        });
-        setList(value.flat(1));
-        setIsLoading(false);
+      const dataArr = [data11, data10, data9, data8, data7, data6, data5, data4, data3, data2, data1, data];
+      dataArr.forEach(element => {
+        getGameData(element);
       });
+      
+      const timeout = setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
 
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  const getGameData = (data) => {
+    try {
+      const url = gameLogUrl;
+      const headers = {};
+      apiWithPostData(url, data, headers).then((response) => {
+        if(response && response.length > 0) {
+          setIsLoading(false);
+          initialList = initialList.concat(response);
+          setList(initialList);
+        }
+      });
     } catch (error) {
       console.log(error);
       setIsLoading(false);
     }
-
   };
   
   const handleFilterItem = (data, totalUser, adminsList) => {
