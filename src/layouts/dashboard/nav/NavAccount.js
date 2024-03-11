@@ -62,6 +62,7 @@ export default function NavAccount() {
       const headers = {};
       apiWithGetData(url, {}, headers).then((response) => {
         setPoint(response?.total?.toLocaleString() || 0);
+        localStorage.setItem('point', response?.total);
       });
     } catch (error) {
       console.log(error);

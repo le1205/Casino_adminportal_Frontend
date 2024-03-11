@@ -110,9 +110,11 @@ export default function Header({ onOpenNav }) {
 
     const optimer = setInterval(getHeaderCount, 3000);
     const optimer1 = setInterval(getOnlineCount, 10000);
+    const optimer2 = setInterval(getHeaderDashboard, 5000);
     return () => {
       clearInterval(optimer);
       clearInterval(optimer1);
+      clearInterval(optimer2);
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -224,10 +226,10 @@ export default function Header({ onOpenNav }) {
   };
  
   useEffect(() => () => {
-      clearInterval(widthdrawRef.current);
-      clearInterval(deposutRef.current);
-      clearInterval(customerRef.current);
-    }, []);
+    clearInterval(widthdrawRef.current);
+    clearInterval(deposutRef.current);
+    clearInterval(customerRef.current);
+  }, []);
 
   const renderContent = (
     <>
