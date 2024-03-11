@@ -56,8 +56,8 @@ import {parseJson } from '../../../auth/utils';
 
 const TABLE_HEAD = [
   { id: 'no', label: 'no', align: 'left' },
-  { id: 'name', label: 'name', align: 'left' },
   { id: 'creator', label: 'creator', align: 'left' },
+  { id: 'name', label: 'id', align: 'left' },
   { id: 'level', label: 'level', align: 'left' },
   { id: 'cash', label: 'cash', align: 'left' },
   // { id: 'point', label: 'point', align: 'left' },
@@ -415,43 +415,41 @@ export default function UserListPage() {
         const users = [];
         results.forEach((item, index) => {
           if(item.username !== process.env.REACT_APP_ADMIN_DEVELOPER) {
-            if(item.creator !== process.env.REACT_APP_ADMIN_DEVELOPER) {
-              const user = {
-                _id: item?._id || '',
-                no: page * rowsPerPage + index + 1,
-                id: item?.user_id || '',
-                name: item?.username || '',
-                company: item?.company || '',
-                creator: item?.creator || '',
-                level: item?.level || '',
-                cash: item?.balanceMain || 0,
-                point: item?.pointSlot || 0,
-                inOut: item?.inOut || '',
-                totalLoose: item?.loseSlotRate || 0,
-                lastDate: item?.updatedAt,
-                isVerified: item?.verify || false,
-                status: item?.isBlock || false,
-                role: item?.role?.name || '',
-                roleOrder: item?.role?.order || 0,
-                nickName: item?.Nickname || '',
-                birthday: item?.Birthday || '',
-                phoneNumber: item?.phone || '',
-                bankInfo: item?.bankName || '',
-                bankAccount: item?.bankAccount || '',
-                loginAvailable: item?.verify || true,
-                betAvailable: item?.isBlock || true,
-                depositOwner: item?.bankOwner || '',
-                community: item?.community || '',
-                slotRolling: item?.slotRate || 0,
-                slotLoosing: item?.loseSlotRate || 0,
-                casinoRolling: item?.liveRate || 0,
-                casinoLoosing: item?.loseLiveRate || 0,
-                agent: item?.agent || '',
-                exchangeRate: item?.withdrawRate || '',
-              }
-              users.push(user);
+            const user = {
+              _id: item?._id || '',
+              no: page * rowsPerPage + index + 1,
+              id: item?.user_id || '',
+              name: item?.username || '',
+              company: item?.company || '',
+              creator: item?.creator || '',
+              level: item?.level || '',
+              cash: item?.balanceMain || 0,
+              point: item?.pointSlot || 0,
+              inOut: item?.inOut || '',
+              totalLoose: item?.loseSlotRate || 0,
+              lastDate: item?.updatedAt,
+              isVerified: item?.verify || false,
+              status: item?.isBlock || false,
+              role: item?.role?.name || '',
+              roleOrder: item?.role?.order || 0,
+              nickName: item?.Nickname || '',
+              birthday: item?.Birthday || '',
+              phoneNumber: item?.phone || '',
+              bankInfo: item?.bankName || '',
+              bankAccount: item?.bankAccount || '',
+              loginAvailable: item?.verify || true,
+              betAvailable: item?.isBlock || true,
+              depositOwner: item?.bankOwner || '',
+              community: item?.community || '',
+              slotRolling: item?.slotRate || 0,
+              slotLoosing: item?.loseSlotRate || 0,
+              casinoRolling: item?.liveRate || 0,
+              casinoLoosing: item?.loseLiveRate || 0,
+              agent: item?.agent || '',
+              exchangeRate: item?.withdrawRate || '',
             }
-        }
+            users.push(user);
+          }
         });
         setTableData(users);
         setIsLoading(false);

@@ -42,6 +42,10 @@ export default function UserTableRow({ row, selected, index,  onSelectMoney, onS
       <TableRow hover selected={selected}>
         <TableCell align="left">{no}</TableCell>
 
+        <TableCell align="left">        
+        {(creator === process.env.REACT_APP_ADMIN_DEVELOPER || creator === process.env.REACT_APP_ADMIN_HEADCOACH) ? '관리자' : creator }
+        </TableCell>
+
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Typography variant="subtitle2" noWrap>
@@ -49,8 +53,6 @@ export default function UserTableRow({ row, selected, index,  onSelectMoney, onS
             </Typography>
           </Stack>
         </TableCell>
-
-        <TableCell align="left">{creator}</TableCell>
 
         <TableCell align="left"
         
@@ -97,6 +99,7 @@ export default function UserTableRow({ row, selected, index,  onSelectMoney, onS
           <Stack direction="row" alignItems="center" spacing={2}>
             <Tooltip title={`${translate('changeUserStatus')}`}>
               <PersonIcon color="primary"  
+                sx={{cursor: 'pointer'}}
                 onClick={() => {
                   onSelectChangeStatus();
                 }}
@@ -104,7 +107,8 @@ export default function UserTableRow({ row, selected, index,  onSelectMoney, onS
             </Tooltip>
             
             <Tooltip title={`${translate('cashDepWith')}`}>
-              <AttachMoneyIcon color="warning"  
+              <AttachMoneyIcon color="warning"    
+                sx={{cursor: 'pointer'}}
                 onClick={() => {
                   onSelectMoney();
                 }}
@@ -114,14 +118,16 @@ export default function UserTableRow({ row, selected, index,  onSelectMoney, onS
               <LocalParkingIcon color="secondary"/>
             </Tooltip> */}
             <Tooltip title={`${translate('changePassword')}`}>
-              <KeyIcon color="error"
+              <KeyIcon color="error"  
+                sx={{cursor: 'pointer'}}
                 onClick={() => {
                   onSelectChangePassword();
                 }}
               />
             </Tooltip>
             <Tooltip title={`${translate('removeUser')}`}>
-              <PersonRemoveIcon color="black" 
+              <PersonRemoveIcon color="black"   
+                sx={{cursor: 'pointer'}}
                 onClick={() => {
                   onSelectRemove();
                 }}

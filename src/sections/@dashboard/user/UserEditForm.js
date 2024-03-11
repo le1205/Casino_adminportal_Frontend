@@ -78,7 +78,7 @@ export default function UserEditForm({ isEdit = true, currentUser, onSelectCance
   const defaultValues = useMemo(
     () => ({
       _id: currentUser?._id || '',
-      id: currentUser?.id || '',
+      id: currentUser?.name || '',
       password: currentUser?.password || '',
       nickName: currentUser?.nickName || '',
       exchangePassword: currentUser?.exchangePassword || '',
@@ -95,7 +95,7 @@ export default function UserEditForm({ isEdit = true, currentUser, onSelectCance
       slotLoosing: currentUser?.slotLoosing || 0,
       casinoRolling: currentUser?.casinoRolling || 0,
       casinoLoosing: currentUser?.casinoLoosing || 0,
-      role: currentUser?.role || '',
+      role: currentUser?.roleOrder || '',
       agent: currentUser?.agent || '',
       withdrawRate: currentUser?.withdrawRate || '',
     }),
@@ -258,7 +258,7 @@ export default function UserEditForm({ isEdit = true, currentUser, onSelectCance
               <RHFSelect native name="role" label={`${translate('role')}`} placeholder={`${translate('role')}`}  >
                 <option value=""  />
                 {totalRole.map((element) => (
-                  <option key={element.order} value={element.title}  >
+                  <option key={element.order} value={element.order}  >
                     {element.name}
                   </option>
                 ))}

@@ -267,6 +267,7 @@ const kr = {
   hide:'대기',
   send:'보내기',
   add:'추가',
+  companyStr: `게임사`,
 };
 
 export default kr;
