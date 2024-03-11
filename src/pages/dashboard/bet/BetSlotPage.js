@@ -4,12 +4,18 @@ import { useState, useEffect } from 'react';
 import {
   Card,
   Stack,
+  Button,
   Table,
   Divider,
   Typography,
   TableBody,
   Container,
   TableContainer,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 // routes
@@ -85,6 +91,8 @@ export default function BetSlotPage() {
   const [tableData, setTableData] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [gameType, setGameType] = useState('slot');
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertContent, setAlertContent] = useState(`${translate('couldNotSelectFuture')}`);
   const [filterEndDate, setFilterEndDate] = useState(new Date);
   const [filterStartDate, setFilterStartDate] = useState(new Date);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -112,6 +120,9 @@ export default function BetSlotPage() {
   const isNotFound =
     (!dataFiltered.length && !!filterName) ||( !tableData.length);
 
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
 
   const handleResetFilter = () => {
     setFilterRole('all');
@@ -122,9 +133,28 @@ export default function BetSlotPage() {
     setFilterRole(event.target.value);
   };
 
+  const handleClickStartDate = (date) => {
+    const now = moment(new Date()).format('YYYY-MM-DD');
+    const selectedDate = moment(date).format('YYYY-MM-DD');
+    if (moment(selectedDate).isAfter(moment(now))) {
+      setOpenAlert(true);
+      setFilterStartDate(new Date());
+      return;
+    }
+    setFilterStartDate(date);
+  };
+
   const handleClickSearch = () => {
     setPage(0)
     setFilterRole('all');
+    const now = moment(new Date()).format('YYYY-MM-DD');
+    const selectedDate = moment(filterStartDate).format('YYYY-MM-DD');
+    if (moment(selectedDate).isBefore(moment(now))) {
+      getGameData(gameType);
+    }
+    else {
+      getGameFirstData(gameType);
+    }
     gameLog(gameType);
   };
   
@@ -173,8 +203,7 @@ export default function BetSlotPage() {
 
   const gameLog = async (game) => {
     try {
-      setIsLoading(true);
-      setPage(0);
+      // setIsLoading(true);
       
       const NewDate = moment(filterStartDate).format('YYYY-MM-DD');
       const url = gameLogUrl;
@@ -272,14 +301,61 @@ export default function BetSlotPage() {
             value = [...value, item];
         });
         setList(value.flat(1));
-        setIsLoading(false);
       });
 
     } catch (error) {
       console.log(error);
+    }
+  };
+  
+  const getGameData = (game) => {
+    try {
+      setIsLoading(true);
+      setPage(0);
+      const NewDate = moment(filterStartDate).format('YYYY-MM-DD');
+      const url = gameLogUrl;
+      const headers = {};
+      const data = {
+        "start": `${NewDate} 22:00:00`,
+        "end": `${NewDate} 23:59:59`,
+        "game_type": game,
+        "perPage": 100,
+      };
+      apiWithPostData(url, data, headers).then((response) => {
+        setList(response);
+        setIsLoading(false);
+      });
+    } catch (error) {
+      console.log(error);
       setIsLoading(false);
     }
-
+  };
+  
+  const getGameFirstData = (game) => {
+    try {
+      setIsLoading(true);
+      setPage(0);
+      const date = new Date()
+      const timestamp = date.getTime() - 1 * 3600 * 1000
+      const newDate = new Date(timestamp)
+      const startDate = moment(date).format('YYYY-MM-DD HH:MM:SS');
+      const endDate = moment(newDate).format('YYYY-MM-DD HH:MM:SS');
+      const url = gameLogUrl;
+      const headers = {};
+      const data = {
+        "start": `${startDate} `,
+        "end": `${endDate} `,
+        "game_type": game,
+        "perPage": 100,
+      };
+      apiWithPostData(url, data, headers).then((response) => {
+        setList(response);
+        setIsLoading(false);
+      });
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
   };
   
   const handleFilterItem = (data, totalUser, adminsList) => {
@@ -339,6 +415,7 @@ export default function BetSlotPage() {
   useEffect(() => {
     usersList();
     getListRole();
+    getGameFirstData(gameType);
     gameLog(gameType);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFirst]);
@@ -391,7 +468,7 @@ export default function BetSlotPage() {
             onClickSearch={handleClickSearch}
             onFilterRole={handleFilterRole}
             onFilterStartDate={(newValue) => {
-              setFilterStartDate(newValue);
+              handleClickStartDate(newValue);
             }}
             onFilterEndDate={(newValue) => {
               setFilterEndDate(newValue);
@@ -478,6 +555,21 @@ export default function BetSlotPage() {
           />
         </Card>
       </Container>
+
+      <Dialog open={openAlert} onClose={handleCloseAlert} sx={{ minWidth: 400 }}>
+        <DialogTitle sx={{ textTransform: 'capitalize' }}>{`${translate('alert')}`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {alertContent}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseAlert} autoFocus>
+          {`${translate('ok')}`}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {(isLoading === true) && <LoadingScreen/>} 
     </>
   );
