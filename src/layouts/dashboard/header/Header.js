@@ -339,26 +339,15 @@ export default function Header({ onOpenNav }) {
                 color={theme.palette.text.secondary}
                 handleClick={() => movePage(PATH_DASHBOARD.user.list)}
               /> */}
-              {isAdmin && (
-                <HeaderSplitAnalytic
-                  title="totalBet"
-                  belowTitle="rollingAmount"
-                  isAgent={isAgent}
-                  price={totalBet}
-                  belowPrice={rolling}
-                  color={theme.palette.success.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
-                />
-              )}
-              {!isAdmin && (
-                <HeaderAnalytic
-                  title="rollingAmount"
-                  isAgent={isAgent}
-                  price={rolling}
-                  color={theme.palette.success.main}
-                  handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
-                />
-              )}
+              <HeaderSplitAnalytic
+                title="totalBet"
+                belowTitle="rollingAmount"
+                isAgent={isAgent}
+                price={totalBet}
+                belowPrice={rolling}
+                color={theme.palette.success.main}
+                handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
+              />
               <HeaderAnalytic
                 title="totalWin"
                 isAgent={isAgent}

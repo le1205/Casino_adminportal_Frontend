@@ -30,7 +30,7 @@ export default function HeaderAnalytic({ title, color, price, handleClick, key, 
   return (
     
     <Grid key={key} item xs={2} 
-      sx={{flexBasis: isAgent ? `20% !important` : `16% !important`, minWidth:'140px', maxWidth: isAgent? `20% !important` : '16%', marginLeft:isMargin? '20px' : '0px', marginRight:isMargin? '20px' : '0px'}}>
+      sx={{flexBasis: isAgent ? `24% !important` : `16% !important`, minWidth:'140px', maxWidth: isAgent? `24% !important` : '16%', marginLeft:isMargin? '25px' : '0px', marginRight:isMargin? '25px' : '0px'}}>
       <Box
         borderLeft={2}
         borderColor={color}
