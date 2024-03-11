@@ -78,9 +78,9 @@ export default function UserConnectingTableRow({ row, selected, onDeleteRow, onS
           {dateString}
         </TableCell>
 
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+        {/* <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
           {ip}
-        </TableCell>
+        </TableCell> */}
 
         {/* <TableCell align="left">
           {0}

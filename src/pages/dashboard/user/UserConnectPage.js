@@ -54,7 +54,7 @@ const TABLE_HEAD = [
   { id: 'company', label: 'company', align: 'left' },
   { id: 'cash', label: 'cash', align: 'left' },
   { id: 'connectTime', label: 'connectTime', align: 'left' },
-  { id: 'ip', label: 'ip', align: 'left' },
+  // { id: 'ip', label: 'ip', align: 'left' },
   // { id: 'depowith', label: 'depowith', align: 'left' },
   { id: 'lastGame', label: 'lastGame', align: 'left' },
   // { id: 'loginPossible', label: 'loginPossible', align:'left' },
