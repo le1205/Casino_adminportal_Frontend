@@ -98,8 +98,8 @@ export default function BetSlotPage() {
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [totalRole, setTotalRole] = useState([{
-    _id: '0',
-    id: '0',
+    _id: 0,
+    id: 0,
     name: "all",
   }]);
   const [totalUsers, setTotalUsers] = useState([]);
@@ -159,16 +159,16 @@ export default function BetSlotPage() {
       apiWithPostData(url, data, headers).then((response) => {
         const { results } = response;
         const users = [{
-          _id: '0',
-          id: '0',
+          _id: 0,
+          id: 0,
           name: "all",
         }];
         results.forEach((item, index) => {
           if(item?.role?.title === 'user') {
             const user = {
-              _id: `${item._id  }` || '',
-              id: `${item.user_id  }` || '',
-              name: `${item.username  }` || '',
+              _id: item._id   || '',
+              id: item.user_id  || '',
+              name: item.username  || '',
             }
             users.push(user);
           }
@@ -203,89 +203,119 @@ export default function BetSlotPage() {
       const NewDate = moment(filterStartDate).format('YYYY-MM-DD');
       const data = {
         "start": `${NewDate} 00:00:00`,
-        "end": `${NewDate} 01:59:59`,
-        "game_type": game,
-        "perPage": 100,
-      };
-      const data1 = {
-        "start": `${NewDate} 02:00:00`,
-        "end": `${NewDate} 03:59:59`,
-        "game_type": game,
-        "perPage": 100,
-      };
-      const data2 = {
-        "start": `${NewDate} 04:00:00`,
-        "end": `${NewDate} 05:59:59`,
-        "game_type": game,
-        "perPage": 100,
-      };
-      const data3 = {
-        "start": `${NewDate} 06:00:00`,
-        "end": `${NewDate} 07:59:59`,
-        "game_type": game,
-        "perPage": 100,
-      };
-      const data4 = {
-        "start": `${NewDate} 08:00:00`,
-        "end": `${NewDate} 09:59:59`,
-        "game_type": game,
-        "perPage": 100,
-      };
-      const data5 = {
-        "start": `${NewDate} 10:00:00`,
-        "end": `${NewDate} 11:59:59`,
-        "game_type": game,
-        "perPage": 100,
-      };
-      const data6 = {
-        "start": `${NewDate} 12:00:00`,
-        "end": `${NewDate} 13:59:59`,
-        "game_type": game,
-        "perPage": 100,
-      };
-      const data7 = {
-        "start": `${NewDate} 14:00:00`,
-        "end": `${NewDate} 15:59:59`,
-        "game_type": game,
-        "perPage": 100,
-      };
-      const data8 = {
-        "start": `${NewDate} 16:00:00`,
-        "end": `${NewDate} 17:59:59`,
-        "game_type": game,
-        "perPage": 100,
-      };
-      const data9 = {
-        "start": `${NewDate} 18:00:00`,
-        "end": `${NewDate} 19:59:59`,
-        "game_type": game,
-        "perPage": 100,
-      };
-      const data10 = {
-        "start": `${NewDate} 20:00:00`,
-        "end": `${NewDate} 21:59:59`,
-        "game_type": game,
-        "perPage": 100,
-      };
-      const data11 = {
-        "start": `${NewDate} 22:00:00`,
         "end": `${NewDate} 23:59:59`,
         "game_type": game,
         "perPage": 100,
       };
-      const dataArr = [data11, data10, data9, data8, data7, data6, data5, data4, data3, data2, data1, data];
-      dataArr.forEach(element => {
-        getGameData(element);
-      });
-      
-      const timeout = setTimeout(() => {
+      const url = gameLogUrl;
+      const headers = {};
+      apiWithPostData(url, data, headers).then((response) => {
         setIsLoading(false);
-      }, 5000);
-
+        if(response && response.length > 0) {
+          setList(response);
+        }
+        else {
+          setList([]);
+        }
+      });
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   };
+
+  // const gameLog = async (game) => {
+  //   try {
+  //     setIsLoading(true);
+  //     setList([]);
+  //     initialList = [];
+      
+  //     const NewDate = moment(filterStartDate).format('YYYY-MM-DD');
+  //     const data = {
+  //       "start": `${NewDate} 00:00:00`,
+  //       "end": `${NewDate} 01:59:59`,
+  //       "game_type": game,
+  //       "perPage": 100,
+  //     };
+  //     const data1 = {
+  //       "start": `${NewDate} 02:00:00`,
+  //       "end": `${NewDate} 03:59:59`,
+  //       "game_type": game,
+  //       "perPage": 100,
+  //     };
+  //     const data2 = {
+  //       "start": `${NewDate} 04:00:00`,
+  //       "end": `${NewDate} 05:59:59`,
+  //       "game_type": game,
+  //       "perPage": 100,
+  //     };
+  //     const data3 = {
+  //       "start": `${NewDate} 06:00:00`,
+  //       "end": `${NewDate} 07:59:59`,
+  //       "game_type": game,
+  //       "perPage": 100,
+  //     };
+  //     const data4 = {
+  //       "start": `${NewDate} 08:00:00`,
+  //       "end": `${NewDate} 09:59:59`,
+  //       "game_type": game,
+  //       "perPage": 100,
+  //     };
+  //     const data5 = {
+  //       "start": `${NewDate} 10:00:00`,
+  //       "end": `${NewDate} 11:59:59`,
+  //       "game_type": game,
+  //       "perPage": 100,
+  //     };
+  //     const data6 = {
+  //       "start": `${NewDate} 12:00:00`,
+  //       "end": `${NewDate} 13:59:59`,
+  //       "game_type": game,
+  //       "perPage": 100,
+  //     };
+  //     const data7 = {
+  //       "start": `${NewDate} 14:00:00`,
+  //       "end": `${NewDate} 15:59:59`,
+  //       "game_type": game,
+  //       "perPage": 100,
+  //     };
+  //     const data8 = {
+  //       "start": `${NewDate} 16:00:00`,
+  //       "end": `${NewDate} 17:59:59`,
+  //       "game_type": game,
+  //       "perPage": 100,
+  //     };
+  //     const data9 = {
+  //       "start": `${NewDate} 18:00:00`,
+  //       "end": `${NewDate} 19:59:59`,
+  //       "game_type": game,
+  //       "perPage": 100,
+  //     };
+  //     const data10 = {
+  //       "start": `${NewDate} 20:00:00`,
+  //       "end": `${NewDate} 21:59:59`,
+  //       "game_type": game,
+  //       "perPage": 100,
+  //     };
+  //     const data11 = {
+  //       "start": `${NewDate} 22:00:00`,
+  //       "end": `${NewDate} 23:59:59`,
+  //       "game_type": game,
+  //       "perPage": 100,
+  //     };
+  //     const dataArr = [data11, data10, data9, data8, data7, data6, data5, data4, data3, data2, data1, data];
+  //     dataArr.forEach(element => {
+  //       getGameData(element);
+  //     });
+      
+  //     const timeout = setTimeout(() => {
+  //       setIsLoading(false);
+  //     }, 5000);
+
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   
   const getGameData = (data) => {
     try {

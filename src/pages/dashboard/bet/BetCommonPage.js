@@ -105,8 +105,8 @@ export default function BetCommonPage() {
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [totalRole, setTotalRole] = useState([{
-    _id: '0',
-    id: '0',
+    _id: 0,
+    id: 0,
     name: "all",
   }]);
   const [totalUsers, setTotalUsers] = useState([]);
@@ -173,16 +173,16 @@ export default function BetCommonPage() {
       apiWithPostData(url, data, headers).then((response) => {
         const { results } = response;
         const users = [{
-          _id: '0',
-          id: '0',
+          _id: 0,
+          id: 0,
           name: "all",
         }];
         results.forEach((item, index) => {
           if(item?.role?.title === 'user') {
             const user = {
-              _id: `${item._id  }` || '',
-              id: `${item.user_id  }` || '',
-              name: `${item.username  }` || '',
+              _id: item._id   || '',
+              id: item.user_id  || '',
+              name: item.username  || '',
             }
             users.push(user);
           }

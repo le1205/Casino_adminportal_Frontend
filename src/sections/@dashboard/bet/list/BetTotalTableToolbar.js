@@ -20,7 +20,7 @@ BetTotalTableToolbar.propTypes = {
   onClickSearch: PropTypes.func,
   filterEndDate: PropTypes.instanceOf(Date),
   filterStartDate: PropTypes.instanceOf(Date),
-  optionsRole: PropTypes.arrayOf(PropTypes.string),
+  optionsRole: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default function BetTotalTableToolbar({
