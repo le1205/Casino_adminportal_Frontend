@@ -2,8 +2,10 @@ import { Helmet } from 'react-helmet-async';
 import { useState, useEffect } from 'react';
 // @mui
 import {
+  Stack,
   Button,
   Card,
+  Typography,
   Table,
   Divider,
   TableBody,
@@ -36,16 +38,19 @@ import { useLocales } from '../../../locales';
 // api
 import { apiWithPostData, apiWithGetData } from '../../../utils/api';
 // url
-import { balanceHistoryUrl, adminListUrl, transactionUrl } from '../../../utils/urlList';
+import { transactionUrl } from '../../../utils/urlList';
+// utils
+import {parseJson } from '../../../auth/utils';
+import {toNumberString } from '../../../utils/convert';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  // { id: 'user', label: 'user', align: 'center' },
+  { id: 'user', label: '아이디', align: 'center' },
   { id: 'permission', label: 'permission', align: 'center' },
   { id: 'amount', label: 'amount', align: 'center' },
-  { id: 'beforeAmount', label: 'beforeAmount', align: 'center' },
-  { id: 'afterAmount', label: 'afterAmount', align: 'center' },
+  { id: 'beforeAmount', label: '이동전', align: 'center' },
+  { id: 'afterAmount', label: '이동후', align: 'center' },
   { id: 'style', label: 'style', align: 'center' },
   { id: 'date', label: 'date', align: 'center' },
 ];
@@ -83,6 +88,14 @@ export default function InvoiceAdminListPage() {
   const [filterEndDate, setFilterEndDate] = useState(new Date);
   const [filterStartDate, setFilterStartDate] = useState(new Date);
   const [totalCount, setTotalCount] = useState(0);
+
+  const loginUser = parseJson(localStorage.getItem('user') || "");
+  let isAdmin = false;
+  if (loginUser?.roleMain?.order === 1) {
+    isAdmin = true;
+  }
+
+  const point = localStorage.getItem('point') || 0;
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -170,14 +183,15 @@ export default function InvoiceAdminListPage() {
             { name: 'invoices', href: PATH_DASHBOARD.invoice.root },
             { name: 'Admin List' },
           ]}
+          
           action={
             <Button
               variant="contained"
-              sx={{ mt: 4 }}
+              disabled={point === '0' || point === 0}
+              sx={{ mt: 4, display: isAdmin ? 'block' : 'none'}}
               onClick={handleClickCreate}
             >
-              {/* {translate('create')} */}
-              create
+              {translate('strWithdraw')}
             </Button>
           }
         />
@@ -200,6 +214,16 @@ export default function InvoiceAdminListPage() {
               setFilterEndDate(newValue);
             }}
           />
+          
+          
+          <Stack direction="row" justifyContent="flex-end" alignItems="center" spacing={3} sx={{ textTransform: 'capitalize', mt: -4, pb:1, mr:6 }}>
+            <Typography variant="subtitle1" noWrap  sx={{ color: theme.palette.warning.main, pl:2}}>
+            {`${translate('point')}`}:
+            </Typography>
+            <Typography variant="subtitle1" noWrap  sx={{ color: theme.palette.warning.main}}>
+              {toNumberString(point)}
+            </Typography>
+          </Stack>
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction

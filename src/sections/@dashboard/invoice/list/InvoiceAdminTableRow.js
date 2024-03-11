@@ -7,6 +7,8 @@ import {
 } from '@mui/material';
 // components
 import Label from '../../../../components/label';
+// locales
+import { useLocales } from '../../../../locales';
 // utils
 import { fKoreanDate } from '../../../../utils/formatTime';
 import {parseJson } from '../../../../auth/utils';
@@ -22,6 +24,7 @@ InvoiceAdminTableRow.propTypes = {
 
 export default function InvoiceAdminTableRow({ row, selected, onEditRow, }) {
   const {_id,  createdAt, currentBalance, beforeBalance, type, userId, amount, agent, role } = row;
+  const { translate } = useLocales();
   const dateString = fKoreanDate(createdAt) ;
   const userName = userId?.username || "";
 
@@ -30,12 +33,12 @@ export default function InvoiceAdminTableRow({ row, selected, onEditRow, }) {
   return (
     <TableRow hover selected={selected}>
 
-        {/* <TableCell align="center" >
-          {userName}
-        </TableCell> */}
+        <TableCell align="center" >
+          {(userName === process.env.REACT_APP_ADMIN_DEVELOPER || userName === process.env.REACT_APP_ADMIN_HEADCOACH) ? '관리자' : userName }
+        </TableCell>
 
         <TableCell align="center" >
-          {userId?.rolesId?.title}
+          {`${translate(userId?.rolesId?.title)}`}
         </TableCell>
 
         <TableCell align="center">

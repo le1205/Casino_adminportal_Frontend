@@ -15,6 +15,7 @@ import audioAddUser from '../../../assets/mp3/add-users.mp3';
 import audioCustomer from '../../../assets/mp3/requre account.mp3';
 
 import HeaderAnalytic from '../../../sections/@dashboard/header/headerMobileAnalytic';
+import HeaderSplitAnalytic from '../../../sections/@dashboard/header/headerMobileSplitAnalytic';
 // api
 import { apiWithPostData } from '../../../utils/api';
 // url
@@ -47,6 +48,8 @@ export default function NavMobileHeader() {
   const [countWithdraw, setCountWithdraw] = useState(0);
   const [countNofi, setCountNofi] = useState(0);
   const [countUser, setCountUser] = useState(0);
+  const [depositRequest, setDepositRequest] = useState(0);
+  const [withdrawRequest, setWithdrawRequest] = useState(0);
   const widthdrawRef = useRef();
   const deposutRef = useRef();
   const customerRef = useRef();
@@ -80,6 +83,8 @@ export default function NavMobileHeader() {
       const headers = {};
       apiWithPostData(url, {}, headers).then((response) => {
         const { dashboard } = response;
+        setDepositRequest(response?.countDeposit || 0);
+        setWithdrawRequest(response?.countWithdraw || 0);
         setTotalMember(dashboard?.total_member || 0);
         setBetMember(dashboard?.total_bet || 0);
         setNewMember(0);
@@ -96,7 +101,7 @@ export default function NavMobileHeader() {
         setTotalWin(dashboard?.total_win || 0);
         setRolling(dashboard?.rolling || 0);
         // eslint-disable-next-line no-unsafe-optional-chaining
-        const rate = (dashboard?.total_bet) - (dashboard?.total_win)
+        const rate = dashboard?.total_bet - dashboard?.total_win;
         setBettingProfit(rate || 0);
       });
     } catch (error) {
@@ -186,22 +191,29 @@ export default function NavMobileHeader() {
       {!isDesktop && 
         <Grid container spacing={1} 
           direction="row"
-        > {!isAgent && 
-            <HeaderAnalytic
+        > 
+          {!isAgent && (
+            <HeaderSplitAnalytic
               title="depositRequestCount"
-              price={countDeposit}
+              belowTitle="waitingDeposit"
+              isAgent={isAgent}
+              price={depositRequest}
+              belowPrice={countDeposit}
               color={theme.palette.info.main}
               handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
             />
-          }
-          {!isAgent && 
-            <HeaderAnalytic
+          )}
+          {!isAgent && (
+            <HeaderSplitAnalytic
               title="withdrawRequestCount"
-              price={countWithdraw}
+              belowTitle="waitingWithdraw"
+              isAgent={isAgent}
+              price={withdrawRequest}
+              belowPrice={countWithdraw}
               color={theme.palette.info.main}
               handleClick={() => movePage(PATH_DASHBOARD.invoice.outReport)}
             />
-          }
+          )}
           {!isAgent && 
             <HeaderAnalytic
               title="memberRequestCount"
@@ -221,51 +233,44 @@ export default function NavMobileHeader() {
           <HeaderAnalytic
             title="loggedInMember"
             price={loginMember}
+            isMargin
             color={theme.palette.warning.main}
             handleClick={() => movePage(PATH_DASHBOARD.user.connect)}
           />
-          <HeaderAnalytic
+          {/* <HeaderAnalytic
             title="totalMembers"
             price={totalMember}
             color={theme.palette.warning.main}
             handleClick={() => movePage(PATH_DASHBOARD.user.list)}
-          />
+          /> */}
           <HeaderAnalytic
             title="userMoney"
             price={userMoney}
-            color={theme.palette.text.secondary}
+            isMargin
+            color={theme.palette.warning.main}
             handleClick={() => movePage(PATH_DASHBOARD.user.list)}
           />
-          <HeaderAnalytic
+          {/* <HeaderAnalytic
             title="totalRate"
             price={userPoint}
             color={theme.palette.text.secondary}
             handleClick={() => movePage(PATH_DASHBOARD.user.list)}
-          />
+          /> */}
           <HeaderAnalytic
             title="totalDeposit"
             price={deposit}
             color={theme.palette.success.main}
             handleClick={() => movePage(PATH_DASHBOARD.invoice.inReport)}
           />
-          {isAdmin && 
-            <HeaderAnalytic
-              title="totalBet"
-              isAgent ={isAgent}
-              price={totalBet}
-              color={theme.palette.success.main}
-              handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
-            />
-          }
-          {!isAdmin && 
-            <HeaderAnalytic
-              title="rollingAmount"
-              isAgent ={isAgent}
-              price={rolling}
-              color={theme.palette.success.main}
-              handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
-            />
-          }
+          <HeaderSplitAnalytic
+            title="totalBet"
+            belowTitle="rollingAmount"
+            isAgent={isAgent}
+            price={totalBet}
+            belowPrice={rolling}
+            color={theme.palette.success.main}
+            handleClick={() => movePage(PATH_DASHBOARD.bet.common)}
+          />
           <HeaderAnalytic
             title="totalWithdraw"
             price={withdraw}
