@@ -51,7 +51,7 @@ import SettingGameSlotPage from '../setting/game/SettingGameSlotPage';
 
 const TABLE_HEAD = [
   { id: 'id', label: 'id', align: 'left' },
-  { id: 'company', label: 'company', align: 'left' },
+  { id: 'company', label: 'companyStr', align: 'left' },
   { id: 'cash', label: 'cash', align: 'left' },
   { id: 'connectTime', label: 'connectTime', align: 'left' },
   // { id: 'ip', label: 'ip', align: 'left' },

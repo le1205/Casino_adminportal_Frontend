@@ -267,6 +267,7 @@ const en = {
   hide:'hide',
   send:'send',
   add:'add',
+  companyStr: `company`,
 
 };
 
