@@ -50,7 +50,8 @@ const TABLE_HEAD = [
   { id: 'permission', label: 'permission', align: 'center' },
   { id: 'amount', label: 'amount', align: 'center' },
   { id: 'beforeAmount', label: '이동전', align: 'center' },
-  { id: 'afterAmount', label: '이동후', align: 'center' },
+  { id: 'afterAmount', label: '보유 금액', align: 'center' },
+  // { id: 'money', label: '보유 머니', align: 'center' },
   { id: 'style', label: 'style', align: 'center' },
   { id: 'date', label: 'date', align: 'center' },
 ];

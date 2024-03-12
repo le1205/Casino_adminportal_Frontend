@@ -372,6 +372,7 @@ export default function UserListPage() {
         element.casinoRolling = data.liveRate || 0;
         element.casinoLoosing = data.loseLiveRate || 0;
         element.agent = data.agent || '';
+        element.creator = data?.creator[0]?.username || '';
         element.exchangeRate = data.withdrawRate || '';
       }
     });
@@ -433,6 +434,7 @@ export default function UserListPage() {
                 status: item?.isBlock || false,
                 role: item?.role?.name || '',
                 roleOrder: item?.role?.order || 0,
+                roleTitle: item?.role?.title || '',
                 nickName: item?.Nickname || '',
                 birthday: item?.Birthday || '',
                 phoneNumber: item?.phone || '',

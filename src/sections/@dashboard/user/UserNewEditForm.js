@@ -212,13 +212,16 @@ export default function UserNewEditForm({ isEdit = false, currentUser, partner }
         status: data?.betAvailable || true,
       };
       apiWithPostData(url, body, headers).then((response) => {
-        console.log(response);
-        reset();
-        enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-        navigate(PATH_DASHBOARD.user.list);
+        if(response?.code === "ERR_BAD_REQUEST") {
+          enqueueSnackbar(response?.response?.data || '회원 생성 오류');
+        }
+        else {
+          reset();
+          navigate(PATH_DASHBOARD.user.list);
+        }
       });
     } catch (error) {
-      console.log(error);
+      console.log("here>>>", error);
     }
   };
 

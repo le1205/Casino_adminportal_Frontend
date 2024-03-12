@@ -95,8 +95,8 @@ export default function UserEditForm({ isEdit = true, currentUser, onSelectCance
       slotLoosing: currentUser?.slotLoosing || 0,
       casinoRolling: currentUser?.casinoRolling || 0,
       casinoLoosing: currentUser?.casinoLoosing || 0,
-      role: currentUser?.roleOrder || '',
-      agent: currentUser?.agent || '',
+      role: currentUser?.roleTitle || '',
+      agent: currentUser?.creator || '',
       withdrawRate: currentUser?.withdrawRate || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -203,9 +203,15 @@ export default function UserEditForm({ isEdit = true, currentUser, onSelectCance
         status: data?.betAvailable || true,
       };
       apiWithPutData(url, body, headers).then((response) => {
-        onUpdateSuccess(response);
-        reset();
-        enqueueSnackbar('갱신 성공!');
+        console.log(response);
+        if(response?.code === "ERR_BAD_REQUEST") {
+          enqueueSnackbar(response?.response?.data || '갱신 오류');
+        }
+        else {
+          onUpdateSuccess(response);
+          reset();
+          enqueueSnackbar('갱신 성공!');
+        }
       });
     } catch (error) {
       console.log(error);
@@ -255,10 +261,10 @@ export default function UserEditForm({ isEdit = true, currentUser, onSelectCance
               <RHFTextField name="password" label={`${translate('password')}`} />
               <RHFTextField name="nickName" label={`${translate('nickName')}`} />
               <RHFTextField name="exchangePassword" label={`${translate('exchangePassword')}`}  />
-              <RHFSelect native name="role" label={`${translate('role')}`} placeholder={`${translate('role')}`}  >
+              <RHFSelect disabled native name="role" label={`${translate('role')}`} placeholder={`${translate('role')}`}  >
                 <option value=""  />
                 {totalRole.map((element) => (
-                  <option key={element.order} value={element.order}  >
+                  <option key={element.order} value={element.title}  >
                     {element.name}
                   </option>
                 ))}

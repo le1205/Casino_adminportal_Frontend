@@ -52,7 +52,10 @@ export default function InvoiceAdminTableRow({ row, selected, onEditRow, }) {
         <TableCell align="center">
           {currentBalance > 0 ? toNumberString(currentBalance) : 0}
         </TableCell>
-        
+
+        {/* <TableCell align="center">
+          {currentBalance > 0 ? toNumberString(currentBalance) : 0}
+        </TableCell> */}
 
         <TableCell align="center">
           <Label
