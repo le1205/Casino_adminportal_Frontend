@@ -159,12 +159,14 @@ export default function UserNewEditForm({ isEdit = false, currentUser, partner }
         const { results } = response;
         const users = [];
         results.forEach((item, index) => {
-          const user = {
-            _id: item._id || '',
-            id: item.user_id || '',
-            name: item.username || '',
+          if(item.username !== process.env.REACT_APP_ADMIN_DEVELOPER) {
+            const user = {
+              _id: item._id || '',
+              id: item.user_id || '',
+              name: item.username || '',
+            }
+            users.push(user);
           }
-          users.push(user);
         });
         setTotalAgent(users);
       });

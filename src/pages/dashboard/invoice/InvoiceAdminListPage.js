@@ -154,7 +154,6 @@ export default function InvoiceAdminListPage() {
       const headers = {};
       const data = {};
       apiWithPostData(url, data, headers).then((response) => {
-        console.log(response);
         setIsLoading(false);
       });
     } catch (error) {
