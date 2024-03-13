@@ -75,7 +75,7 @@ const navAgentConfig = [
         children: [
           { title: 'depositList', path: PATH_DASHBOARD.invoice.inReport },
           { title: 'withdrawList', path: PATH_DASHBOARD.invoice.outReport },
-          { title: 'amountList', path: PATH_DASHBOARD.invoice.amount },
+          // { title: 'amountList', path: PATH_DASHBOARD.invoice.amount },
           { title: 'cashHistory', path: PATH_DASHBOARD.invoice.history },
         ],
       },
