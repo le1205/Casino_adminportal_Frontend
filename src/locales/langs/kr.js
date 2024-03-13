@@ -268,6 +268,8 @@ const kr = {
   send:'보내기',
   add:'추가',
   companyStr: `게임사`,
+  beforeMoney: `이동전 보유금액`,
+  afterMoney: `이동후 보유금액`,
 };
 
 export default kr;

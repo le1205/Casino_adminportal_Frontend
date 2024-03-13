@@ -46,11 +46,11 @@ import {toNumberString } from '../../../utils/convert';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'user', label: '아이디', align: 'center' },
+  { id: 'user', label: 'id', align: 'center' },
   { id: 'permission', label: 'permission', align: 'center' },
   { id: 'amount', label: 'amount', align: 'center' },
-  { id: 'beforeAmount', label: '이동전', align: 'center' },
-  { id: 'afterAmount', label: '보유 금액', align: 'center' },
+  { id: 'beforeAmount', label: 'beforeMoney', align: 'center' },
+  { id: 'afterAmount', label: 'afterMoney', align: 'center' },
   // { id: 'money', label: '보유 머니', align: 'center' },
   { id: 'style', label: 'style', align: 'center' },
   { id: 'date', label: 'date', align: 'center' },

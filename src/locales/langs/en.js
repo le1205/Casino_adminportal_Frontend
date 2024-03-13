@@ -268,6 +268,8 @@ const en = {
   send:'send',
   add:'add',
   companyStr: `company`,
+  beforeMoney: `before money`,
+  afterMoney: `after money`,
 
 };
 
